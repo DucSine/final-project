@@ -11,7 +11,7 @@ const connectDB = require('./config/db')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
 connectDB()
-
+console.log('adad')
 app.use('/',(req,res)=> res.send('hello'))
 
 app.listen(port, ()=>console.log(`run with http://localhost:${port}`))
