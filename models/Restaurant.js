@@ -6,10 +6,6 @@ const RestaurantSchema = new mongoose.Schema({
     unique: true,
     required: true,
   },
-  name: {
-    type: String,
-    required: true,
-  },
   email: {
     type: String,
     unique: true,
@@ -58,4 +54,4 @@ const Restaurant = mongoose.model(
   'restaurants',
 );
 
-module.exports = Restaurant;
+module.exports = Restaurant

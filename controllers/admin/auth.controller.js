@@ -1,50 +1,45 @@
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const { validationResult } = require('express-validator');
-const crypto = require('crypto');
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+const { validationResult } = require('express-validator')
+const crypto = require('crypto')
 
 
-const Response = require('../../helpers/response.helper');
-
+const Response = require('../../helpers/response.helper')
 
 exports.login = async (req, res, next) => {
-  const errors = validationResult(req);
+  const errors = validationResult(req)
 
   try {
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
+    if (!errors.isEmpty())
+      return res.status(400).json({ errors: errors.array() })
 
     const { username, password } = req.body;
 
     if (username !== process.env.ADMIN_NAME)
-      return next(new Error('Sai tên đăng nhập.'));
+      return next(new Error('Username is incorrect!'))
 
     const result = await bcrypt.compare(password, process.env.ADMIN_PASSWORD);
 
-    if (!result) return next(new Error('Bạn nhập sai mật khẩu.'));
+    if (!result) return next(new Error('Password is incorrect!'));
 
     const payload = {
       admin: {
         username: username,
         password,
       },
-    };
+    }
 
     jwt.sign(
       payload,
       process.env.JWT_SECRET,
       { expiresIn: 360000 },
-      (err, token) => {
-        if (err) return next(err);
-        return Response.success(res, { token });
-      },
+      (err, token) => err ? next(err) : Response.success(res, { token })
     )
 
     return true;
   } catch (error) {
     console.log(error);
-    return next(new Error('Có lỗi xảy ra'));
+    return next(new Error('Error occurred!'));
   }
 };
 /*

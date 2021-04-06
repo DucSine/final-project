@@ -1,10 +1,9 @@
-const express = require('express');
+const express = require('express')
 
-const router = express.Router();
+const router = express.Router()
+const handleError = require('../helpers/handleError.helper')
 
-const handleError = require('../helpers/handleError.helper');
-
-router.use('/admin', require('./admin.route'));
+router.use('/admin', require('./admin.route'))
 
 
-module.exports = router;
+module.exports = router

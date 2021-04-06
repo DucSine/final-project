@@ -5,26 +5,21 @@ const FoodSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  caption: {
-    type: String,
+  price: {
+    type: Number,
     required: true,
   },
   image: {
     type: String,
     default: 'https://picsum.photos/200',
   },
-  price: {
-    type: Number,
+  caption: {
+    type: String,
     required: true,
   },
   type: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'FoodType',
-    required: true,
-  },
-  restaurant: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Restaurant',
     required: true,
   },
   dateCreate: {

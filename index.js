@@ -12,6 +12,26 @@ app.use(bodyParser.urlencoded({extended:true}))
 
 connectDB()
 app.use('/api',apiRoute)
-app.use('/test',(req,res)=> res.send('hello'))
+//
+const {
+    addResType,
+    addRes,
+    addFoodType,
+    addFood,
+    addUser
+  } = require('./controllers/dev.controller');
+app.set('view engine', 'pug')
+app.set('views', './views')
+
+app.get('/test',(req,res)=> res.send('hello'))
+
+app.post('/dev/addRestaurantType', addResType)
+app.post('/dev/addRestaurant', addRes)
+
+app.post('/dev/addFoodType', addFoodType)
+app.post('/dev/addFood', addFood)
+
+app.post('/dev/addUser', addUser)
+//
 
 app.listen(port, ()=>console.log(`run with http://localhost:${port}`))
