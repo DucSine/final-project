@@ -1,14 +1,6 @@
 const mongoose = require('mongoose');
 
 const TokenSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-  },
-  restaurant: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Restaurant',
-  },
   email: {
     type: String,
     required: true,

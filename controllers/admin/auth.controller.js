@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 const { validationResult } = require('express-validator')
 const crypto = require('crypto')
 
-
+const sendEmail = require('../../utils/sendEmail')
 const Response = require('../../helpers/response.helper')
 
 exports.login = async (req, res, next) => {
@@ -42,7 +42,7 @@ exports.login = async (req, res, next) => {
     return next(new Error('Error occurred!'));
   }
 };
-/*
+
 exports.forgotPassword = async (req, res, next) => {
   const errors = validationResult(req);
 
@@ -53,7 +53,7 @@ exports.forgotPassword = async (req, res, next) => {
   const { email } = req.body;
 
   if (email !== process.env.ADMIN_EMAIL)
-    return next(new Error('Email không chính xác'));
+    return next(new Error('Email is incorrect!'));
 
   // Create password reset token
   const resetToken = crypto.randomBytes(16).toString('hex');
@@ -73,7 +73,7 @@ exports.forgotPassword = async (req, res, next) => {
 
     const message = `<p>Bạn cần truy cập vào link sau để xác nhận tài khoản:</p><p>${tokenUrl}</p>`;
     await sendEmail({
-      email,
+      email: email,
       subject: 'Forgot Password - Admin',
       message,
     });
@@ -85,7 +85,7 @@ exports.forgotPassword = async (req, res, next) => {
   } catch (error) {
     console.log(error);
     process.env.ADMIN_RESETTOKEN = '';
-    return next(new Error('Có lỗi xảy ra'));
+    return next(new Error('Error occurred!'));
   }
 };
 
@@ -131,4 +131,3 @@ exports.resetPassword = async (req, res, next) => {
     return next(new Error('Có lỗi xảy ra'));
   }
 };
-*/

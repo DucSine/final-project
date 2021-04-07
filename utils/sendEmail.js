@@ -1,6 +1,7 @@
-const nodemailer = require('nodemailer')
+require('dotenv').config()
+const nodemailer = require('nodemailer');
 
-exports.sendEmail = async (options) => {
+const sendEmail = async (options) => {
   const transporter = nodemailer.createTransport({
 
     host: process.env.SMTP_HOST,
@@ -10,15 +11,19 @@ exports.sendEmail = async (options) => {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASSWORD
     }
-  })
+  });
 
+  console.log(process.env.SMTP_HOST)
+  console.log(process.env.SMTP_PORT)
   // send mail with defined transport object
   const info = await transporter.sendMail({
-    from: options.name,
+    from: process.env.SMTP_NAME,
     to: options.email,
     subject: options.subject,
     html: options.message,
-  })
+  });
 
   console.log('Message sent: %s', info.messageId);
-}
+};
+
+module.exports = sendEmail;
