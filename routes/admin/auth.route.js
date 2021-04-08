@@ -16,8 +16,7 @@ router.post(
   [
     check('username', 'Enter username').not().isEmpty(),
     check(
-      'password',
-      'Password has at least 8 chars and maximum 30 chars ',
+      'password', 'Password has at least 8 chars and maximum 30 chars'
     ).isLength({ min: 8, max: 30 }),
   ],
   login,
@@ -28,9 +27,9 @@ router.post(
 // @access  Public
 router.post(
   '/forgotPassword',
-  [check('email', 'Bạn phải nhập đúng định dạng email').isEmail()],
+  [check('email', 'Email invalidate!').isEmail()],
   forgotPassword,
-);
+)
 
 // @route   POST api/admin/auth/resetPassword
 // @desc    Reset mật khẩu
@@ -39,11 +38,10 @@ router.post(
   '/resetPassword/:resetToken',
   [
     check(
-      'password',
-      'Mật khẩu phải có ít nhất 8 ký tự và không quá 30 ký tự',
+      'password', 'Password has at least 8 chars and maximum 30 chars'
     ).isLength({ min: 8, max: 30 }),
   ],
   resetPassword,
-);
+)
 
 module.exports = router

@@ -12,9 +12,7 @@ const sendEmail = async (options) => {
       pass: process.env.SMTP_PASSWORD
     }
   });
-
-  console.log(process.env.SMTP_HOST)
-  console.log(process.env.SMTP_PORT)
+  
   // send mail with defined transport object
   const info = await transporter.sendMail({
     from: process.env.SMTP_NAME,

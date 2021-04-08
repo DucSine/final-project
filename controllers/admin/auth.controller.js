@@ -63,6 +63,7 @@ exports.forgotPassword = async (req, res, next) => {
     .update(resetToken)
     .digest('hex');
 
+  console.log('envTK: '+ process.env.ADMIN_RESETTOKEN)
   try {
     // Send email
     const tokenUrl = `<a href="${req.protocol}://${req.get(
