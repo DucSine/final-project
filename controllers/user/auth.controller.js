@@ -1,14 +1,15 @@
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-// const crypto = require('crypto');
-// const path = require('path');
-const { validationResult } = require('express-validator');
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+// const crypto = require('crypto')
+// const path = require('path')
+const { validationResult } = require('express-validator')
 
 // Models
-const User = require('../../models/User');
+const User = require('../../models/User')
+const Restaurant = require('../../models/Restaurant')
 // const Token = require('../../models/Token');
 
-// const sendEmail = require('../../utils/sendEmail');
+const sendEmail = require('../../utils/sendEmail');
 const Response = require('../../helpers/response.helper');
 
 const limit = 20;
@@ -134,7 +135,7 @@ exports.login = async (req, res, next) => {
     return next(error);
   }
 };
-/*
+
 exports.register = async (req, res, next) => {
   // Validate
   const errors = validationResult(req);
@@ -146,30 +147,28 @@ exports.register = async (req, res, next) => {
     username,
     email,
     password,
-    SDT,
-    diaChi,
+    phone,
+    adress,
     fullName,
-    gioiTinh,
-    ngaySinh,
-    CMND,
+    gender,
+    bDate,
+    ID,
   } = req.body;
-
-  // let { ngaySinh } = req.body;
 
   try {
     let user = await User.findOne({ email });
 
     if (user) {
-      throw new Error('Email đã tồn tại');
+      throw new Error('Email was exists!');
     } else user = null;
 
     user = await User.findOne({ username });
 
     if (user) {
-      throw new Error('Tên đăng nhập đã tồn tại');
+      throw new Error('Username was exists!');
     }
 
-    const dateParts = ngaySinh.split('/');
+    const dateParts = bDate.split('/');
 
     // Tạo ra salt mã hóa
     const salt = await bcrypt.genSalt(10);
@@ -177,18 +176,16 @@ exports.register = async (req, res, next) => {
       username,
       email,
       password: await bcrypt.hash(password, salt),
-      SDT,
-      diaChi,
+      phone,
+      adress,
       fullName,
-      gioiTinh,
-      CMND,
-      ngaySinh: new Date(
+      gender,
+      ID,
+      bDate: new Date( // dd/mm/yyyy
         parseInt(dateParts[2], 10),
         parseInt(dateParts[1], 10) - 1,
         parseInt(dateParts[0], 10),
-      ),
-      isVerified: true,
-      // ngaySinh,
+      )
     });
 
     // // Tạo 1 token -> lưu lại -> gởi email + token -> email gởi lại token hợp lệ -> verified user
@@ -221,7 +218,7 @@ exports.register = async (req, res, next) => {
     return next(error);
   }
 };
-
+/*
 exports.getMe = (req, res) => {
   const { user } = req;
   return Response.success(res, { user });
