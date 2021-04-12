@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const FoodSchema = new mongoose.Schema({
   foodName: {
     type: String,
-    required: true,
+     required: true,
   },
   price: {
     type: Number,
@@ -17,10 +17,14 @@ const FoodSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  type: {
+  restaurant: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'FoodType',
+    ref: 'Restaurant',
     required: true,
+  },
+  rate: {
+    type: Number,
+    default: 0
   },
   dateCreate: {
     type: Date,

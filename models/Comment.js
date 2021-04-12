@@ -1,18 +1,13 @@
 const mongoose = require('mongoose');
 
 const CommentSchema = new mongoose.Schema({
-  detail: String,
-  // nhaHang: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: 'Restaurant',
-  //   required: true,
-  // },
+  message: String,
   food: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Food',
     required: true,
   },
-  customer: {
+  user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,

@@ -3,9 +3,10 @@ const express = require('express')
 const bodyParser = require('body-parser')
 
 const app = express()
-const port = process.env.PORT||3000
+const port = process.env.PORT
 const connectDB = require('./config/db')
 const apiRoute = require('./routes/api.route')
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
 
@@ -34,8 +35,5 @@ app.post('/dev/addFood', addFood)
 
 app.post('/dev/addUser', addUser)
 
-app.get('/userHostPage', getMonExample)
-
-//
 
 app.listen(port, ()=>console.log(`run with http://localhost:${port}`))

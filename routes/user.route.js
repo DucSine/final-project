@@ -1,26 +1,23 @@
-const express = require('express');
+const express = require('express')
 
-const router = express.Router();
+const router = express.Router()
 
-const handleError = require('../helpers/handleError.helper');
+const handleError = require('../helpers/handleError.helper')
 
-const { protect } = require('../middlewares/user/auth');
+const { protect } = require('../middlewares/user/auth')
 
-router.use('/auth', require('./user/auth.route'));
+router.use('/auth', require('./user/auth.route'))
 
-router.use(handleError);
+router.use(handleError)
 /*
 router.use('/restaurant', require('./user/restaurant.route'));
 
 router.use(handleError);
 */
-router.use('/food', require('./user/food.route'));
+router.use('/func', require('./user/user.function.route'));
 
-router.use(handleError);
+router.use(handleError)
 
-// router.use(handleError);
-
-router.use(protect);
 
 router.use(handleError);
 /*

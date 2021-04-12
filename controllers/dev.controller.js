@@ -122,19 +122,20 @@ exports.addFood = async (req,res,next)=>{
     foodName,
     price,
     caption,
-    type
+    restaurantID,
   } = req.body
 
   console.log(req.body )
   try {
     let food = await Food.findOne({ foodName });
-    const foodType = await FoodType.findById(type);
-  
-    if (food && foodType)  throw new Error('Món đã tồn tại');
-      
+    if (food)  throw new Error('Món đã tồn tại');
+    
+    const restaurant = await Restaurant.findById(restaurantID)
+    if(!res) throw new Error('res k tồn tại');
+    console.log(res)
     food = await Food.create({ 
       foodName,
-      type: foodType._id,
+      restaurant: restaurant._id,
       price,
       caption 
     });

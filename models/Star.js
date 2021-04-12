@@ -1,18 +1,13 @@
 const mongoose = require('mongoose');
 
 const StarSchema = new mongoose.Schema({
-  soLuong: Number,
-  // nhaHang: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: 'Restaurant',
-  //   required: true,
-  // },
+  rate: Number,
   food: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Food',
     required: true,
   },
-  customer: {
+  user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
