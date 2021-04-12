@@ -52,26 +52,24 @@ exports.topRate = async(req, res, next)=>{
 exports.findProducts = async(req, res, next)=>{
   try{
     let {key} = req.query
-    
-    const productsTotal = await Food.find({foodName: new RegExp(key)}).count()
-    const pageTotal = Math.ceil(productsTotal / limit)
+    // const p = parseInt(p,10)
+    // const productsTotal = await Food.find({foodName: new RegExp(key)}).count()
+    // const pageTotal = Math.ceil(productsTotal / limit)
 
-    if(productsTotal<=0)
-      return Response.error(res,{message: 'Không tìm thấy!'})
+
+//    if(productsTotal<=0)
+  //    return Response.error(res,{message: 'Không tìm thấy!'})
 
     const food = await Food.find({foodName: new RegExp(key)})
-    const foods = await Food.find({foodName: new RegExp(key)})
-      .sort({rate:-1, price: 1 , dateCreate: -1 })
-      .populate('restaurant')
-      .skip((q - 1) * limit)
-      .limit(limit);
+    // zconst foods = await Food.find({foodName: new RegExp(key)})
+    //   .sort({rate:-1, price: 1 , dateCreate: -1 })
+    //   .populate('restaurant')
+    //   .skip((p - 1) * limit)
+    //   .limit(limit);
       
     return Response.success(
       res, {
-        food,
-        productsTotal,
-        pageTotal
-      })
+        food      })
   }catch(error){
     console.log(error)
     return next(error)
