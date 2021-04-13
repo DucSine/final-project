@@ -10,14 +10,13 @@ exports.protect = async (req, res, next) => {
     if (!token) 
       throw new Error('Không tìm thấy token!')
     
-    const decode = jwt.verify(token.split(' ')[1], process.env.JWT_SECRET)
+    const decode = jwt.verify(token, process.env.JWT_SECRET)
     const user = await User.findById(decode.user.id)
     
     if (!user) 
       throw new Error('Token không đúng hoặc đã hết hạn!')
     
     req.user = user
-    
     return next()
   } catch (error) {
     console.log(error)

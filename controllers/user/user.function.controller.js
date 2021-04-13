@@ -9,89 +9,38 @@ const User = require('../../models/User')
 const { Error } = require('mongoose')
 const limit = 20
 
+//Thêm vào giỏ hàng
+exports.addCart = async(req, res, next)=>{}
 
-//trang chủ -5 món mới nhất
-exports.getNewFood = async(req,res,next)=>{
-  try{
-    const foods = await Food.find()
-      .sort({ dateCreate: -1 })
-      .populate('restaurant')
-      .skip(0)
-      .limit(5)
+//Update giỏ hàng
+exports.updateCart = async(req, res, next)=>{}
 
-    if (!foods) 
-      throw new Error('Có lỗi xảy ra')
+// Đặt hàng
+exports.order = async(req, res, next)=>{}
 
-    return Response.success(res, { foods })
-  } catch (error) {
-    console.log(error)
-    return next(error)
-  }
-}
+//Hủy Đơn hàng
+exports.cancelOrder = async(req, res, next)=>{}
 
-//top 10 rate
-exports.topRate = async(req, res, next)=>{
-  try{
-    const food = await Food.find()
-      .sort({ rate: -1, price: 1, dateCreate: -1 })
-      .populate('restaurant')
-      .skip(0)
-      .limit(10)
+//Thanh toán
 
-    if (!foods) 
-      throw new Error('Có lỗi xảy ra')
-
-    return Response.success( res, { foods })
-  } catch (error) {
-    console.log(error)
-    return next(error)
-  }
-}
-
-//Tìm kiếm món ăn
-exports.findProducts = async(req, res, next)=>{
-  try{
-    let {key} = req.query
-    // const p = parseInt(p,10)
-    // const productsTotal = await Food.find({foodName: new RegExp(key)}).count()
-    // const pageTotal = Math.ceil(productsTotal / limit)
-
-
-//    if(productsTotal<=0)
-  //    return Response.error(res,{message: 'Không tìm thấy!'})
-
-    const food = await Food.find({foodName: new RegExp(key)})
-    // zconst foods = await Food.find({foodName: new RegExp(key)})
-    //   .sort({rate:-1, price: 1 , dateCreate: -1 })
-    //   .populate('restaurant')
-    //   .skip((p - 1) * limit)
-    //   .limit(limit);
-      
-    return Response.success(
-      res, {
-        food      })
-  }catch(error){
-    console.log(error)
-    return next(error)
-  }
-}
-
-// Đánh giá 
+//Đánh giá 
 exports.rate = async(req, res, next)=>{
   try{
     const {
       foodID,
-      userID,
       rate
     } = req.body
-
+    
     const food = await Food.findById(foodID)
     if(!food)
       throw new Error('Có lỗi xảy ra!')
 
-    const user = await User.findById(userID)
-    if(!user)
-    throw new Error('Có lỗi xảy ra!')
+    const _rate = await Star.findOne({
+      user: req.user._id, 
+      food: food._id
+    })
+    if(_rate)  // Đã đánh giá sp
+      throw new Error('Có lỗi xảy ra!')
 
     const star =  Math.ceil(Number(rate))
     if(star > 5 && star < 0)
@@ -100,8 +49,40 @@ exports.rate = async(req, res, next)=>{
     await Star.create({
       rate: star,
       food: food._id,
-      user: user._id
+      user: req.user._id
     })
+
+    return Response.success(res,{message: 'Đánh giá thành công'})
+  }catch(error){
+    console.log(error)
+    return next(error)
+  }
+}
+
+//Chỉnh sửa đánh giá
+exports.editRate = async(req, res, next)=>{
+  try{
+    const {
+      foodID,
+      rate
+    } = req.body
+
+    const food = await Food.findById(foodID)
+    if(!food)
+      throw new Error('Có lỗi xảy ra!')
+
+    const _rate = await Star.findOne({
+      user: req.user._id, 
+      food: food._id
+    })
+    if(!_rate)  // đánh giá không tồn tại
+      throw new Error('Có lỗi xảy ra!')
+
+    const star =  Math.ceil(Number(rate))
+    if(star > 5 && star < 0)
+      throw new Error('Có lỗi xảy ra!')
+
+    await Star.findByIdAndUpdate(_rate._id, { $set: {rate: star}} )
 
     return Response.success(res,{message: 'Đánh giá thành công'})
   }catch(error){
@@ -115,37 +96,34 @@ exports.comment = async(req, res, next)=>{
   try{
     const {
       foodID,
-      userID,
-      message
+      comment
     } = req.body
 
     const food = await Food.findById(foodID)
     if(!food)
       throw new Error('Có lỗi xảy ra!')
 
-    const user = await User.findById(userID)
-    if(!user)
-      throw new Error('Có lỗi xảy ra!')
+    if(comment.trim() == null || comment.trim()== '')
+      throw new Error('Không có bình luận')
 
-    if(message.trim()!= null && message.trim()!='')
-      return Response.error(res,{message: 'Vui lòng nhập bình luận.'})
+    await Comment.create({
+      food: food._id,
+      user: req.user._id,
+      message: comment
+    })
 
-    return Response.success(res,{message: 'Bình luận thành công.'})
+    return Response.success(res,{message: 'Bình luận thành công'})
   }catch(error){
     console.log(error)
     return next(error)
   }
 }
+
+//Chỉnh sửa bình luận
+exports.editComment = async(req, res, next)=>{}
+
+//Xóa bình luận
+exports.deleteComment = async(req, res, next)=>{}
+
 ///
-// Đặt hàng
-exports.order = async(req, res, next)=>{}
 
-//Hủy Đơn hàng
-exports.cancelOrder = async(req, res, next)=>{}
-
-//Thêm vào giỏ hàng
-exports.addCart = async(req, res, next)=>{}
-
-//Update giỏ hàng
-exports.updateCart = async(req, res, next)=>{}
-//Thanh toán

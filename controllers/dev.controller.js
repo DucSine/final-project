@@ -128,7 +128,7 @@ exports.addFood = async (req,res,next)=>{
   console.log(req.body )
   try {
     let food = await Food.findOne({ foodName });
-    if (food)  throw new Error('Món đã tồn tại');
+    //if (food)  throw new Error('Món đã tồn tại');
     
     const restaurant = await Restaurant.findById(restaurantID)
     if(!res) throw new Error('res k tồn tại');

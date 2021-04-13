@@ -36,4 +36,29 @@ app.post('/dev/addFood', addFood)
 app.post('/dev/addUser', addUser)
 
 
+///
+const Restaurant = require('./models/Restaurant')
+const Food = require('./models/Food')
+
+const findd = async()=>{
+  const res = await Restaurant.find({restaurantName:'Cua Đồng 101'})
+  const food = await Food.findOne({price:30000, foodName: 'Bún thập cẩm'})
+  const f = food._id.toString()
+  console.log(await Food.findById(f))
+}
+findd()
+
+////
+const {protect}= require('./middlewares/user/auth')
+const User = require('./models/User')
+app.get('/testlog',protect,async(req, res, next)=>{
+  
+
+  const us = await User.findById({_id: req.user._id})
+  console.log(us)
+  res.send(us)
+  
+})
+const Response = require('./helpers/response.helper')
+app.get('/getme', protect, async(req, res, next)=> Response.success(res, req.user))
 app.listen(port, ()=>console.log(`run with http://localhost:${port}`))

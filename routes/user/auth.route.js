@@ -8,7 +8,11 @@ const {
   login, 
   register,
   editEmailRegister,
-  verificationAccount
+  editPassword,
+  verificationAccount,
+  editAccount,
+  userProfile,
+  changeAvatar
 } = require('../../controllers/user/auth.controller')
 const { protect } = require('../../middlewares/user/auth')
 
@@ -68,12 +72,12 @@ router.post(
   verificationAccount
 )
 
-/*
-// @route   POST api/admin/auth/updatePassword
-// @desc    Cập nhật mật khẩu
+
+// @route   POST api/user/auth/editPassword
+// @desc    Đổi mật khẩu
 // @access  Private
 router.post(
-  '/updatePassword',
+  '/editPassword',
   [
     check('password', 'Mật khẩu phải nhiều hơn 8 ký tự').isLength({ min: 8 }),
     check('newPassword', 'Mật khẩu phải nhiều hơn 8 ký tự').isLength({
@@ -81,32 +85,35 @@ router.post(
     }),
   ],
   protect,
-  updatePassword,
+  editPassword,
 );
 
-// @route   POST api/admin/auth/update
+// @route   POST api/user/auth/editAccount
 // @desc    Cập nhật tài khoản
 // @access  Private
 router.post(
-  '/update',
+  '/editAccount',
   [
-    // check('username', 'Bạn phải nhập tên').not().isEmpty(),
-    check('email', 'Bạn phải nhập đúng định dạng email').isEmail(),
-    // check('password', 'Mật khẩu phải nhiều hơn 8 ký tự').isLength({ min: 8 }),
     check('fullName', 'Bạn phải nhập họ tên').not().isEmpty(),
-    check('diaChi', 'Bạn phải nhập địa chỉ').not().isEmpty(),
-    check('SDT', 'Bạn phải nhập số điện thoại').not().isEmpty(),
-    check('gioiTinh', 'Bạn phải chọn giới tính').not().isEmpty(),
-    check('CMND', 'Bạn phải nhập số CMND').not().isEmpty(),
-    check('ngaySinh', 'Bạn phải nhập ngày sinh').not().isEmpty(),
+    check('adress', 'Bạn phải nhập địa chỉ').not().isEmpty(),
+    check('phone', 'Bạn phải nhập số điện thoại').not().isEmpty(),
+    check('gender', 'Bạn phải chọn giới tính').not().isEmpty(),
+    check('ID', 'Bạn phải nhập số CMND').not().isEmpty(),
+    check('bDate', 'Bạn phải nhập ngày sinh').not().isEmpty(),
   ],
   protect,
-  update,
+  editAccount,
 );
 
-// @route   GET api/admin/auth/getMe
+// @route   GET api/admin/auth/profile
 // @desc    Lấy thông tin tài khoản
 // @access  Private
-router.get('/getMe', protect, getMe);
-*/
+router.get('/userProfile', protect, userProfile)
+
+// @route   GET api/admin/auth/profile
+// @desc    Lấy thông tin tài khoản
+// @access  Private
+router.get('/changeAvatar', protect, changeAvatar)
+
+
 module.exports = router

@@ -11,8 +11,9 @@ const OTP = require('../../models/OTP')
 
 const sendEmail = require('../../utils/sendEmail')
 const Response = require('../../helpers/response.helper')
+const { findOneAndUpdate } = require('../../models/User')
 
-const sendMailVerify = async(user) =>{
+const sendMailVerify = async(user, subject) =>{
   //generate otp code
   const OTPcode = 'FO-'
   for(var i = 0; i <= 5; i++)
@@ -35,7 +36,7 @@ const sendMailVerify = async(user) =>{
     
     await sendEmail({
       email: user.email,
-      subject: 'Xác thực tài khoản',
+      subject: subject,
       message: verifitonMessage
     })
 
@@ -103,7 +104,7 @@ exports.register = async (req, res, next) => {
       )
     })
     //verifition account
-    sendMailVerify(user)
+    sendMailVerify(user, 'Xác thực tài khoản')
   
     const message = `Chúng tôi đã gửi một email kèm theo mã OTP đến ${email},`
                   + `vui lòng kiểm tra email vủa bạn và nhập mã OTP để kích hoạt tài khoản`
@@ -134,7 +135,7 @@ exports.editEmailRegister = async(req, res, next) =>{
 
     await User.findByIdAndUpdate(userID, { $set: { email: email } })
 
-    sendMailVerify(User)
+    sendMailVerify(User, 'Mã thay đổi')
     //
     return Response.success(res, { message: 'Cập nhật thành công' });
   }catch(error){
@@ -143,8 +144,14 @@ exports.editEmailRegister = async(req, res, next) =>{
   }
 }
 
+
 //Xác thực tài khoản
 exports.verificationAccount = async(req, res, next) =>{
+  // Validate
+  const errors = validationResult(req)
+  if (!errors.isEmpty())
+    return res.status(400).json({ errors: errors.array() })
+
   const {
     email,
     OTP
@@ -180,9 +187,7 @@ exports.verificationAccount = async(req, res, next) =>{
 // Đăng nhập
 exports.login = async (req, res, next) => {
   // Validate
-  console.log(req)
   const errors = validationResult(req);
-
   if (!errors.isEmpty())
     return res.status(400).json({ errors: errors.array() })
 
@@ -227,28 +232,122 @@ exports.login = async (req, res, next) => {
   }
 }
 
+// Quên mật khẩu 
+// post mail xác nhận - verificationAccount
+exports.fogotPassword = async(req, res, next) =>{
+  // Validate
+  const errors = validationResult(req)
+  if (!errors.isEmpty())
+    return res.status(400).json({ errors: errors.array() })
+
+  const { email } = req.body
+
+  try{
+    let user = findOne({ email })
+    if(!user)
+      throw new Error('Địa chỉ email không đúng!')
+    
+    sendMailVerify(user, 'Xác thực tài khoản')
+
+    return Response.success(res, {
+      message: 'Vui lòng kiểm tra email và nhập mã OTP'
+    })
+  }catch(error){
+    console.log(error)
+    return next(error)
+  }
+}
+// Nhập mk mới - login 
+exports.editPassword = async(req, res, next) =>{
+// Validate
+  const errors = validationResult(req)
+  if (!errors.isEmpty())
+    return res.status(400).json({ errors: errors.array() })
+
+  const { 
+    email, 
+    newPassword 
+  } = req.body
+
+  try{
+    let user = await User.findOne({ email })
+    if (!user.isVerified) 
+      throw new Error('Tài khoản chưa được kích hoạt!')
+    
+    const salt = await bcrypt.genSalt(10);
+    const password = await bcrypt.hash(newPassword, salt)  
+    await User.findByIdAndUpdate(user._id, {$set :{ password }})
+
+    const payload = {
+      user: {
+        id: user.id,
+      },
+    };
+
+    jwt.sign(
+      payload,
+      process.env.JWT_SECRET,
+      { expiresIn: 360000 },
+      (err, token) => {
+        if (err) throw err;
+        return Response.success(res, { token, avatar: user.avatar })
+      },
+    )
+    
+    return true
+  }catch(error){
+    console.log(error)
+    return next(error)
+  }
+
+}
+
 // Đổi mật khẩu
 exports.editPassword = async(req, res, next) =>{
+  // Validate
+  const errors = validationResult(req)
+  if (!errors.isEmpty())
+    return res.status(400).json({ errors: errors.array() })
 
+  const { 
+    password,
+    newPassword } = req.body
+
+  try{
+    // Result: boolean
+    const result = await bcrypt.compare(password, req.user.password)
+    if (!result) 
+      throw new Error('Password sai!')
+    
+    const salt = await bcrypt.genSalt(10);
+    const editPass = await bcrypt.hash(newPassword, salt)  
+    await User.findByIdAndUpdate(user._id, {$set :{ password: editPass }})
+
+    //làm mới token 
+    const payload = {
+      user: {
+        id: user.id,
+      },
+    };
+
+    jwt.sign(
+      payload,
+      process.env.JWT_SECRET,
+      { expiresIn: 360000 },
+      (err, token) => {
+        if (err) throw err;
+        return Response.success(res, { token })
+      }
+    )
+    
+    return true
+  }catch(error){
+    console.log(error)
+    return next(error)
+  }
 }
-
-// Quên mật khẩu
-exports.editPassword = async(req, res, next) =>{
-
-}
-
-
 // Đổi thông tin tài khoản
-exports.updateAccount = async(req, res, next) =>{
-  
-}
-
-// 
-
-
-/*
-//edit user
-exports.update = async (req, res, next) => {
+exports.editAccount = async (req, res, next) => {
   // Validate
   const errors = validationResult(req)
   if (!errors.isEmpty())
@@ -258,50 +357,18 @@ exports.update = async (req, res, next) => {
   const { bDate } = req.body
   try {
     const currentUser = await User.findByIdAndUpdate(user._id, {
-      $set: { ...req.body, ngaySinh: new Date(bDate) },
-    });
-    if (!currentUser) throw new Error('Có lỗi xảy ra');
-    return Response.success(res, { message: 'Cập nhật thành công' });
+      $set: { ...req.body, bDate: new Date(bDate) },
+    })
+    if (!currentUser) throw new Error('Có lỗi xảy ra')
+    return Response.success(res, { message: 'Cập nhật thành công' })
   } catch (error) {
-    console.log(error);
-    return next(error);
+    console.log(error)
+    return next(error)
   }
-};
+}
 
-exports.updatePassword = async (req, res, next) => {
-  // Validate
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-
-  let {
-    body: { newPassword },
-  } = req;
-
-  const {
-    user,
-    body: { password },
-  } = req;
-
-  try {
-    // Result: boolean
-    const result = await bcrypt.compare(password, user.password);
-
-    if (!result) {
-      throw new Error('Bạn nhập sai mật khẩu');
-    }
-
-    // Tạo ra salt mã hóa
-    const salt = await bcrypt.genSalt(10);
-    newPassword = await bcrypt.hash(newPassword, salt);
-
-    await User.findByIdAndUpdate(user._id, { $set: { password: newPassword } });
-
-    return Response.success(res, { message: 'Cập nhật thành công' });
-  } catch (error) {
-    console.log(error);
-    return next(error);
-  }
-};
-*/
+//Lấy thông tin tài khoản
+exports.userProfile = async (req, res, next) => Response.success(res, req.user)
+//>>stop here
+// Thay Avatar
+exports.changeAvatar = async (req, res, next) => {}
