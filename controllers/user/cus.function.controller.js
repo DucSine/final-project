@@ -77,7 +77,7 @@ exports.findProducts = async(req, res, next)=>{
 
 //Xem đánh giá
 exports.showRate = async(req, res, next)=>{
-
+// foodID  :query
 }
 
 //Xem bình luận

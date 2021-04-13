@@ -60,5 +60,8 @@ app.get('/testlog',protect,async(req, res, next)=>{
   
 })
 const Response = require('./helpers/response.helper')
-app.get('/getme', protect, async(req, res, next)=> Response.success(res, req.user))
+app.get('/getme', protect, async(req, res, next)=>{
+
+  return Response.success(res, req.user)
+} )
 app.listen(port, ()=>console.log(`run with http://localhost:${port}`))
