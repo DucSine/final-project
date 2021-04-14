@@ -12,7 +12,11 @@ app.use(bodyParser.urlencoded({extended:true}))
 
 connectDB()
 app.use('/api',apiRoute)
-//
+
+app.set('view engine', 'pug')
+app.set('views', './views')
+
+//////////////////////////////////////////////
 const {
     addResType,
     addRes,
@@ -22,16 +26,15 @@ const {
   } = require('./controllers/dev.controller');
 
 const {getMonExample} = require('./example')
-app.set('view engine', 'pug')
-app.set('views', './views')
 
-app.get('/test',(req,res)=> res.send('hello'))
 
+////////////////////////////
+const multer = require('multer')
+const upload = multer({dest: './public/uploads'})
 app.post('/dev/addRestaurantType', addResType)
-app.post('/dev/addRestaurant', addRes)
+app.post('/dev/addRestaurant', upload.single('banner'), addRes)
 
-app.post('/dev/addFoodType', addFoodType)
-app.post('/dev/addFood', addFood)
+app.post('/dev/addFood',upload.single('image'), addFood)
 
 app.post('/dev/addUser', addUser)
 

@@ -10,15 +10,15 @@ exports.protect = async (req, res, next) => {
 
   try {
     if (!token) 
-      throw new Error('Token not found!')
+      throw new Error('Không tìm thấy token!')
 
-    const decode = jwt.verify(token.split(' ')[1], process.env.JWT_SECRET)
-    const restaurant = await Restaurant.findById(decode.restaurantManager.id)
+    const decode = jwt.verify(token, process.env.JWT_SECRET)
+    const restaurant = await Restaurant.findById(decode.restaurant.id)
     
     if (!restaurant) 
-      throw new Error('Invaild token!')
+      throw new Error('Token không đúng hoặc đã hết hạn!')
     
-    req.restaurantManager = restaurant
+    req.restaurant = restaurant
     return next()
   } catch (error) {
     console.log(error)

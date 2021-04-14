@@ -2,7 +2,7 @@ const User = require('../models/User')
 const Restaurant = require('../models/Restaurant')
 const OTP = require('../models/OTP')
 
-//Kiểm tra email tồn tại 
+//Kiểm tra email tồn tại  
 exports.emailIsExists = async(email) =>{
     if(email == process.env.ADMIN_EMAIL ||
        email == process.env.SMTP_USER )

@@ -14,7 +14,6 @@ const {
   changePassword,
   editAccount,
   userProfile,
-  changeAvatar,
   fogotPassword,
   otpResetPassword,
   resetPassword,
@@ -99,7 +98,7 @@ router.post(
   '/editAccount',
   [
     check('fullName', 'Bạn phải nhập họ tên').not().isEmpty(),
-    check('adress', 'Bạn phải nhập địa chỉ').not().isEmpty(),
+    check('address', 'Bạn phải nhập địa chỉ').not().isEmpty(),
     check('phone', 'Bạn phải nhập số điện thoại').not().isEmpty(),
     check('gender', 'Bạn phải chọn giới tính').not().isEmpty(),
     check('ID', 'Bạn phải nhập số CMND').not().isEmpty(),

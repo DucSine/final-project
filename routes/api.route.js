@@ -7,4 +7,6 @@ router.use('/admin', require('./admin.route'))
 
 router.use('/user', require('./user.route'))
 
+router.use('/res', require('./restaurant.route'))
+
 module.exports = router

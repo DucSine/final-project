@@ -121,7 +121,7 @@ exports.changeEmailRegister = async(req, res, next) =>{
     if(!user)
       throw new Error('Có lỗi xảy ra!')
     
-    const checkMail = await emailIsExists(emailIsExists)
+    const checkMail = await emailIsExists(email)
     if(checkMail)
       throw new Error('email đã được sử dụng!')
 
@@ -402,7 +402,11 @@ exports.editAccount = async (req, res, next) => {
     }
 
     const currentUser = await User.findByIdAndUpdate(req.user._id, {
-      $set: { ...req.body, bDate: new Date(bDate) },
+      $set: { 
+        ...req.body,
+        bDate: new Date(bDate),
+        avatar: urlUpload
+      },
     })
     if (!currentUser) throw new Error('Có lỗi xảy ra')
     return Response.success(res, { message: 'Cập nhật thành công' })

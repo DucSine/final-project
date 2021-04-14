@@ -7,12 +7,11 @@ const Response = require('../helpers/response.helper')
 // Models
 const RestaurantType = require('../models/RestaurantType')
 const Restaurant = require('../models/Restaurant')
-const FoodType = require('../models/FoodType')
 const Food = require('../models/Food')
 const User = require('../models/User')
 
 const limit = 20
-
+const { emailIsExists } = require('../config/general')
 // res
 exports.addResType = async(req,res,next)=>{
     const errors = validationResult(req);
@@ -42,37 +41,52 @@ exports.addRes = async (req, res, next)=>{
     if (!errors.isEmpty())
       return res.status(400).json({ errors: errors.array() });
 
-    const {
+    const{
+      file,
+      body: {
         restaurantName,
         email,
         password,
         phone,
-        adress,
+        address,
         type,
-      } = req.body;
-      console.log(req.body)
+      }
+    } = req
+  
   try{
       let restaurant = await Restaurant.findOne({ restaurantName });
-  
       if (restaurant) throw new Error('Tên nhà hàng đã tồn tại');
   
-      restaurant = await Restaurant.findOne({ email });
-  
-      if (restaurant) throw new Error('Email đã tồn tại');
+      if(await emailIsExists(email))
+        throw new Error('Email đã tồn tại');
   
       const restaurantType = await RestaurantType.findById(type);
   
       if (!restaurantType) throw new Error('Loại hình không tồn tại');
   
+      const urlUpload = ''
+      if(file){   // nếu upload ảnh đại diện 
+        let orgName = file.originalname || '';
+        orgName = orgName.trim().replace(/ /g, '-');
+        const fullPathInServ = file.path;
+        const newFullPath = `${fullPathInServ}-${orgName}`;
+        fs.rename(fullPathInServ, newFullPath);
+
+        const result = await cloudinary.uploader.upload(newFullPath);
+        urlUpload = result.url
+        fs.unlinkSync(newFullPath);
+      }
+
       const salt = await bcrypt.genSalt(10);
       restaurant = await Restaurant.create({
         restaurantName,
         email,
         password: await bcrypt.hash(password, salt),
         phone: phone,
-        adress,
+        address,
         isVerified:true,
         type: restaurantType._id,
+        banner: urlUpload,
       });
   
       return Response.success(res, { message: 'Bạn đã đăng ký thành công' });
@@ -83,61 +97,49 @@ exports.addRes = async (req, res, next)=>{
 }
 
 //foods
-exports.addFoodType = async(req,res,next)=>{
-  const errors = validationResult(req)
-    
-  if (!errors.isEmpty())
-    return res.status(400).json({ errors: errors.array() });
-
-  const { typeName, restaurant } = req.body;
-  
-  try {
-    let foodType = await FoodType.findOne({ typeName });
-  
-    if (foodType)  throw new Error('Loại hình đã tồn tại');
-
-    const restaurants = await Restaurant.findById(restaurant);
-  
-    if (!restaurants) throw new Error('Nhà hàng không tồn tại');
-      
-    foodType = await FoodType.create({ 
-      typeName,
-      restaurant: restaurants._id 
-    });
-  
-    return Response.success(res, { message: 'Thêm thành công' });
-  } catch (error) {
-    console.log(error.message);
-    return next(error);
-  }
-}
-
 exports.addFood = async (req,res,next)=>{
   const errors = validationResult(req)
     
   if (!errors.isEmpty())
     return res.status(400).json({ errors: errors.array() });
-  
+
   const {
-    foodName,
-    price,
-    caption,
-    restaurantID,
-  } = req.body
+    file,
+    body: {
+      foodName,
+      price,
+      caption,
+      restaurantID,
+    }
+  } = req
 
   console.log(req.body )
   try {
-    let food = await Food.findOne({ foodName });
-    //if (food)  throw new Error('Món đã tồn tại');
+    let food = await Food.findOne({ foodName, restaurantID });
+    if (food)  throw new Error('Món đã tồn tại');
     
     const restaurant = await Restaurant.findById(restaurantID)
     if(!res) throw new Error('res k tồn tại');
-    console.log(res)
+    
+    const urlUpload = ''
+      if(file){   // nếu upload ảnh đại diện 
+        let orgName = file.originalname || '';
+        orgName = orgName.trim().replace(/ /g, '-');
+        const fullPathInServ = file.path;
+        const newFullPath = `${fullPathInServ}-${orgName}`;
+        fs.rename(fullPathInServ, newFullPath);
+
+        const result = await cloudinary.uploader.upload(newFullPath);
+        urlUpload = result.url
+        fs.unlinkSync(newFullPath);
+      }
+
     food = await Food.create({ 
       foodName,
       restaurant: restaurant._id,
       price,
-      caption 
+      caption, 
+      image : urlUpload
     });
   
     return Response.success(res, { message: 'Thêm thành công' });

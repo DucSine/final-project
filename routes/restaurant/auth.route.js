@@ -1,73 +1,149 @@
-const express = require('express');
+const express = require('express')
+const multer = require('multer') 
 
-const router = express.Router();
-const { check } = require('express-validator');
-const {
-  login,
-  forgotPassword,
-  resetPassword,
-  thongKe,
+const router = express.Router()
+const upload = multer({dest: './public/uploads'}) 
+const { check } = require('express-validator')
+const { 
+  login, 
+  register, 
+  changeEmailRegister, 
+  verificationAccount, 
+  changePassword, 
+  editAccount, 
+  resProfile, 
+  fogotPassword, 
+  otpResetPassword, 
+  resetPassword 
 } = require('../../controllers/restaurant/auth.controller');
+const { protect } = require('../../middlewares/restaurant/auth')
 
-// @route   POST api/admin/auth/login
+
+// @route   POST api/res/auth/login
 // @desc    Đăng nhập
 // @access  Public
 router.post(
   '/login',
   [
-    check('username', 'Enter username').not().isEmpty(),
-    check(
-      'password', 'Password has at least 8 chars and maximum 30 chars ').isLength({
-        min: 8, 
-        max: 30 
-      }),
+    check('email', 'Bạn phải nhập đúng định dạng email').isEmail(),
+    check('password', 'Password ít nhất 8 ký tự').isLength({ min: 8 }),
   ],
-  login,
+  login
 )
 
-// @route   POST api/admin/auth/register
+// @route   POST api/res/auth/register
 // @desc    Đăng ký tài khoản
 // @access  Public
 router.post(
   '/register',
   [
-    check('restaurantName', 'Enter restaurant name').not().isEmpty(),
-    check('email', 'Email is incorrect').isEmail(),
-    check('username', 'Enter username').not().isEmpty(),
-    check('password', 'Password has at least 8 chars and maximum 30 chars').isLength({
-      min: 8,
-      max: 30,
-    }),
-    check('phone', 'Enter phone').not().isEmpty(),
-    check('adress', 'Enter adress').not().isEmpty(),
-    check('type', 'Choose a type').not().isEmpty(),
+    check('email', 'Bạn phải nhập đúng định dạng email').isEmail(),
+    check('password', 'Mật khẩu phải nhiều hơn 8 ký tự').isLength({ min: 8 }),
+    check('restaurantName', 'Bạn phải nhập tên nhà hàng').not().isEmpty(),
+    check('address', 'Bạn phải nhập địa chỉ').not().isEmpty(),
+    check('phone', 'Bạn phải nhập số điện thoại').not().isEmpty(),
+    check('type', 'Bạn phải chọn loại hình nhà hàng').not().isEmpty(),
   ],
+  upload.single('banner'),
   register,
 )
 
-/*
-// @route   POST api/admin/auth/forgotPassword
-// @desc    Quên mật khẩu
+// @route   POST api/res/auth/changeEmailRegister
+// @desc    Thay đổi email đăng ký
 // @access  Public
 router.post(
-  '/forgotPassword',
-  [check('email', 'Bạn phải nhập đúng định dạng email').isEmail()],
-  forgotPassword,
+  '/changeEmailRegister',
+  [
+    check('email', 'Bạn phải nhập đúng định dạng email').isEmail(),
+    check('newEmail', 'Bạn phải nhập đúng định dạng email').isEmail(),
+  ],
+  changeEmailRegister
+)
+
+// @route   POST api/res/auth/verificationAccount
+// @desc    Kích hoạt tài khoản
+// @access  Public
+router.post(
+  '/verificationAccount',
+  [
+    check('email', 'Bạn phải nhập đúng định dạng email').isEmail(),
+    check('OTP','Bạn phải nhập số CMND').not().isEmpty()
+  ],
+  verificationAccount
+)
+
+
+// @route   POST api/res/auth/changePassword
+// @desc    Đổi mật khẩu
+// @access  Private
+router.post(
+  '/changePassword',
+  [
+    check('password', 'Mật khẩu phải nhiều hơn 8 ký tự').isLength({ min: 8 }),
+    check('newPassword', 'Mật khẩu phải nhiều hơn 8 ký tự').isLength({min: 8}),
+  ],
+  protect,
+  changePassword,
 );
 
-// @route   POST api/admin/auth/resetPassword
-// @desc    Reset mật khẩu
+// @route   POST api/res/auth/editAccount
+// @desc    Cập nhật tài khoản
+// @access  Private
+router.post(
+  '/editAccount',
+  [
+    check('restaurantName', 'Bạn phải nhập tên nhà hàng').not().isEmpty(),
+    check('address', 'Bạn phải nhập địa chỉ').not().isEmpty(),
+    check('phone', 'Bạn phải nhập số điện thoại').not().isEmpty(),
+    check('gender', 'Bạn phải chọn giới tính').not().isEmpty(),
+    check('ID', 'Bạn phải nhập số CMND').not().isEmpty(),
+    check('bDate', 'Bạn phải nhập ngày sinh').not().isEmpty(),
+  ],
+  protect,
+  upload.single('banner'),
+  editAccount,
+)
+
+// @route   GET api/res/auth/profile
+// @desc    Lấy thông tin tài khoản
+// @access  Private
+router.get(
+  '/profile', 
+  protect, 
+  resProfile
+)
+
+// @route   POST api/res/auth/fogotPassword
+// @desc    Quên mật khẩu (nhận otp)
 // @access  Public
 router.post(
-  '/resetPassword/:resetToken',
+  '/fogotPassword',
+  [check('email', 'Bạn phải nhập đúng định dạng email').isEmail(),],
+  fogotPassword
+)
+
+// @route   POST api/res/auth/otpResetPassword
+// @desc    Quên mật khẩu (nhập otp)
+// @access  Public
+router.post(
+  '/otpResetPassword',
   [
-    check(
-      'password',
-      'Mật khẩu phải có ít nhất 8 ký tự và không quá 30 ký tự',
-    ).isLength({ min: 8, max: 30 }),
+    check('email', 'Bạn phải nhập đúng định dạng email').isEmail(),
+    check('OTP', 'Bạn phải nhập OTP').not().isEmpty()
   ],
-  resetPassword,
-);
-*/
+  otpResetPassword
+)
+
+// @route   POST api/res/auth/resetPassword 
+// @desc    Quên mật khẩu (nhập mật khẩu mới)
+// @access  Public
+router.post(
+  '/resetPassword',
+  [
+    check('email', 'Bạn phải nhập đúng định dạng email').isEmail(),
+    check('OTP', 'Bạn phải nhập OTP').not().isEmpty()
+  ],
+  resetPassword
+)
 
 module.exports = router
