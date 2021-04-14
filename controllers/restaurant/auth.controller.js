@@ -9,13 +9,14 @@ const { validationResult } = require('express-validator')
 // Models
 const User = require('../../models/User')
 const Restaurant = require('../../models/Restaurant')
+
 const sendEmail = require('../../utils/sendEmail')
 const Response = require('../../helpers/response.helper')
 const { 
-  emailIsExists, 
-  generateOTP, 
-  compareOTP 
+    generateOTP, 
+    compareOTP 
 } = require('../../config/general')
+const e = require('express')
 
 //Đăng ký
 exports.register = async (req, res, next) => {
@@ -39,11 +40,19 @@ exports.register = async (req, res, next) => {
     },
   } = req
   try {
-    const checkMail = await emailIsExists(email)
-    if(checkMail)
-      throw new Error('Email đã được sử dụng!')
+    let user = await User.findOne({ email })
 
-    let user = await User.findOne({ username })
+    if (user)
+      throw new Error('Email đã được sử dụng!')
+    else{
+      user = await Restaurant.findOne({ email })
+      if (user)
+        throw new Error('Email đã được sử dụng!')
+      else
+        user = null
+    }
+
+    user = await User.findOne({ username })
 
     if (user)
       throw new Error('Username đã được sử dụng!')
@@ -121,12 +130,9 @@ exports.changeEmailRegister = async(req, res, next) =>{
     if(!user)
       throw new Error('Có lỗi xảy ra!')
     
-    const checkMail = await emailIsExists(emailIsExists)
-    if(checkMail)
-      throw new Error('email đã được sử dụng!')
+    const userID = user._id
 
-    //
-    await User.findByIdAndUpdate(user._id, { $set: { email: email } })
+    await User.findByIdAndUpdate(userID, { $set: { email: email } })
 
     //TẠO OTP
     const otpCode = await generateOTP(email)
@@ -351,9 +357,7 @@ exports.changePassword = async(req, res, next) =>{
   } = req.body
 
   try{
-    if(password == newPassword)
-      throw new Error('Mật khẩu mới phải khác mật khẩu cũ!')
-
+    // Result: boolean
     const result = await bcrypt.compare(password, req.user.password)
     if (!result) 
       throw new Error('Password sai!')

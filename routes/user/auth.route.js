@@ -119,7 +119,6 @@ router.get(
   userProfile
 )
 
-
 // @route   POST api/user/auth/fogotPassword
 // @desc    Quên mật khẩu (nhận otp)
 // @access  Public

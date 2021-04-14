@@ -2,6 +2,24 @@ const User = require('../models/User')
 const Restaurant = require('../models/Restaurant')
 const OTP = require('../models/OTP')
 
+//Kiểm tra email tồn tại 
+exports.emailIsExists = async(email) =>{
+    if(email == process.env.ADMIN_EMAIL ||
+       email == process.env.SMTP_USER )
+       return true
+    
+    const res = await Restaurant.findOne({ email })
+    if(res) 
+        return true
+    
+    const user = await User.findOne({ email })
+    if(user)
+        return true
+    
+    return false
+} 
+
+//Tạo OTP
 exports.generateOTP = async (email) => {
     const OTPcode = 'FO-'
     for(var i = 0; i <= 5; i++)
@@ -21,6 +39,7 @@ exports.generateOTP = async (email) => {
     }
 }
 
+//kiểm tra OTP
 exports.compareOTP = async (email, otpCode ) => {
     try{
         let otp = await OTP.findOne({ 
