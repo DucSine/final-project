@@ -2,7 +2,6 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const { validationResult } = require('express-validator')
 const crypto = require('crypto')
-
 const sendEmail = require('../../utils/sendEmail')
 const Response = require('../../helpers/response.helper')
 const { 

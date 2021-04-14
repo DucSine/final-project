@@ -11,16 +11,14 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
 
 connectDB()
+//back-end
 app.use('/api',apiRoute)
 
-app.set('view engine', 'pug')
-app.set('views', './views')
 
 //////////////////////////////////////////////
 const {
     addResType,
     addRes,
-    addFoodType,
     addFood,
     addUser
   } = require('./controllers/dev.controller');
@@ -30,14 +28,13 @@ const {getMonExample} = require('./example')
 
 ////////////////////////////
 const multer = require('multer')
-const upload = multer({dest: './public/uploads'})
+const upload = multer({dest: './resources/uploads'})
 app.post('/dev/addRestaurantType', addResType)
 app.post('/dev/addRestaurant', upload.single('banner'), addRes)
 
 app.post('/dev/addFood',upload.single('image'), addFood)
 
 app.post('/dev/addUser', addUser)
-
 
 ///
 const Restaurant = require('./models/Restaurant')
@@ -54,14 +51,7 @@ findd()
 ////
 const {protect}= require('./middlewares/user/auth')
 const User = require('./models/User')
-app.get('/testlog',protect,async(req, res, next)=>{
-  
 
-  const us = await User.findById({_id: req.user._id})
-  console.log(us)
-  res.send(us)
-  
-})
 const Response = require('./helpers/response.helper')
 app.get('/getme', protect, async(req, res, next)=>{
 

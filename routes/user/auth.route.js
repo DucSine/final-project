@@ -2,7 +2,7 @@ const express = require('express');
 const multer = require('multer')
 
 const router = express.Router()
-const upload = multer({dest: './public/uploads'})
+const upload = multer({dest: './resources/uploads'})
 const { check } = require('express-validator')
 
 
