@@ -1,8 +1,10 @@
 const express = require('express');
-
-const { check } = require('express-validator')
+const multer = require('multer')
 
 const router = express.Router()
+const upload = multer({dest: './public/uploads'})
+const { check } = require('express-validator')
+
 
 const {
   login, 
@@ -48,6 +50,7 @@ router.post(
     check('ID', 'Bạn phải nhập số CMND').not().isEmpty(),
     check('bDate', 'Bạn phải nhập ngày sinh, định dạng dd/MM/yyyy').not().isEmpty(),
   ],
+  upload.single('avatar'),
   register,
 )
 
@@ -103,18 +106,19 @@ router.post(
     check('bDate', 'Bạn phải nhập ngày sinh').not().isEmpty(),
   ],
   protect,
+  upload.single('avatar'),
   editAccount,
 )
 
 // @route   GET api/user/auth/profile
 // @desc    Lấy thông tin tài khoản
 // @access  Private
-router.get('/userProfile', protect, userProfile)
+router.get(
+  '/userProfile', 
+  protect, 
+  userProfile
+)
 
-// @route   GET api/user/auth/profile
-// @desc    Lấy thông tin tài khoản
-// @access  Private
-router.get('/changeAvatar', protect, changeAvatar)
 
 // @route   POST api/user/auth/fogotPassword
 // @desc    Quên mật khẩu (nhận otp)

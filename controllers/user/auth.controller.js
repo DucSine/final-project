@@ -2,6 +2,8 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 // const crypto = require('crypto')
 // const path = require('path')
+
+const cloudinary = require('../../config/cloudinaryConfig')
 const { validationResult } = require('express-validator')
 
 // Models
@@ -22,17 +24,19 @@ exports.register = async (req, res, next) => {
     return res.status(400).json({ errors: errors.array() })
 
   const {
-    username,
-    email,
-    password,
-    phone,
-    address,
-    fullName,
-    gender,
-    bDate, //dd/mm/yyyy
-    ID,
-  } = req.body
-
+    file,
+    body: {
+      username,
+      email,
+      password,
+      phone,
+      address,
+      fullName,
+      gender,
+      bDate, //dd/mm/yyyy
+      ID,   
+    },
+  } = req
   try {
     let user = await User.findOne({ email })
 
@@ -51,6 +55,19 @@ exports.register = async (req, res, next) => {
     if (user)
       throw new Error('Username đã được sử dụng!')
 
+    const urlUpload = ''
+    if(file){   // nếu upload ảnh đại diện 
+      let orgName = file.originalname || '';
+      orgName = orgName.trim().replace(/ /g, '-');
+      const fullPathInServ = file.path;
+      const newFullPath = `${fullPathInServ}-${orgName}`;
+      fs.rename(fullPathInServ, newFullPath);
+
+      const result = await cloudinary.uploader.upload(newFullPath);
+      urlUpload = result.url
+      fs.unlinkSync(newFullPath);
+    }
+
     const dateParts = bDate.split('/')
 
     // Tạo ra salt mã hóa
@@ -59,6 +76,7 @@ exports.register = async (req, res, next) => {
       username,
       email,
       password: await bcrypt.hash(password, salt),
+      avatar: urlUpload,
       phone,
       address,
       fullName,
@@ -359,10 +377,32 @@ exports.editAccount = async (req, res, next) => {
   if (!errors.isEmpty())
     return res.status(400).json({ errors: errors.array() })
 
-  const { user } = req
-  const { bDate } = req.body
+  const {
+    file,
+    body: {
+      phone,
+      address,
+      fullName,
+      gender,
+      bDate, //dd/mm/yyyy
+      ID,
+    }
+  } = req
   try {
-    const currentUser = await User.findByIdAndUpdate(user._id, {
+    const urlUpload = ''
+    if(file){   // nếu đổi ảnh đại diện 
+      let orgName = file.originalname || '';
+      orgName = orgName.trim().replace(/ /g, '-');
+      const fullPathInServ = file.path;
+      const newFullPath = `${fullPathInServ}-${orgName}`;
+      fs.rename(fullPathInServ, newFullPath);
+
+      const result = await cloudinary.uploader.upload(newFullPath);
+      urlUpload = result.url
+      fs.unlinkSync(newFullPath);
+    }
+
+    const currentUser = await User.findByIdAndUpdate(req.user._id, {
       $set: { ...req.body, bDate: new Date(bDate) },
     })
     if (!currentUser) throw new Error('Có lỗi xảy ra')
@@ -376,5 +416,3 @@ exports.editAccount = async (req, res, next) => {
 //Lấy thông tin tài khoản
 exports.userProfile = async (req, res, next) => Response.success(res, req.user)
 //>>stop here
-// Thay Avatar
-exports.changeAvatar = async (req, res, next) => {}
