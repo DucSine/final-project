@@ -5,7 +5,12 @@ const crypto = require('crypto')
 
 const sendEmail = require('../../utils/sendEmail')
 const Response = require('../../helpers/response.helper')
+const { 
+  compareOTP, 
+  generateOTP 
+} = require('../../config/general')
 
+//Đăng nhập
 exports.login = async (req, res, next) => {
   const errors = validationResult(req)
 
@@ -13,19 +18,23 @@ exports.login = async (req, res, next) => {
     if (!errors.isEmpty())
       return res.status(400).json({ errors: errors.array() })
 
-    const { username, password } = req.body;
+    const { 
+      username, 
+      password 
+    } = req.body
 
     if (username !== process.env.ADMIN_NAME)
-      return next(new Error('Username is incorrect!'))
+      return next(new Error('Tên đăng nhập không đúng!'))
 
-    const result = await bcrypt.compare(password, process.env.ADMIN_PASSWORD);
+    const result = await bcrypt.compare(password, process.env.ADMIN_PASSWORD)
 
-    if (!result) return next(new Error('Password is incorrect!'));
+    if (!result) 
+      return next(new Error('Password sai!'))
 
     const payload = {
       admin: {
-        username: username,
-        password,
+        username,
+        password
       },
     }
 
@@ -36,99 +45,123 @@ exports.login = async (req, res, next) => {
       (err, token) => err ? next(err) : Response.success(res, { token })
     )
 
-    return true;
+    return true
   } catch (error) {
-    console.log(error);
-    return next(new Error('Error occurred!'));
+    console.log(error)
+    return next(new Error('Có lỗi xảy ra!'))
   }
-};
+}
 
+//Quên mật khẩu
 exports.forgotPassword = async (req, res, next) => {
-  const errors = validationResult(req);
+  const errors = validationResult(req)
 
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
+  if (!errors.isEmpty())
+    return res.status(400).json({ errors: errors.array() })
 
-  const { email } = req.body;
+  const { email } = req.body
 
   if (email !== process.env.ADMIN_EMAIL)
-    return next(new Error('Email is incorrect!'));
+    return next(new Error('Email sai!'))
 
-  // Create password reset token
-  const resetToken = crypto.randomBytes(16).toString('hex');
+  try{
+    //TẠO OTP
+    const otpCode = await generateOTP(email)
+    if(otpCode == null)
+      throw new Error('Có lỗi xảy ra!')
 
-  process.env.ADMIN_RESETTOKEN = crypto
-    .createHash('sha256')
-    .update(resetToken)
-    .digest('hex');
-
-  console.log('envTK: '+ process.env.ADMIN_RESETTOKEN)
-  try {
-    // Send email
-    const tokenUrl = `<a href="${req.protocol}://${req.get(
-      'host',
-    )}/admin/confirmationForgotPassword/${resetToken}">${
-      req.protocol
-    }://${req.get('host')}/admin/confirmationForgotPassword/${resetToken}</a>`;
-
-    const message = `<p>Bạn cần truy cập vào link sau để xác nhận tài khoản:</p><p>${tokenUrl}</p>`;
+    //SEND MAIL
+    const eMessage = `Xin chào ${process.env.ADMIN_NAME}!`
+                    +`\nMã OTP của bạn là ${otpCode} `
+                    +`\nVui lòng bỏ qua nếu không phải bạn.`
     await sendEmail({
       email: email,
-      subject: 'Forgot Password - Admin',
-      message,
-    });
+      subject: 'Xác thực tài khoản',
+      message: eMessage,
+    })
 
     return Response.success(res, {
-      message: 'Email reset password đã được gởi',
-      token: resetToken,
-    });
-  } catch (error) {
-    console.log(error);
-    process.env.ADMIN_RESETTOKEN = '';
-    return next(new Error('Error occurred!'));
+      message: 'Vui lòng kiểm tra email và nhập mã OTP'
+    })
+  }catch(error){
+    console.log(error)
+    return next(error)
   }
-};
+}
 
-exports.resetPassword = async (req, res, next) => {
-  const errors = validationResult(req);
+// Xác thực OTP
+exports.otpResetPassword = async(req, res, next) =>{
+  const errors = validationResult(req)
+  if (!errors.isEmpty())
+    return res.status(400).json({ errors: errors.array() })
 
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
+  const { OTP } = req.body
+  
+  try{ 
+    const rs = await compareOTP(process.env.ADMIN_EMAIL, OTP)
+    if(!rs)
+      return Response.error(res, {message: 'OTP không hợp lệ!'})
+  
+    return Response.success(res, {message: 'OTP hợp lệ.'})
+    }catch(err){
+      console.log(error.message)
+      return next(error)
+    }
+}
 
-  const resetToken = crypto
-    .createHash('sha256')
-    .update(req.params.resetToken)
-    .digest('hex');
+// Nhập mk mới - login 
+exports.resetPassword = async(req, res, next) =>{
+// Validate
+  const errors = validationResult(req)
+  if (!errors.isEmpty())
+    return res.status(400).json({ errors: errors.array() })
 
-  if (resetToken !== process.env.ADMIN_RESETTOKEN)
-    return next(new Error('Reset token không hợp lệ'));
+  const { newPassword } = req.body
 
-  try {
+  try{
     const salt = await bcrypt.genSalt(10);
-    process.env.ADMIN_PASSWORD = await bcrypt.hash(req.body.password, salt);
+    const password = await bcrypt.hash(newPassword, salt)  
+    await User.findByIdAndUpdate(user._id, {$set :{ password }})
 
     const payload = {
       admin: {
-        name: process.env.ADMIN_NAME,
-        password: process.env.ADMIN_PASSWORD,
+        username,
+        password
       },
-    };
+    }
 
     jwt.sign(
       payload,
       process.env.JWT_SECRET,
       { expiresIn: 360000 },
-      (err, token) => {
-        if (err) return next(err);
-        return Response.success(res, { token });
-      },
-    );
-
-    return true;
-  } catch (error) {
-    console.log(error);
-    return next(new Error('Có lỗi xảy ra'));
+      (err, token) => err ? next(err) : Response.success(res, { token })
+    )
+    
+    return true
+  }catch(error){
+    console.log(error)
+    return next(error)
   }
-};
+
+}
+
+// Đổi mật khẩu
+exports.changePassword = async(req, ré, next) =>{
+  const {
+    password,
+    newPassword,
+  } = req.body
+
+  if(password == newPassword)
+    throw new Error('Mật khẩu mới phải khác mật khẩu cũ.')
+
+  try {
+    const salt = await bcrypt.genSalt(10);
+    process.env.ADMIN_PASSWORD = await bcrypt.hash(newPassword, salt)
+    
+    return Response.success(res, {message: 'Đổi mật khẩu hoàn tất.'})
+  } catch (error) {
+    console.log(error)
+    return next(error)
+  }
+}
