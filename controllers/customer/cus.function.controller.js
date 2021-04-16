@@ -3,6 +3,8 @@ const fs = require('fs-promise')
 const cloudinary = require('../../config/cloudinaryConfig')
 const Food = require('../../models/Food')
 const Response = require('../../helpers/response.helper')
+const Star = require('../../models/Star')
+const Comment = require('../../models/Comment')
 const limit = 20
 
 //trang chủ -5 món mới nhất
@@ -76,11 +78,65 @@ exports.findProducts = async(req, res, next)=>{
 }
 
 //Xem đánh giá
-exports.showRate = async(req, res, next)=>{
 // foodID  :query
+// đếm rate 5,4,3,2,1
+// rate trung bình
+exports.showRate = async(req, res, next)=>{
+  const { foodID } = req.query
+  try{
+    let food = await Food.findById(foodID)
+    if(!food)
+      throw new Error('Có lỗi xảy ra!')
+      
+    const vote_1 = await Star.find({ food: food._id, rate: 1 }).count()
+    const vote_2 = await Star.find({ food: food._id, rate: 2 }).count()
+    const vote_3 = await Star.find({ food: food._id, rate: 3 }).count()      
+    const vote_4 = await Star.find({ food: food._id, rate: 4 }).count()
+    const vote_5 = await Star.find({ food: food._id, rate: 5 }).count()
+    const rate = {
+      avg: food.rate,
+      vote_1,
+      vote_2,
+      vote_3,
+      vote_4,
+      vote_5
+    }
+  
+  return Response.success(res, {rate})
+  }catch(error){
+    console.log(error)
+    return next(error)
+  }
 }
 
 //Xem bình luận
+//Hiển thị 5 bình luận
+//Ấn next và pre để xem các bình luận cũ hơn hoăc ...
 exports.showComment = async(req, res, next)=>{
+  const { foodID, p } = req.query 
+  
+  try{
+    const page = parseInt(p,10)
+    let food = await Food.findById(foodID)
+    if(!food)
+      throw new Error('Có lỗi xảy ra!')
 
+    const totalComent = await Comment.find({food: food._id}).count()
+    const totalPage = Math.ceil(totalComent / limit)
+    
+    const comment = await Comment.find({food: food._id})
+      .sort({dateCreate: -1})
+      .populate('user')
+      .skip((page - 1) * 5)
+      .limit(5)
+
+    return Response.success(res,{
+      comment, 
+      totalComent, 
+      totalPage
+    })
+  }catch(error){
+    console.log(error)
+    return next(error)
+  } 
 }
