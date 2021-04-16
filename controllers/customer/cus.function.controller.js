@@ -61,7 +61,6 @@ exports.findProducts = async(req, res, next)=>{
   
     const food = await Food.find({foodName: new RegExp(key,'i')})
       .sort({rate:-1, price: 1 , dateCreate: -1 })
-      .populate('restaurant')
       .skip((page - 1) * limit)
       .limit(limit);
         
