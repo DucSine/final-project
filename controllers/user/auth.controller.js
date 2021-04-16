@@ -8,7 +8,6 @@ const { validationResult } = require('express-validator')
 
 // Models
 const User = require('../../models/User')
-const Restaurant = require('../../models/Restaurant')
 const sendEmail = require('../../utils/sendEmail')
 const Response = require('../../helpers/response.helper')
 const { 

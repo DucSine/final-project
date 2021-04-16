@@ -28,11 +28,11 @@ router.get('/findProducts', findProducts)
 // @route   GET api/cus/showRate
 // @desc    Xem đánh giá
 // @access  Public
-//router.get('/findProducts', showRate)
+router.get('/showRate', showRate)
 
 // @route   GET api/cus/showComment
 // @desc    Xem danh sách bình luận
 // @access  Public
-//router.get('/findProducts', showComment)
+router.get('/showComment', showComment)
 
 module.exports = router
