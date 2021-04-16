@@ -51,11 +51,16 @@ exports.findProducts = async(req, res, next)=>{
       key, 
       p 
     } = req.query
+    console.log(typeof key)
+
+    if(key == undefined || key.trim() == '')
+      throw new Error('Có lỗi xảy ra!')
+      
     const page = parseInt(p,10)
     const productsTotal = await Food.find({foodName: new RegExp(key,'i')}).count()
     const pageTotal = Math.ceil(productsTotal / limit)
   
-    if(productsTotal<=0)
+    if(productsTotal <= 0)
       return Response.error(res,{message: 'Không tìm thấy!'})
   
     const food = await Food.find({foodName: new RegExp(key,'i')})
