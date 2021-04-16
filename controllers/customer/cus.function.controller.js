@@ -1,6 +1,3 @@
-const fs = require('fs-promise')
-
-const cloudinary = require('../../config/cloudinaryConfig')
 const Food = require('../../models/Food')
 const Response = require('../../helpers/response.helper')
 const Star = require('../../models/Star')
@@ -55,7 +52,7 @@ exports.findProducts = async(req, res, next)=>{
 
     if(key == undefined || key.trim() == '')
       throw new Error('Có lỗi xảy ra!')
-      
+
     const page = parseInt(p,10)
     const productsTotal = await Food.find({foodName: new RegExp(key,'i')}).count()
     const pageTotal = Math.ceil(productsTotal / limit)
