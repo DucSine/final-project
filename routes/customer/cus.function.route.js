@@ -7,7 +7,8 @@ const {
     topRate, 
     findProducts,
     showRate,
-    showComment
+    showComment,
+    getRestaurantInfo
 } = require('../../controllers/customer/cus.function.controller')
 
 // @route   GET api/cus/getNewFood
@@ -24,6 +25,12 @@ router.get('/topRate', topRate)
 // @desc    Tìm kiếm 
 // @access  Public
 router.get('/findProducts', findProducts)
+
+// @route   GET api/cus/getRestaurantInfo
+// @desc    Lấy thông tin nhà hàng
+// @access  Public
+router.get('/getRestaurantInfo', getRestaurantInfo)
+
 
 // @route   GET api/cus/showRate
 // @desc    Xem đánh giá

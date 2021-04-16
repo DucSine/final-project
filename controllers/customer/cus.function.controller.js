@@ -5,6 +5,7 @@ const Food = require('../../models/Food')
 const Response = require('../../helpers/response.helper')
 const Star = require('../../models/Star')
 const Comment = require('../../models/Comment')
+const Restaurant = require('../../models/Restaurant')
 const limit = 20
 
 //trang chủ -5 món mới nhất
@@ -12,7 +13,6 @@ exports.getNewFood = async(req, res, next)=>{
   try{
     const foods = await Food.find()
       .sort({ dateCreate: -1 })
-      .populate('restaurant')
       .skip(0)
       .limit(5)
     
@@ -31,7 +31,6 @@ exports.topRate = async(req, res, next)=>{
   try{
     const food = await Food.find()
       .sort({ rate: -1, price: 1, dateCreate: -1 })
-      .populate('restaurant')
       .skip(0)
       .limit(10)
   
@@ -75,6 +74,25 @@ exports.findProducts = async(req, res, next)=>{
     return next(error)
   }
 }
+
+// Lấy thông tin nhà hàng
+exports.getRestaurantInfo = async(req, res, next)=>{
+  const { resID } = req.query
+  
+  try {
+    let restaurant = await Restaurant.findById(resID)
+      .populate('type')
+      
+    if(!restaurant)
+      throw new Error('Nhà hàng không tồn tại!')
+
+    return Response.success(res, {restaurant})
+  } catch (error) {
+    console.log(error)
+    return next(error)
+  }
+}
+
 
 //Xem đánh giá
 // foodID  :query
