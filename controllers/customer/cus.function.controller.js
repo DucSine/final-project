@@ -40,7 +40,7 @@ exports.topRate = async(req, res, next)=>{
       .limit(10)
   
 
-    return Response.success( res, { foods })
+    return Response.success( res, { food })
   } catch (error) {
     console.log(error)
     return next(error)
