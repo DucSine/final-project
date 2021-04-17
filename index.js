@@ -16,7 +16,7 @@ connectDB()
 
 app.set('view engine', 'pug')
 app.set('views', './resources/views')
-
+app.use(cors())
 
 app.get('/teet', (req,res)=> {
   
@@ -28,7 +28,7 @@ app.get('/teet', (req,res)=> {
 
 app.use('/api',apiRoute)
 app.use('/', viewRoute)
-app.use(cors())
+
 
 //////////////////////////////////////////////
 const {
