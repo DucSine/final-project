@@ -34,6 +34,12 @@ exports.topRate = async(req, res, next)=>{
     if (!foods) 
       throw new Error('Có lỗi xảy ra')
   
+    food = await Food.find()
+      .sort({ price: 1, dateCreate: -1 })
+      .skip(0)
+      .limit(10)
+  
+
     return Response.success( res, { foods })
   } catch (error) {
     console.log(error)

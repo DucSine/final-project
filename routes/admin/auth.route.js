@@ -12,7 +12,7 @@ const {
 } = require('../../controllers/admin/auth.controller')
 
 
-// @route   POST https://khtnfoodoffer.herokuapp.com/api/admin/auth/login
+// @route   POST api/admin/auth/login
 // @desc    Đăng nhập
 // @access  Public
 router.post(

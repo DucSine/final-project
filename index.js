@@ -2,6 +2,7 @@ require('dotenv').config()
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
+const path = require('path')
 
 const app = express()
 const port = process.env.PORT
@@ -12,20 +13,20 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
 
 connectDB()
-//back-end
-
+app.use(express.static(path.join(__dirname, 'resources')));
 app.set('view engine', 'pug')
 app.set('views', './resources/views')
 app.use(cors())
 
-app.get('/teet', (req,res)=> {
-  
-  res.render('index')
-  
-
-
+app.get('/teet', (req,res)=> {  
+  res.render('./admin/index')
 })
 
+app.post('/teet/login',(req,res)=> {
+  console.log(req.body)
+  if(req.body.username == process.env.ADMIN_NAME)
+  res.send('ok')
+})
 app.use('/api',apiRoute)
 app.use('/', viewRoute)
 
