@@ -9,4 +9,6 @@ router.use(handleError)
 router.use('/cus', require('./cus.route'))
 router.use(handleError)
 
+router.use('/admin', require('./admin.route'))
+router.use(handleError)
 module.exports = router
