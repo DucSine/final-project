@@ -26,14 +26,14 @@ exports.getNewFood = async(req, res, next)=>{
 //top 10 rate
 exports.topRate = async(req, res, next)=>{
   try{
-    const food = await Food.find()
+    /*const food = await Food.find()
       .sort({ rate: -1, price: 1, dateCreate: -1 })
       .skip(0)
       .limit(10)
   
-    if (!foods) 
+    if (!food) 
       throw new Error('Có lỗi xảy ra')
-  
+  */
     food = await Food.find()
       .sort({ price: 1, dateCreate: -1 })
       .skip(0)
