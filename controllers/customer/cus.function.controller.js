@@ -10,6 +10,7 @@ exports.getNewFood = async(req, res, next)=>{
   try{
     const foods = await Food.find()
       .sort({ dateCreate: -1 })
+      .populate('restaurant')
       .skip(0)
       .limit(5)
     
@@ -36,6 +37,7 @@ exports.topRate = async(req, res, next)=>{
   */
     food = await Food.find()
       .sort({ price: 1, dateCreate: -1 })
+      .populate('restaurant')
       .skip(0)
       .limit(10)
   
@@ -68,6 +70,7 @@ exports.findProducts = async(req, res, next)=>{
   
     const food = await Food.find({foodName: new RegExp(key,'i')})
       .sort({rate:-1, price: 1 , dateCreate: -1 })
+      .populate('restaurant')
       .skip((page - 1) * limit)
       .limit(limit);
         

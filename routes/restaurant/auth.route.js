@@ -17,7 +17,6 @@ const {
   resetPassword 
 } = require('../../controllers/restaurant/auth.controller');
 const { protect } = require('../../middlewares/restaurant/auth')
-const { route } = require('../user/auth.route')
 
 
 router.get('/test', (req,res,next)=>res.render('index'))
