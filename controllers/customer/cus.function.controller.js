@@ -95,7 +95,6 @@ exports.getRestaurantInfo = async(req, res, next)=>{
   }
 }
 
-
 //Xem đánh giá
 // foodID  :query
 // đếm rate 5,4,3,2,1

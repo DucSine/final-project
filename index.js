@@ -1,6 +1,7 @@
 require('dotenv').config()
 const express = require('express')
 const bodyParser = require('body-parser')
+const cors = require('cors')
 
 const app = express()
 const port = process.env.PORT
@@ -12,9 +13,22 @@ app.use(bodyParser.urlencoded({extended:true}))
 
 connectDB()
 //back-end
+
+app.set('view engine', 'pug')
+app.set('views', './resources/views')
+
+
+app.get('/teet', (req,res)=> {
+  
+  res.render('index')
+  
+
+
+})
+
 app.use('/api',apiRoute)
 app.use('/', viewRoute)
-
+app.use(cors())
 
 //////////////////////////////////////////////
 const {
