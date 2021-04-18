@@ -25,14 +25,8 @@ app.use('/', viewRoute)
 
 //////////////////////////////////////////////
 const {
-    addFood,
     addUser
   } = require('./controllers/dev.controller')
-
-const {getMonExample} = require('./example')
-
-
-////////////////////////////
 const { validationResult } = require('express-validator')
 const bcrypt = require('bcryptjs')
 const multer = require('multer')
@@ -110,8 +104,6 @@ app.post('/dev/addFood',upload.single('image'),async(req, res, next)=>{
       restaurant
     }
   } = req
-
-  console.log(req)
   try {
     let food = await Food.findOne({foodName, restaurant})
     if(food)
