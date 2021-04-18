@@ -46,13 +46,12 @@ exports.addRes = async (req, res, next)=>{
       body: {
         restaurantName,
         email,
-        password,
         phone,
         address,
         type,
       }
     } = req
-  
+    const password = 'duc231097'
   try{
       let restaurant = await Restaurant.findOne({ restaurantName });
       if (restaurant) throw new Error('Tên nhà hàng đã tồn tại');
@@ -64,7 +63,7 @@ exports.addRes = async (req, res, next)=>{
   
       if (!restaurantType) throw new Error('Loại hình không tồn tại');
   
-      const urlUpload = ''
+      const urlUpload = 'https://picsum.photos/200'
       if(file){   // nếu upload ảnh đại diện 
         let orgName = file.originalname || '';
         orgName = orgName.trim().replace(/ /g, '-');
@@ -107,6 +106,7 @@ exports.addFood = async (req,res,next)=>{
     file,
     body: {
       foodName,
+      rate,
       price,
       caption,
       restaurantID,
@@ -137,6 +137,7 @@ exports.addFood = async (req,res,next)=>{
     food = await Food.create({ 
       foodName,
       restaurant: restaurant._id,
+      rate,
       price,
       caption, 
       image : urlUpload

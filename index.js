@@ -88,7 +88,8 @@ findd()
 
 const a = ['a','b','a', 1,1,3,2,3]
 console.log([...new Set(a)])
-
+const af = 3.1
+console.log(af + ' ' +typeof af)
 ////
 const {protect}= require('./middlewares/user/auth')
 const User = require('./models/User')
