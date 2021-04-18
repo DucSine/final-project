@@ -42,15 +42,12 @@ exports.addRes = async (req, res, next)=>{
       return res.status(400).json({ errors: errors.array() });
 
     const{
-      file,
-      body: {
-        restaurantName,
-        email,
-        phone,
-        address,
-        type,
-      }
-    } = req
+      restaurantName,
+      email,
+      phone,
+      address,
+      type,
+    } = req.body
     const password = 'duc231097'
 /////////////
     console.log(req.body)
@@ -64,30 +61,16 @@ exports.addRes = async (req, res, next)=>{
       const restaurantType = await RestaurantType.findById(type);
   
       if (!restaurantType) throw new Error('Loại hình không tồn tại');
-  
-      const urlUpload = 'https://picsum.photos/200'
-      if(file){   // nếu upload ảnh đại diện 
-        let orgName = file.originalname || '';
-        orgName = orgName.trim().replace(/ /g, '-');
-        const fullPathInServ = file.path;
-        const newFullPath = `${fullPathInServ}-${orgName}`;
-        fs.rename(fullPathInServ, newFullPath);
-
-        const result = await cloudinary.uploader.upload(newFullPath);
-        urlUpload = result.url
-        fs.unlinkSync(newFullPath);
-      }
-
       const salt = await bcrypt.genSalt(10);
-      restaurant = await Restaurant.create({
+      await Restaurant.create({
         restaurantName,
         email,
         password: await bcrypt.hash(password, salt),
         phone: phone,
+        type: restaurantType._id,
         address,
         isVerified:true,
-        type: restaurantType._id,
-        banner: urlUpload,
+        
       });
   
       return Response.success(res, { message: 'Bạn đã đăng ký thành công' });
