@@ -52,6 +52,8 @@ exports.addRes = async (req, res, next)=>{
       }
     } = req
     const password = 'duc231097'
+/////////////
+    console.log(req.body)
   try{
       let restaurant = await Restaurant.findOne({ restaurantName });
       if (restaurant) throw new Error('Tên nhà hàng đã tồn tại');
