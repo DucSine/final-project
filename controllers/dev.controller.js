@@ -48,9 +48,9 @@ exports.addRes = async (req, res, next)=>{
       address,
       type,
     } = req.body
-    const password = 'duc231097'
+  const password = 'duc231097'
 /////////////
-    console.log(req.body)
+  console.log(req.body)
   try{
       let restaurant = await Restaurant.findOne({ restaurantName });
       if (restaurant) throw new Error('Tên nhà hàng đã tồn tại');
@@ -72,7 +72,6 @@ exports.addRes = async (req, res, next)=>{
         isVerified:true,
         
       });
-  
       return Response.success(res, { message: 'Bạn đã đăng ký thành công' });
     } catch (error) {
       console.log(error);

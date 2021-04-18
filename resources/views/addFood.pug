@@ -1,0 +1,53 @@
+doctype html
+html
+  head
+    title Add Restaurant
+    meta(charset='utf-8')
+    meta(name='viewport' content='width=device-width, initial-scale=1')
+    link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css')
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js')
+    script(src='https://unpkg.com/axios/dist/axios.min.js')
+  body
+    .container
+      h2.text-primary Thêm nhà hàng
+      form(action='/dev/addFood' method='post' enctype='multipart/form-data')
+        .row
+          .col-sm-8
+            .form-group
+              label(for='foodName') Tên món:
+              input#foodName.form-control(type='text' name='foodName' required='')
+            .form-group
+              label(for='res') Nhà hàng:  
+              select#res_type.col-sm-6(name='restaurant')
+                option.dropdown-item(value='null') Chọn
+                each res in restaurant
+                  option.dropdown-item(value=res._id)= res.restaurantName
+             
+            .form-group
+              label(for='price') Giá:
+              input#price.form-control(type='text' name='price' required='')
+            .form-group
+              label(for='caption') Mô tả:
+              input#caption.form-control(type='text' name='caption' required='')
+          .col-sm-4
+            .card
+              label(for='image') Hình ảnh:
+              .card-body
+                img#show_image.img.img-thumbnail.img-circle(width='300')
+              input#image.form-control-file(type='file' name='image')
+        button#btn_submit.btn.btn-primary(type='submit') Submit
+    script.
+      function readURL(input) {
+      if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+      $('#show_image').attr('src', e.target.result);
+      }
+      reader.readAsDataURL(input.files[0]);
+      }
+      }
+      $("#image").change(function(){
+      readURL(this);
+      });
