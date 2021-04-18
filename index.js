@@ -85,12 +85,6 @@ app.post('/dev/addRestaurant', async (req,res, next) => {
 
 app.get('/dev/addFood',async(req,res)=>{
   let restaurant = await Restaurant.find()
-   const len = await Restaurant.find().count()
-  const restaurants = []
-  for(var i = 0; i<len; i++)
-    restaurants.push(restaurant[i])
-  console.log(restaurants)
-  console.log('len = ' + restaurant.length)
   res.render('addFood', {restaurant})
 })
 
