@@ -1,6 +1,7 @@
 require('dotenv').config()
 const express = require('express')
 const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
 const cors = require('cors')
 const path = require('path')
 
@@ -12,8 +13,10 @@ const viewRoute = require('./routes/view.route')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
+app.use(cookieParser())
 
 connectDB()
+
 app.use(express.static(path.join(__dirname, 'resources')));
 app.set('view engine', 'pug')
 app.set('views', './resources/views')
