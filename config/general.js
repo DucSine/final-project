@@ -1,6 +1,8 @@
+const jwt = require('jsonwebtoken')
+
 const User = require('../models/User')
 const Restaurant = require('../models/Restaurant')
-const OTP = require('../models/OTP')
+const AuthCode = require('../models/AuthCode')
 
 //Kiểm tra email tồn tại  
 exports.emailIsExists = async(email) =>{
@@ -21,18 +23,18 @@ exports.emailIsExists = async(email) =>{
 
 //Tạo OTP
 exports.generateOTP = async (email) => {
-    const OTPcode = 'FO-'
+    const authCode = 'FO-'
     for(var i = 0; i <= 5; i++)
-      OTPcode += Math.floor(Math.random() * 10)
+      authCode += Math.floor(Math.random() * 10)
   
     try{
       const otpExpire = Date.now() + 24 * 60 * 60 * 1000 
-      await OTP.create({
-        email: email, 
-        OTP: OTPcode,
-        otpExpire: otpExpire 
+      await AuthCode.create({
+        email, 
+        authCode,
+        otpExpire
       })
-      return OTPcode
+      return authCode
     }catch(error){
         console.log(error)
         return null
@@ -40,21 +42,21 @@ exports.generateOTP = async (email) => {
 }
 
 //kiểm tra OTP
-exports.compareOTP = async (email, otpCode ) => {
+exports.compareOTP = async (email, otp ) => {
     try{
-        let otp = await OTP.findOne({ 
+        let authCode = await AuthCode.findOne({ 
             email, 
-            OTP: otpCode 
+            authCode: otp
         })
 
-        if(!otp) // Không tồn tại
+        if(!authCode) // Không tồn tại
             return false
         
-        const expire = Number(otp.otpExpire)
+        const expire = Number(authCode.otpExpire)
         if(expire < Date.now())  // hết hạn
             return false
 
-        await OTP.findByIdAndDelete(otp._id) // xóa otp 
+        await AuthCode.findByIdAndDelete(authCode._id) // xóa otp 
         return true
     }catch(error){
         console.log(error)
@@ -62,3 +64,16 @@ exports.compareOTP = async (email, otpCode ) => {
     }
 }
 
+//Tạo tokenAuth
+exports.generateAuthToken = (payload) => {
+    return jwt.sign(
+        payload,
+        process.env.JWT_SECRET,
+        { expiresIn: 86400 }, // 1 ngày
+    )
+}
+
+//Giải mã authToken
+exports.decodeAuthToken = (tokenAuth) =>{
+    return jwt.verify(tokenAuth, process.env.JWT_SECRET)
+}

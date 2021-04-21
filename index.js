@@ -39,7 +39,7 @@ const cloudinary = require('./config/cloudinaryConfig')
 const Restaurant = require('./models/Restaurant')
 const RestaurantType = require('./models/RestaurantType')
 const Food = require('./models/Food')
-
+const jwt = require('jsonwebtoken')
 const {emailIsExists} = require('./config/general')
 const upload = multer({dest: './resources/uploads'})
 app.get('/dev/addRes', (req,res) => res.render('addRes') )
@@ -116,7 +116,7 @@ app.post('/dev/addFood',upload.single('image'),async(req, res, next)=>{
     fs.rename(fullPathInServ, newFullPath)
   
     const result = await cloudinary.uploader.upload(newFullPath)
-    const urlUpload = result.url
+    const urlUpload = result.url.replace('http://', 'https://')
     fs.unlinkSync(newFullPath)
 
     await Food.create({
@@ -136,7 +136,6 @@ app.post('/dev/addFood',upload.single('image'),async(req, res, next)=>{
 }, (req, res)=>res.send(`<script>alert('Thành công')</script>`))
 
 app.post('/dev/addUser', addUser)
-
 ///
 
 app.listen(port, ()=>console.log(`run with http://localhost:${port}`))

@@ -56,7 +56,7 @@ exports.register = async (req, res, next) => {
       fs.rename(fullPathInServ, newFullPath);
 
       const result = await cloudinary.uploader.upload(newFullPath);
-      urlUpload = result.url
+      urlUpload = result.url.replace('http://', 'https://')
       fs.unlinkSync(newFullPath);
     }
 
@@ -207,7 +207,7 @@ exports.login = async (req, res, next) => {
       user: {
         id: user.id,
       },
-    };
+    }
 
     jwt.sign(
       payload,

@@ -18,9 +18,6 @@ const {
 } = require('../../controllers/restaurant/auth.controller');
 const { protect } = require('../../middlewares/restaurant/auth')
 
-
-router.get('/test', (req,res,next)=>res.render('index'))
-
 // @route   POST api/res/auth/login
 // @desc    Đăng nhập
 // @access  Public

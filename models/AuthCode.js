@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 
-const OTPSchema = new mongoose.Schema({
+const AuthSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
   },
-  OTP: {
+  authCode: {
     type: String,
     required: true,
   },
@@ -16,4 +16,4 @@ const OTPSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model('OTP', OTPSchema, 'otp');
+module.exports = mongoose.model('AuthCode', AuthSchema, 'auth_code');

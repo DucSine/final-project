@@ -22,6 +22,10 @@ const FoodSchema = new mongoose.Schema({
     ref: 'Restaurant',
     required: true,
   },
+  buys: {
+    type: Number,
+    default: 0
+  },
   rate: {
     type: Number,
     default: 0

@@ -176,7 +176,8 @@ exports.login = async (req, res, next) => {
 
   const { 
     email, 
-    password } = req.body
+    password 
+  } = req.body
 
   try {
     let restaurant = await Restaurant.findOne({ email })
@@ -191,25 +192,25 @@ exports.login = async (req, res, next) => {
     const result = await bcrypt.compare(password, restaurant.password)
 
     if (!result) {
-      throw new Error('Password sai!')
+      throw new Error('Password sai!');
     }
-
     const payload = {
       restaurant: {
         id: restaurant.id,
       },
     };
-
-    jwt.sign(
+   
+    
+    console.log('thành công')
+    const token = jwt.sign(
       payload,
       process.env.JWT_SECRET,
-      { expiresIn: 360000 },
-      (err, token) => {
-        if (err) throw err
-        return Response.success(res, { token, banner: restaurant.banner })
-      },
+      { expiresIn: 432000 }, // 5 ngày
     )
+
+    res.cookie('token',token)
     
+    res.redirect('/')
     return true
   } catch (error) {
     console.log(error.message)
