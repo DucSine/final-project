@@ -1,10 +1,35 @@
 doctype html
-html
+html(lang='en')
   head
+    meta(charset='utf-8')
     meta(name='viewport' content='width=device-width, initial-scale=1')
     link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css')
-    link(rel='stylesheet' href='../../css/login.css' type='text/css')
+    link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+    link(rel='stylesheet' href='../../css/common.css')
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js')
     title Food Offer
   body
-    block content
-    script(src='../../js/common.js')
+    // Header
+    block header 
+    // Header
+    // Content
+    .container-fluid
+      .row.content
+        .col-sm-3.sidenav
+          block sidebar 
+        .col-sm-9
+          block content
+    // Content
+    // Footer
+    footer.bg-primary.text-center.text-black
+      // Copyright
+      .text-center.p-3(style='background-color: rgba(0, 0, 0, 0.2);')
+        | © 2021 Copyright:
+        a.text-white(href='https://khtnfoodoffer.herokuapp.com/') khtnfoodoffer
+        p
+          | Email: 
+          a(href='mailto:duchoangvo97@gmail.com') duchoangvo97@gmail.com
+      // Copyright
+      // Footer

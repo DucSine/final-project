@@ -17,6 +17,7 @@ const {
   resetPassword 
 } = require('../../controllers/restaurant/auth.controller');
 const { protect } = require('../../middlewares/restaurant/auth')
+const { hostPage } = require('../../controllers/restaurant/views.controller')
 
 // @route   POST api/res/auth/login
 // @desc    Đăng nhập

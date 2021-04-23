@@ -8,10 +8,10 @@ router.use('/admin', require('./admin.route'))
 
 router.use(handleError)
 
-router.get('/',(req,res)=>res.render('../views/restaurant/index'))
-
 router.use('/res', require('./restaurant.route'))
 
 router.use(handleError)
+
+router.use('/', async(req, res)=>res.render('./restaurant/index'))
 
 module.exports = router

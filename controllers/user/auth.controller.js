@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
-
+const fs = require('fs-promise')
 //upload file
 const cloudinary = require('../../config/cloudinaryConfig')
 //validate
@@ -19,15 +19,15 @@ const {
 //Đăng ký
 exports.register = async (req, res, next) => {
   // Validate
-  const errors = validationResult(req)
+  var errors = validationResult(req)
   if (!errors.isEmpty())
     return res.status(400).json({ errors: errors.array() })
 
-  const {
+  var {
     file,
-    body: {
-      username,
+    body: { 
       email,
+      username,
       password,
       phone,
       address,
@@ -37,8 +37,9 @@ exports.register = async (req, res, next) => {
       ID,   
     },
   } = req
+console.log(req)
   try {
-    const checkMail = await emailIsExists(email)
+    var checkMail = await emailIsExists(email)
     if(checkMail)
       throw new Error('Email đã được sử dụng!')
 
@@ -47,20 +48,23 @@ exports.register = async (req, res, next) => {
     if (user)
       throw new Error('Username đã được sử dụng!')
 
-    const urlUpload = ''
-    if(file){   // nếu upload ảnh đại diện 
-      let orgName = file.originalname || '';
-      orgName = orgName.trim().replace(/ /g, '-');
-      const fullPathInServ = file.path;
-      const newFullPath = `${fullPathInServ}-${orgName}`;
-      fs.rename(fullPathInServ, newFullPath);
+    var urlUpload = ''
+  if(file){
+    let orgName = file.originalname || ''
+    orgName = orgName.trim().replace(/ /g, '-')
+    var fullPathInServ = file.path
+    var newFullPath = `${fullPathInServ}-${orgName}`
+    fs.rename(fullPathInServ, newFullPath)
+  
+    var result = await cloudinary.uploader.upload(newFullPath)
+    urlUpload = result.url.replace('http://', 'https://')
+    fs.unlinkSync(newFullPath)
+  }
+          
+    
 
-      const result = await cloudinary.uploader.upload(newFullPath);
-      urlUpload = result.url.replace('http://', 'https://')
-      fs.unlinkSync(newFullPath);
-    }
-
-    const dateParts = bDate.split('/')
+//
+    var dateParts = bDate.split('/')
 
     // Tạo ra salt mã hóa
     const salt = await bcrypt.genSalt(10);
@@ -81,12 +85,12 @@ exports.register = async (req, res, next) => {
       )
     })
     //TẠO OTP
-    const otpCode = await generateOTP(email)
+    var otpCode = await generateOTP(email)
     if(otpCode == null)
       throw new Error('Có lỗi xảy ra!')
 
     //SEND MAIL
-    const eMessage = `Xin chào ${username}!`
+    var eMessage = `Xin chào ${username}!`
                     +`\nMã OTP của bạn là ${otpCode} `
                     +`\nVui lòng bỏ qua nếu không phải bạn.`
     await sendEmail({
@@ -95,7 +99,7 @@ exports.register = async (req, res, next) => {
       message: eMessage,
     })
   
-    const rMessage = `Chúng tôi đã gửi một email kèm theo mã OTP đến ${email},`
+    var rMessage = `Chúng tôi đã gửi một email kèm theo mã OTP đến ${email},`
                   + `vui lòng kiểm tra email vủa bạn và nhập mã OTP để kích hoạt tài khoản`
     return Response.success(res, { message: rMessage})
   } catch (error) {
@@ -133,7 +137,7 @@ exports.changeEmailRegister = async(req, res, next) =>{
       throw new Error('Có lỗi xảy ra!')
 
     //SEND MAIL
-    const eMessage = `Xin chào ${username}!`
+    var eMessage = `Xin chào ${username}!`
                     +`\nMã OTP của bạn là ${otpCode} `
                     +`\nVui lòng bỏ qua nếu không phải bạn.`
     await sendEmail({

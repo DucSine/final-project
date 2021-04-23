@@ -200,8 +200,6 @@ exports.login = async (req, res, next) => {
       },
     };
    
-    
-    console.log('thành công')
     const token = jwt.sign(
       payload,
       process.env.JWT_SECRET,
@@ -210,7 +208,7 @@ exports.login = async (req, res, next) => {
 
     res.cookie('token',token)
     
-    res.redirect('/')
+    res.redirect('/res/hostpage')
     return true
   } catch (error) {
     console.log(error.message)

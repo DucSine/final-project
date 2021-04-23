@@ -38,8 +38,10 @@ router.post(
 // @access  Public
 router.post(
   '/register',
+  upload.single('avatar'),
   [
-    check('username', 'Bạn phải nhập tên').not().isEmpty(),
+    check('username', 'username không được bỏ trống!').not().isEmpty(),
+    check('password', 'Password ít nhất 8 ký tự').isLength({ min: 8 }),
     check('email', 'Bạn phải nhập đúng định dạng email').isEmail(),
     check('password', 'Mật khẩu phải nhiều hơn 8 ký tự').isLength({ min: 8 }),
     check('fullName', 'Bạn phải nhập họ tên').not().isEmpty(),
@@ -48,8 +50,7 @@ router.post(
     check('gender', 'Bạn phải chọn giới tính').not().isEmpty(),
     check('ID', 'Bạn phải nhập số CMND').not().isEmpty(),
     check('bDate', 'Bạn phải nhập ngày sinh, định dạng dd/MM/yyyy').not().isEmpty(),
-  ],
-  upload.single('avatar'),
+  ], 
   register,
 )
 

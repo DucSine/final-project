@@ -3,8 +3,12 @@ const multer = require('multer')
 
 const router = express.Router()
 const upload = multer({dest: './resources/uploads'}) 
-const {index} = require('../../controllers/restaurant/resviews.controller')
+const {
+    hostPage,
 
-router.get('/index', index)
+} = require('../../controllers/restaurant/views.controller')
+const { protect } = require('../../middlewares/restaurant/auth')
+
+router.get('/hostpage', hostPage)
 
 module.exports = router

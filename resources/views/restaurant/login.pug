@@ -1,0 +1,40 @@
+doctype html
+html
+  head
+    meta(name='viewport' content='width=device-width, initial-scale=1')
+    link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css')
+    
+
+  body
+    h2 Modal Login Form
+    button(onclick="document.getElementById('login_dialog').style.display='block'" style='width:auto;') Login
+    #login_dialog.modal
+      form.modal-content.animate(action='/res/auth/login' method='post')
+        div(style='background-color:#f1f1f1; text-align: center;')
+          label.text-primary
+            b(style='font-size: xx-large;') Đăng nhập
+        .container
+          .form-group
+            label(for='email')
+              b Email
+            input#email.form-control(type='email' name='email' placeholder='Nhập Password' required='')
+          .form-group
+            label(for='password')
+              b Password
+            input#password.form-control(type='password' name='password' placeholder='Nhập Password' pattern='[A-Za-z0-9]{8,30}' title='Mật khẩu không chứa ký tự đặc biệt, gồm 8-30 ký tự' required='')
+          .form-group.form-check
+            label.form-check-label
+              input.form-check-input(type='checkbox' name='remember')
+              |  Remember me
+          .form-group(style='padding-left: 48px; padding-right: 48px;')
+            span
+              button#btn_login.btn.btn-primary(type='submit') Login
+            span(style='float: right')
+              button.btn.btn-danger(type='button' onclick="document.getElementById('login_dialog').style.display='none'") Cancel
+        .container(style='background-color:#f1f1f1')
+          span
+            | Chưa có tài khoản 
+            a(href='#') Đăng ký?
+          span(style='float: right')
+            a(href='#') Quên mật khẩu?
+    script(src='../../js/common.js')

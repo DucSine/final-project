@@ -12,6 +12,9 @@ const RestaurantType = require('../../models/RestaurantType')
 const Restaurant = require('../../models/Restaurant')
 const sendEmail = require('../../utils/sendEmail')
 
-exports.index = async(req, res, next) => {
-    res.render('./restaurant/index')
+exports.hostPage = async(req, res, next) => {
+    const restaurant = {
+        resName: 'kiot'
+    }
+    res.render('./restaurant/hostpage',{restaurant})
 }

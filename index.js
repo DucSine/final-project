@@ -40,7 +40,7 @@ const Restaurant = require('./models/Restaurant')
 const RestaurantType = require('./models/RestaurantType')
 const Food = require('./models/Food')
 const jwt = require('jsonwebtoken')
-const {emailIsExists} = require('./config/general')
+const {emailIsExists, decodeAuthToken} = require('./config/general')
 const upload = multer({dest: './resources/uploads'})
 app.get('/dev/addRes', (req,res) => res.render('addRes') )
 app.post('/dev/addRestaurant', async (req,res, next) => {
@@ -101,6 +101,8 @@ app.post('/dev/addFood',upload.single('image'),async(req, res, next)=>{
       restaurant
     }
   } = req
+
+  console.log(req)
   try {
     let food = await Food.findOne({foodName, restaurant})
     if(food)
@@ -136,6 +138,15 @@ app.post('/dev/addFood',upload.single('image'),async(req, res, next)=>{
 }, (req, res)=>res.send(`<script>alert('Thành công')</script>`))
 
 app.post('/dev/addUser', addUser)
+
+app.get('/test', async(req, res)=>{
+  token = req.cookies.token
+  var decodeID =  decodeAuthToken(token)
+console.log('cc: '+decodeID.restaurant.id)
+  const rest = await Restaurant.findById(decodeID.restaurant.id)
+  var user = rest.restaurantName
+  res.render('test',{user})
+})
 ///
 
 app.listen(port, ()=>console.log(`run with http://localhost:${port}`))

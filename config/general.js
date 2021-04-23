@@ -23,7 +23,7 @@ exports.emailIsExists = async(email) =>{
 
 //Tạo OTP
 exports.generateOTP = async (email) => {
-    const authCode = 'FO-'
+    var authCode = 'FO-'
     for(var i = 0; i <= 5; i++)
       authCode += Math.floor(Math.random() * 10)
   
