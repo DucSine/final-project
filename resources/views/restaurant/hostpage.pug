@@ -16,10 +16,9 @@ block header
     button#btn_logout.btn.btn-danger Đăng xuất
   script(src='../../js/accContainer.js')
 
-  link(rel="stylesheet" href="../../css/account_info.css")
-  link(rel="stylesheet" href="../../css/account_changepass.css")
-  #accountInfo.modal
-    form.modal-content.animate(action='/teet/login' enctype='multpart/form-data' method='post')
+  
+  #accountInfo.modal.accountInfo-modal
+    form.modal-content.accountInfo-modal-content.animate(action='/teet/login' enctype='multpart/form-data' method='post')
       div(style='background-color:#f1f1f1; text-align: center;')
         label.text-primary
           b(style='font-size: xx-large;') Thông tin cửa hàng
@@ -59,31 +58,32 @@ block header
           span(style='float: right')
             button.btn.btn-danger(type='button' onclick="document.getElementById('accountInfo').style.display='none'") Thoát
       .container(style='background-color:#f1f1f1')
-  #accountChangePass.modal
-  form.modal-content.animate(action='/teet/login' enctype='multpart/form-data' method='post')
-    div(style='background-color:#f1f1f1; text-align: center;')
-      label.text-primary
-        b(style='font-size: xx-large;') Đổi mật khẩu
-    .container
-      .form-group
-        label(for='password')
-          b Mật khẩu cũ
-        input#password.form-control(type='password' name='password' placeholder='Nhập mật khẩu cũ' pattern='[A-Za-z0-9]{8,30}' title='Mật khẩu không chứa ký tự đặc biệt, gồm 8-30 ký tự' required='')
-      .form-group
-        label(for='newPassword')
-          b Mật khẩu mới
-        input#newPassword.form-control(type='password' name='newPassword' placeholder='Nhập mật khẩu mới' pattern='[A-Za-z0-9]{8,30}' title='Mật khẩu không chứa ký tự đặc biệt, gồm 8-30 ký tự' required='')
-      .form-group
-        label(for='passwordConfirm')
-          b Xác nhận mật khẩu
-        input#passwordConfirm.form-control(type='password' name='passwordConfirm' placeholder='Nhập lại mật khẩu' pattern='[A-Za-z0-9]{8,30}' title='Mật khẩu không chứa ký tự đặc biệt, gồm 8-30 ký tự' required='')
-    .form-group(style='padding: 32px 48px 32px 48px')
-      span
-        button#btn_update.btn.btn-primary(type='submit') Cập nhật
-      span(style='float: right')
-        button.btn.btn-danger(type='button' onclick="document.getElementById('accountInfo').style.display='none'") Thoát
-    .container(style='background-color:#f1f1f1')
-
+  
+  
+  #accountChangePass.modal.changepass-modal
+    form.modal-content.changepassmodal-content.animate(action='/teet/login' enctype='multpart/form-data' method='post')
+      div(style='background-color:#f1f1f1; text-align: center;')
+        label.text-primary
+          b(style='font-size: xx-large;') Đổi mật khẩu
+      .container
+        .form-group
+          label(for='password')
+            b Mật khẩu cũ
+          input#password.form-control(type='password' name='password' placeholder='Nhập mật khẩu cũ' pattern='[A-Za-z0-9]{8,30}' title='Mật khẩu không chứa ký tự đặc biệt, gồm 8-30 ký tự' required='')
+        .form-group
+          label(for='newPassword')
+            b Mật khẩu mới
+          input#newPassword.form-control(type='password' name='newPassword' placeholder='Nhập mật khẩu mới' pattern='[A-Za-z0-9]{8,30}' title='Mật khẩu không chứa ký tự đặc biệt, gồm 8-30 ký tự' required='')
+        .form-group
+          label(for='passwordConfirm')
+            b Xác nhận mật khẩu
+          input#passwordConfirm.form-control(type='password' name='passwordConfirm' placeholder='Nhập lại mật khẩu' pattern='[A-Za-z0-9]{8,30}' title='Mật khẩu không chứa ký tự đặc biệt, gồm 8-30 ký tự' required='')
+      .form-group(style='padding: 32px 48px 32px 48px')
+        span
+          button#btn_update.btn.btn-primary(type='submit') Cập nhật
+        span(style='float: right')
+          button.btn.btn-danger(type='button' onclick="document.getElementById('accountChangePass').style.display='none'") Thoát
+      .container(style='background-color:#f1f1f1')
   script(src='../../js/account_info.js')
   
 
@@ -98,6 +98,6 @@ block sidebar
           a.nav-link(href='#section3') Quản lý đơn hàng
         li.nav-item
           a.nav-link(href='#section3') Mã giảm giá
-
+  script(src='../../js/res.sidebar.js')
 block content
   

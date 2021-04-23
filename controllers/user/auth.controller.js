@@ -23,7 +23,7 @@ exports.register = async (req, res, next) => {
   if (!errors.isEmpty())
     return res.status(400).json({ errors: errors.array() })
 
-  var {
+  const {
     file,
     body: { 
       email,
@@ -39,7 +39,7 @@ exports.register = async (req, res, next) => {
   } = req
 console.log(req)
   try {
-    var checkMail = await emailIsExists(email)
+    const checkMail = await emailIsExists(email)
     if(checkMail)
       throw new Error('Email đã được sử dụng!')
 
@@ -56,7 +56,7 @@ console.log(req)
     var newFullPath = `${fullPathInServ}-${orgName}`
     fs.rename(fullPathInServ, newFullPath)
   
-    var result = await cloudinary.uploader.upload(newFullPath)
+    const result = await cloudinary.uploader.upload(newFullPath)
     urlUpload = result.url.replace('http://', 'https://')
     fs.unlinkSync(newFullPath)
   }

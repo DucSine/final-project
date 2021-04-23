@@ -38,3 +38,18 @@
     text-decoration: none;
     padding-bottom: 8px; 
 }
+.accountInfo-modal{
+    padding-top: 10px;
+}
+
+.accountInfo-modal-content{
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+.changepass-modal {
+    padding-top: 60px;
+  }
+
+.changepassmodal-content {
+    width: 60%;
+}

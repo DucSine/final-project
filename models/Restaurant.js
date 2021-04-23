@@ -19,6 +19,10 @@ const RestaurantSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  isLock: {
+    type: Boolean,
+    default: false,
+  },
   resetPasswordToken: String,
   resetPasswordExpire: Date,
   phone: {

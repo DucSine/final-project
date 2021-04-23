@@ -1,0 +1,28 @@
+/* The Modal (background) */
+.login-modal {
+  padding-top: 60px;
+}
+  
+/* Modal Content/Box */
+.login-modal-content {
+  width: 40%; /* Could be more or less, depending on screen size */
+}
+  
+.register-modal{
+  padding-top: 10px;
+}
+
+.register-modal-content{
+  width: 80%;
+}
+
+.changePass-modal{
+  padding-top: 60px;
+}
+
+.changePass-modal-content {
+  width: 40%;
+}
+
+
+  

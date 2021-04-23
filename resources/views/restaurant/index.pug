@@ -1,23 +1,23 @@
 extends ../layouts/rescommon.pug
 
 block header
-  link(rel='stylesheet' href='../../css/login.css' )
+  link(rel='stylesheet' href='../../css/res_index.css' )
   nav.navbar.navbar-light.bg-primary
     a.navbar-brand(href='/res/hostpage')
       img(src='https://res.cloudinary.com/ducsine/image/upload/v1619047971/logo.png' width='200px' height='100px')
     .div-inline(style='padding-right: 32px')
       button#btn_login.btn.btn-primary(type='button' onclick="document.getElementById('login_dialog').style.display='block'" style='width:auto;') Login
 
-  #login_dialog.modal
-    form.modal-content.animate(action='/res/auth/login' method='post')
+  #login_dialog.modal.login-modal
+    form.modal-content.login-modal-content.animate(action='/res/auth/login' method='post')
       div(style='background-color:#f1f1f1; text-align: center;')
         label.text-primary
           b(style='font-size: xx-large;') Đăng nhập
       .container
         .form-group
-          label(for='email')
+          label(for='ac_email')
             b Email
-          input#email.form-control(type='email' name='email' placeholder='Nhập Password' required='')
+          input#ac_email.form-control(type='email' name='email' placeholder='Nhập Email đăng nhập' required='')
         .form-group
           label(for='password')
             b Password
@@ -34,10 +34,78 @@ block header
       .container(style='background-color:#f1f1f1')
         span
           | Chưa có tài khoản 
-          a(href='#') Đăng ký?
+          a.text-primary Đăng ký?
         span(style='float: right')
-          a(href='#') Quên mật khẩu?
-  script(src='../../js/res.login.js')
+          a.text-primary Quên mật khẩu?
+  
+
+  #account_register.modal.register-modal
+    form.modal-content.register-modal-content.animate(action='/teet/login' enctype='multpart/form-data' method='post')
+      div(style='background-color:#f1f1f1; text-align: center;')
+        label.text-primary
+          b(style='font-size: xx-large;') Đăng ký cửa hàng
+      .container
+        .row(style='padding:16px')
+          .col-sm-9
+            .form-group
+              label(for='restaurantName')
+                b Tên nhà hàng
+              input#restaurantName.form-control(type='text' name='restaurantName' placeholder='Nhập tên nhà hàng' required='')
+            .form-group
+              label(for='')
+                b Loại hình kinh doanh  &nbsp;
+              select(name='type' style='width: 300px;')
+                option.dropdown-item(value='null') Chọn
+                option.dropdown-item(value='606c29b97141a71498bd32d8') Quán bún, phở, hủ tiếu,...
+                option.dropdown-item(value='606c29c27141a71498bd32d9') Quán cơm
+                option.dropdown-item(value='606c29df7141a71498bd32da') Coffe, trà sữa,...
+                option.dropdown-item(value='606c29fb7141a71498bd32db') Đồ ăn nhanh (bánh mỳ, fast foods,...)
+                option.dropdown-item(value='606c2a067141a71498bd32dc') Đồ ăn vặt
+                option.dropdown-item(value='60829a97c0f329750c092ee0') Khác
+            .form-group
+              label(for='regis_email')
+                b Email
+              input#regis_email.form-control(type='email' name='email' placeholder='Nhập email đăng ký' required='')              
+            .form-group
+              label(for='phone')
+                b Điện thoại
+              input#phone.form-control(type='text' name='phone' placeholder='Nhập số điện thoại' pattern='[A-Za-z0-9]{8,30}' title='Mật khẩu không chứa ký tự đặc biệt, gồm 8-30 ký tự' required='')
+            .form-group
+              label(for='address')
+                b Địa chỉ
+              input#address.form-control(type='text' name='phone' placeholder='Nhập số điạ chỉ' pattern='[A-Za-z0-9]{8,30}' title='Mật khẩu không chứa ký tự đặc biệt, gồm 8-30 ký tự' required='')
+          .col-sm-3
+            .form-group
+              img#show_image.img.img-thumbnail.img-circle(width='300' height='300')
+            .form-group
+              input#image.form-control(type='file' name='image')
+        .form-group(style='padding-top: 24px; padding-left: 48px; padding-right: 48px;')
+          span
+            button#btn_update.btn.btn-primary(type='submit') Đăng ký
+          span(style='float: right')
+            button.btn.btn-danger(type='button' onclick="document.getElementById('account_register').style.display='none'") Hủy bỏ
+      .container(style='background-color:#f1f1f1')
+
+  #accountChangePass.modal.changePass-modal
+    form.modal-content.changePass-modal-content.animate(action='/teet/login' enctype='multpart/form-data' method='post')
+      div(style='background-color:#f1f1f1; text-align: center;')
+        label.text-primary
+          b(style='font-size: xx-large;') Lấy lại mật khẩu
+      .container
+        .form-group
+          label(for='fg_email')
+            b Email đăng nhập
+          input#fg_email.form-control(type='email' name='email' placeholder='Nhập email đăng nhập' required='')
+      .form-group(style='padding: 32px 48px 32px 48px')
+        span
+          button#btn_fogotPassword.btn.btn-primary(type='submit') Xác nhận
+        span(style='float: right')
+          button.btn.btn-danger(type='button' onclick="document.getElementById('accountChangePass').style.display='none'") Hủy bỏ
+      .container(style='background-color:#f1f1f1')
+
+  script(src='../../js/res.login_container.js')
+  script(src='../../js/res.register_container.js')
+  script(src='../../js/image.js')
 block content
   sdafsaddsagv
 
