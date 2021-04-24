@@ -9,6 +9,8 @@
 }
   
 .register-modal{
+  position: fixed  ; /* Stay in place */
+  overflow: scroll;
   padding-top: 10px;
 }
 

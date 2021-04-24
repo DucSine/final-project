@@ -2,24 +2,21 @@ const mongoose = require('mongoose');
 
 const BillSchema = new mongoose.Schema({
   // 'đang xử lý', 'đã xác nhận', 'đã hủy', 'đã thanh toán'
-  isCompleted: {
+  status: {
     type: String,
     default: 'đang xử lý',
   },
-  restaurantName: {
+  restaurant: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Restaurant',
     required: true,
   },
-  customer: {
+  user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
   },
-  total: {
-    type: Number,
-    default: 0,
-  },
+  discount: Number,
   dateCreate: {
     type: Date,
     default: Date.now(),

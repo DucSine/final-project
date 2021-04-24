@@ -10,7 +10,7 @@ block header
 
   #login_dialog.modal.login-modal
     form.modal-content.login-modal-content.animate(action='/res/auth/login' method='post')
-      div(style='background-color:#f1f1f1; text-align: center;')
+      div(style='background-color:#f1f1f1; text-align: center; ')
         label.text-primary
           b(style='font-size: xx-large;') Đăng nhập
       .container
@@ -40,7 +40,7 @@ block header
   
 
   #account_register.modal.register-modal
-    form.modal-content.register-modal-content.animate(action='/teet/login' enctype='multpart/form-data' method='post')
+    form.modal-content.register-modal-content.animate(action='/teet/login' onsubmit='register_submit()' enctype='multpart/form-data' method='post')
       div(style='background-color:#f1f1f1; text-align: center;')
         label.text-primary
           b(style='font-size: xx-large;') Đăng ký cửa hàng
@@ -48,14 +48,14 @@ block header
         .row(style='padding:16px')
           .col-sm-9
             .form-group
-              label(for='restaurantName')
+              label(for='regis_restaurantName')
                 b Tên nhà hàng
-              input#restaurantName.form-control(type='text' name='restaurantName' placeholder='Nhập tên nhà hàng' required='')
+              input#regis_restaurantName.form-control(type='text' name='restaurantName' placeholder='Nhập tên nhà hàng' required='')
             .form-group
               label(for='')
                 b Loại hình kinh doanh  &nbsp;
-              select(name='type' style='width: 300px;')
-                option.dropdown-item(value='null') Chọn
+              select(name='type' style='width: 300px; ')
+                option.dropdown-item(value= null) Chọn
                 option.dropdown-item(value='606c29b97141a71498bd32d8') Quán bún, phở, hủ tiếu,...
                 option.dropdown-item(value='606c29c27141a71498bd32d9') Quán cơm
                 option.dropdown-item(value='606c29df7141a71498bd32da') Coffe, trà sữa,...
@@ -65,23 +65,31 @@ block header
             .form-group
               label(for='regis_email')
                 b Email
-              input#regis_email.form-control(type='email' name='email' placeholder='Nhập email đăng ký' required='')              
+              input#regis_email.form-control(type='email' name='email' placeholder='Nhập email đăng ký' required='')  
             .form-group
-              label(for='phone')
+              label(for='regis_pass')
+                b Mật khẩu
+              input#regis_pass.form-control(type='password' name='password' placeholder='Nhập password' required='')            
+            .form-group
+              label(for='regis_pass_confirm')
+                b Nhập lại mật khẩu
+              input#regis_pass_confirm.form-control(type='password' placeholder='Nhập lại mật khẩu' required='')
+            .form-group
+              label(for='regis_phone')
                 b Điện thoại
-              input#phone.form-control(type='text' name='phone' placeholder='Nhập số điện thoại' pattern='[A-Za-z0-9]{8,30}' title='Mật khẩu không chứa ký tự đặc biệt, gồm 8-30 ký tự' required='')
+              input#regis_phone.form-control(type='text' name='phone' placeholder='Nhập số điện thoại' required='')
             .form-group
-              label(for='address')
+              label(for='regis_address')
                 b Địa chỉ
-              input#address.form-control(type='text' name='phone' placeholder='Nhập số điạ chỉ' pattern='[A-Za-z0-9]{8,30}' title='Mật khẩu không chứa ký tự đặc biệt, gồm 8-30 ký tự' required='')
+              input#regis_address.form-control(type='text' name='address' placeholder='Nhập địa chỉ' required='')
           .col-sm-3
             .form-group
-              img#show_image.img.img-thumbnail.img-circle(width='300' height='300')
+              img#regis_show_image.img.img-thumbnail.img-circle(width='300' height='300')
             .form-group
-              input#image.form-control(type='file' name='image')
+              input#regis_image.form-control(type='file' name='image')
         .form-group(style='padding-top: 24px; padding-left: 48px; padding-right: 48px;')
           span
-            button#btn_update.btn.btn-primary(type='submit') Đăng ký
+            button#btn_register.btn.btn-primary(type='submit') Đăng ký
           span(style='float: right')
             button.btn.btn-danger(type='button' onclick="document.getElementById('account_register').style.display='none'") Hủy bỏ
       .container(style='background-color:#f1f1f1')
