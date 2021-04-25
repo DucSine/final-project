@@ -15,7 +15,8 @@ const Response = require('../../helpers/response.helper')
 const { 
   emailIsExists, 
   generateOTP, 
-  compareOTP 
+  compareOTP, 
+  generateAuthToken
 } = require('../../config/general')
 
 //Đăng ký nhà hàng
@@ -69,14 +70,15 @@ exports.register = async (req, res, next) => {
       address,
       type: resType._id
     })
-    //TẠO OTP
-    const otpCode = await generateOTP(email)
-    if(otpCode == null)
-      throw new Error('Có lỗi xảy ra!')
-
+    const payload = {
+      restaurant: {
+        id: restaurant.id,
+      },
+    }
+    const authToken =  generateAuthToken(payload)
     //SEND MAIL
     const eMessage = `Xin chào ${restaurantName}!`
-                    +`\nMã OTP của bạn là ${otpCode} `
+                    +`\nLink kích hoạt tài khoản của bạn là: https://kltn-foodoffer.herokuapp.com/auth?tokenAuth=${authToken} `
                     +`\nVui lòng bỏ qua nếu không phải bạn.`
     await sendEmail({
       email: email,
@@ -85,7 +87,7 @@ exports.register = async (req, res, next) => {
     })
   
     const rMessage = `Chúng tôi đã gửi một email kèm theo mã OTP đến ${email},`
-                  + `vui lòng kiểm tra email vủa bạn và nhập mã OTP để kích hoạt tài khoản`
+                  + `vui lòng xác thực tài khoản.`
     return Response.success(res, { message: rMessage})
   } catch (error) {
     console.log(error.message)
@@ -198,7 +200,7 @@ exports.login = async (req, res, next) => {
       restaurant: {
         id: restaurant.id,
       },
-    };
+    }
    
     const token = jwt.sign(
       payload,

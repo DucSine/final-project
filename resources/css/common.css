@@ -7,9 +7,15 @@
   height: 100%;
 }
 
-
 body {
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.input-valid{
+  border-color: #28a745;
+}
+.input-invalid{
+  border-color: #dc3545;
 }
 
 .container {
@@ -53,19 +59,7 @@ body {
   to {transform: scale(1)}
 }
 
-@media screen and (max-width: 300px) {
-  span.psw {
-     display: block;
-     float: none;
-  }
-  .cancelbtn {
-     width: 100%;
-  }
-}
-
 /* On small screens, set height to 'auto' for sidenav and grid */
-
-
 @media screen and (max-width: 767px) {
   .sidenav {
     height: auto;

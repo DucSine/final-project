@@ -40,7 +40,7 @@ block header
   
 
   #account_register.modal.register-modal
-    form.modal-content.register-modal-content.animate(action='/teet/login' onsubmit='register_submit()' enctype='multpart/form-data' method='post')
+    form.modal-content.register-modal-content.animate(action='/teet/login' onsubmit='return register_submit()' enctype='multpart/form-data' method='post')
       div(style='background-color:#f1f1f1; text-align: center;')
         label.text-primary
           b(style='font-size: xx-large;') Đăng ký cửa hàng
@@ -50,11 +50,11 @@ block header
             .form-group
               label(for='regis_restaurantName')
                 b Tên nhà hàng
-              input#regis_restaurantName.form-control(type='text' name='restaurantName' placeholder='Nhập tên nhà hàng' required='')
+              input#regis_restaurantName.form-control(type='text' name='restaurantName' placeholder='Nhập tên nhà hàng' required='' )
             .form-group
               label(for='')
                 b Loại hình kinh doanh  &nbsp;
-              select(name='type' style='width: 300px; ')
+              select(name='type' style='width: 300px;')
                 option.dropdown-item(value= null) Chọn
                 option.dropdown-item(value='606c29b97141a71498bd32d8') Quán bún, phở, hủ tiếu,...
                 option.dropdown-item(value='606c29c27141a71498bd32d9') Quán cơm

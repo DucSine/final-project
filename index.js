@@ -27,9 +27,6 @@ app.use('/', viewRoute)
 
 
 //////////////////////////////////////////////
-const {
-    addUser
-  } = require('./controllers/dev.controller')
 const { validationResult } = require('express-validator')
 const bcrypt = require('bcryptjs')
 const multer = require('multer')
@@ -137,16 +134,6 @@ app.post('/dev/addFood',upload.single('image'),async(req, res, next)=>{
 
 }, (req, res)=>res.send(`<script>alert('Thành công')</script>`))
 
-app.post('/dev/addUser', addUser)
-
-app.get('/test', async(req, res)=>{
-  token = req.cookies.token
-  var decodeID =  decodeAuthToken(token)
-console.log('cc: '+decodeID.restaurant.id)
-  const rest = await Restaurant.findById(decodeID.restaurant.id)
-  var user = rest.restaurantName
-  res.render('test',{user})
-})
 ///
 
 app.listen(port, ()=>console.log(`run with http://localhost:${port}`))

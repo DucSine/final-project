@@ -12,6 +12,8 @@ router.use('/res', require('./restaurant.route'))
 
 router.use(handleError)
 
-router.use('/', async(req, res)=>res.render('./restaurant/index'))
+router.use('/', require('./general.function.route'))
+
+//router.use('/auth', 
 
 module.exports = router
