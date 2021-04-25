@@ -9,26 +9,26 @@ block header
       button#btn_login.btn.btn-primary(type='button' onclick="document.getElementById('login_dialog').style.display='block'" style='width:auto;') Login
 
   #login_dialog.modal.login-modal
-    form.modal-content.login-modal-content.animate(action='/res/auth/login' method='post')
+    form.modal-content.login-modal-content.animate(action='/res/auth/login' onsubmit='return false' method='post')
       div(style='background-color:#f1f1f1; text-align: center; ')
         label.text-primary
           b(style='font-size: xx-large;') Đăng nhập
       .container
         .form-group
-          label(for='ac_email')
+          label(for='li_email')
             b Email
-          input#ac_email.form-control(type='email' name='email' placeholder='Nhập Email đăng nhập' required='')
+          input#li_email.form-control(type='email' name='email' placeholder='Nhập Email đăng nhập' required='')
         .form-group
-          label(for='password')
+          label(for='li_password')
             b Password
-          input#password.form-control(type='password' name='password' placeholder='Nhập Password' pattern='[A-Za-z0-9]{8,30}' title='Mật khẩu không chứa ký tự đặc biệt, gồm 8-30 ký tự' required='')
+          input#li_password.form-control(type='password' name='password' placeholder='Nhập Password' pattern='[A-Za-z0-9]{8,30}' title='Mật khẩu không chứa ký tự đặc biệt, gồm 8-30 ký tự' required='')
         .form-group.form-check
           label.form-check-label
-            input.form-check-input(type='checkbox' name='remember')
+            input.form-check-input(type='checkbox' name='remember' checked = 'true')
             |  Remember me
         .form-group(style='padding-left: 48px; padding-right: 48px;')
           span
-            button#btn_login.btn.btn-primary(type='submit') Login
+            button#btn_login.btn.btn-primary(type='button' onclick='postLogin()') Login
           span(style='float: right')
             button.btn.btn-danger(type='button' onclick="document.getElementById('login_dialog').style.display='none'") Cancel
       .container(style='background-color:#f1f1f1')

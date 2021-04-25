@@ -92,12 +92,13 @@ exports.register = async (req, res, next) => {
       subject: 'Xác thực tài khoản',
       message: eMessage,
     })
-
-    const rMessage = `Chúng tôi đã gửi một email kèm theo mã OTP đến ${email},`
-      + `vui lòng xác thực tài khoản.`
-
-
-    res.send(`<script>alert(${rMessage})</script>`)
+    
+    res.send(
+      `<script>
+      alert('Đăng ký thành công, vui lòng kiểm tra email')
+      window.location = '/'
+      </script>`)
+    
 
     return true
   } catch (error) {
@@ -200,6 +201,9 @@ exports.login = async (req, res, next) => {
 
     if (!restaurant.isVerified)
       throw new Error('Tài khoản chưa được kích hoạt!')
+    
+      if (restaurant.isLock)
+      throw new Error('Tài khoản đã bị khóa!')
 
     // Result: boolean
     const result = await bcrypt.compare(password, restaurant.password)
@@ -221,8 +225,7 @@ exports.login = async (req, res, next) => {
 
     res.cookie('token', token)
 
-    res.redirect('/res/hostpage')
-    return true
+    return Response.success(res,{message: 'Đăng nhập thành công'})
   } catch (error) {
     console.log(error.message)
     return next(error)
@@ -351,18 +354,17 @@ exports.changePassword = async (req, res, next) => {
     password,
     newPassword
   } = req.body
-
   try {
     if (password == newPassword)
       throw new Error('Mật khẩu mới phải khác mật khẩu cũ!')
 
-    const result = await bcrypt.compare(password, req.user.password)
+    const result = await bcrypt.compare(password, req.restaurant.password)
     if (!result)
       throw new Error('Password sai!')
 
     const salt = await bcrypt.genSalt(10);
     const editPass = await bcrypt.hash(newPassword, salt)
-    await Restaurant.findByIdAndUpdate(restaurant._id, { $set: { password: editPass } })
+    await Restaurant.findByIdAndUpdate(req.restaurant._id, { $set: { password: editPass } })
 
     return Response.success(res, { message: 'Thay đổi mật khẩu thành công.' })
   } catch (error) {

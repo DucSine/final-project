@@ -1,6 +1,6 @@
 // get element
 var form_container = document.querySelector('.modal-content.register-modal-content.animate')
-var list_inputText = form_container.querySelectorAll('input')
+var list_txtPass = form_container.querySelectorAll('input')
 var selectType = form_container.querySelector('select')
 var btn_register = form_container.querySelector('#btn_register')
 
@@ -32,21 +32,21 @@ selectType.onchange = function () {
 }
 
 
-list_inputText[1].oninput = function () {
+list_txtPass[1].oninput = function () {
   email_ismatch = this.value.match(list_patterm.checkEmail)
   if (email_ismatch == null)
-    list_inputText[1].classList.add('input-invalid')
+    list_txtPass[1].classList.add('input-invalid')
   else {
     axios.get(`/api/auth/checkemail?email=${this.value}`)
       .then(res => {
         if (res.data.status == 'failed') {
           email_ismatch = null
           alert('Email đã được sử dụng.')
-          list_inputText[1].classList.add('input-invalid')
+          list_txtPass[1].classList.add('input-invalid')
         }
         else {
-          list_inputText[1].classList.add('input-valid')
-          list_inputText[1].classList.remove('input-invalid')
+          list_txtPass[1].classList.add('input-valid')
+          list_txtPass[1].classList.remove('input-invalid')
         }
 
       })
@@ -55,7 +55,7 @@ list_inputText[1].oninput = function () {
 
 }
 
-list_inputText[2].oninput = function () {
+list_txtPass[2].oninput = function () {
   password = this.value
   password_ismatch = password.match(list_patterm.checkPass)
 
@@ -67,7 +67,7 @@ list_inputText[2].oninput = function () {
   }
 }
 
-list_inputText[3].oninput = function () {
+list_txtPass[3].oninput = function () {
   if (this.value != password)
     this.classList.add('input-invalid')
   else {
@@ -77,7 +77,7 @@ list_inputText[3].oninput = function () {
   }
 }
 
-list_inputText[4].oninput = function () {
+list_txtPass[4].oninput = function () {
   phone_ismatch = this.value.match(list_patterm.checkPhone)
   if (phone_ismatch == null)
     this.classList.add('input-invalid')

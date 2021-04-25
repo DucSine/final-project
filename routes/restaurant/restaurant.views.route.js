@@ -9,6 +9,9 @@ const {
 } = require('../../controllers/restaurant/views.controller')
 const { protect } = require('../../middlewares/restaurant/auth')
 
-router.get('/hostpage', hostPage)
+// @route   GET /res/hostpage
+// @desc    Trang chủ sau khi đăng nhập
+// @access  Public
+router.get('/hostpage', protect, hostPage)
 
 module.exports = router
