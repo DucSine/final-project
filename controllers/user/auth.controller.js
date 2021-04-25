@@ -173,8 +173,10 @@ exports.verificationAccount = async(req, res, next) =>{
     const rs = await compareOTP(email, OTP)
     if(!rs)
       return Response.error(res, {message: 'OTP không hợp lệ!'})
+      console.log(" id:" + user._id)
+    let testus = await User.findByIdAndUpdate(user._id, { $set: { isVerified: true } })
+console.log('rsus: '+ testus)
 
-    await User.findByIdAndUpdate(user._id, { $set: { isVerified: true } })
     return Response.success(res, {message: 'Kích hoạt tài khoản thành công.'})
   }catch(err){
     console.log(error.message)

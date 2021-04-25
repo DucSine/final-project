@@ -133,7 +133,14 @@ app.post('/dev/addFood',upload.single('image'),async(req, res, next)=>{
   }
 
 }, (req, res)=>res.send(`<script>alert('Thành công')</script>`))
+app.get('/setus', async(req,res)=>{
+  const User = require('./models/User')
+  var _idre = '6085141b2afa3c0015249f5c'
+  var uss = await User.findByIdAndUpdate(_idre, { $set: { isVerified: false } })
+  console.log(uss)
+  res.send('ok')
 
+})
 ///
 
 app.listen(port, ()=>console.log(`run with http://localhost:${port}`))
