@@ -19,7 +19,7 @@ const {
 const { protect } = require('../../middlewares/restaurant/auth')
 const { hostPage } = require('../../controllers/restaurant/views.controller')
 
-// @route   POST api/res/auth/login
+// @route   POST /res/auth/login
 // @desc    Đăng nhập
 // @access  Public
 router.post(
@@ -31,7 +31,7 @@ router.post(
   login
 )
 
-// @route   POST api/res/auth/register
+// @route   POST /res/auth/register
 // @desc    Đăng ký tài khoản
 // @access  Public
 router.post(

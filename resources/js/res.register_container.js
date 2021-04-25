@@ -22,8 +22,16 @@ var list_patterm = {
 //get value 
 selectType.onchange = function () {
   typeValue = selectType.value
-  selectType.classList.add('input-valid')
+  if(typeValue == null || typeValue == 'Chọn'){
+    this.classList.add('input-invalid')
+  }
+  else{
+    this.classList.remove('input-invalid')
+    this.classList.add('input-valid')
+  }
 }
+
+
 list_inputText[1].oninput = function () {
   email_ismatch = this.value.match(list_patterm.checkEmail)
   if (email_ismatch == null)
