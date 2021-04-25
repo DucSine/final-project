@@ -166,7 +166,7 @@ exports.verificationAccount = async(req, res, next) =>{
   } = req.body
 
   try{ 
-    let user = User.findOne({ email })
+    let user = await User.findOne({ email })
     console.log("day la uss: "+user)
     if(!user)
       throw new Error('Có lỗi xảy ra')
