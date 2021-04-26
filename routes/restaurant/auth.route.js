@@ -48,7 +48,7 @@ router.post(
   register,
 )
 
-// @route   POST api/res/auth/changeEmailRegister
+// @route   POST /res/auth/changeEmailRegister
 // @desc    Thay đổi email đăng ký
 // @access  Public
 router.post(
@@ -60,7 +60,7 @@ router.post(
   changeEmailRegister
 )
 
-// @route   POST api/res/auth/verificationAccount
+// @route   POST /res/auth/verificationAccount
 // @desc    Kích hoạt tài khoản
 // @access  Public
 router.post(
@@ -73,7 +73,7 @@ router.post(
 )
 
 
-// @route   POST api/res/auth/changePassword
+// @route   POST /res/auth/changePassword
 // @desc    Đổi mật khẩu
 // @access  Private
 router.post(

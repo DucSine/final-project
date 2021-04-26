@@ -40,7 +40,7 @@ const jwt = require('jsonwebtoken')
 const {emailIsExists, decodeAuthToken} = require('./config/general')
 const upload = multer({dest: './resources/uploads'})
 app.get('/dev/addRes', (req,res) => res.render('addRes') )
-app.post('/dev/addRestaurant', async (req,res, next) => {
+app.post('/dev/addRes', async (req,res, next) => {
   const errors = validationResult(req) 
   if (!errors.isEmpty())
     return res.status(400).json({ errors: errors.array() })

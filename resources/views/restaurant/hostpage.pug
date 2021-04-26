@@ -27,12 +27,15 @@ block header
           .col-sm-9
             .form-group
               label(for='ifrestaurantName')
-                b Tên nhà hàng
+                b Tên nhà hàng 
+              i.fas.fa-edit(style='float:right')
               input#ifrestaurantName.form-control(type='text' name='restaurantName' placeholder='Nhập tên nhà hàng' value=restaurant.restaurantName required='')
+
             .form-group
               label(for='')
-                b Loại hình kinh doanh  &nbsp;
-              select(name='type' style='width: 300px;' value='Quán cơm')
+                b Loại hình kinh doanh:  &nbsp;
+              i.fas.fa-edit(style='float:right')
+              select(name='type' style='display:none ;width: 300px;' value='Quán cơm')
                 option.dropdown-item(value= null) Chọn
                 option.dropdown-item(value='606c29b97141a71498bd32d8') Quán bún, phở, hủ tiếu,...
                 option.dropdown-item(value='606c29c27141a71498bd32d9') Quán cơm
@@ -49,10 +52,12 @@ block header
             .form-group
               label(for='ifphone')
                 b Điện thoại
+              i.fas.fa-edit(style='float:right')
               input#ifphone.form-control(type='text' name='phone' placeholder='Nhập số điện thoại' value=restaurant.phone  required='')
             .form-group
               label(for='ifaddress')
                 b Địa chỉ
+              i.fas.fa-edit(style='float:right')
               input#ifaddress.form-control(type='text' name='address' placeholder='Nhập số điạ chỉ' value=restaurant.address required='')
           .col-sm-3
             .form-group
@@ -65,8 +70,7 @@ block header
           span(style='float: right')
             button.btn.btn-danger(type='button' onclick="document.getElementById('accountInfo').style.display='none'") Thoát
       .container(style='background-color:#f1f1f1')
-  
-  
+   
   #accountChangePass.modal.changepass-modal
     form.modal-content.changepassmodal-content.animate(action='' onsubmit='return false'  method='post')
       div(style='background-color:#f1f1f1; text-align: center;')
@@ -93,18 +97,18 @@ block header
       .container(style='background-color:#f1f1f1')
   script(src='../../js/changePass.js')
   
-
 block sidebar
   h4 ResName
       ul.nav.nav-pills.flex-column
         li.nav-item
-          a.nav-link(href='#section1') Trang chủ
+          a.nav-link.active(href='#section1') Trang chủ
         li.nav-item
-          a.nav-link.active(href='#section2') Sản Phẩm
+          a.nav-link(href='#section2') Sản Phẩm
         li.nav-item
           a.nav-link(href='#section3') Quản lý đơn hàng
         li.nav-item
           a.nav-link(href='#section3') Mã giảm giá
   script(src='../../js/res.sidebar.js')
+
 block content
   

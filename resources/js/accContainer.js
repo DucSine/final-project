@@ -2,7 +2,7 @@ var imgAvatar = document.querySelector('.avatar')
 var userContainer = document.querySelector('.user-container')
 var tagA_usContainer = document.querySelectorAll('.user-container a')
 var btn_logout = document.getElementById('btn_logout')
-
+console.log(userContainer)
 imgAvatar.onclick = function(){
     userContainer.classList.toggle('show')
 }
