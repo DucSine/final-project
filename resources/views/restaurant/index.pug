@@ -18,26 +18,30 @@ block header
           label(for='li_email')
             b Email
           input#li_email.form-control(type='email' name='email' placeholder='Nhập Email đăng nhập' required='')
+          label.label-valid(for="" ) 
+            | Email không đúng định dạng.
         .form-group
           label(for='li_password')
             b Password
           input#li_password.form-control(type='password' name='password' placeholder='Nhập Password' pattern='[A-Za-z0-9]{8,30}' title='Mật khẩu không chứa ký tự đặc biệt, gồm 8-30 ký tự' required='')
+          label.label-valid(for="" ) 
+            | Password không chứa ký tự đặc biệt, gồm 8-30 ký tự.
         .form-group.form-check
           label.form-check-label
             input.form-check-input(type='checkbox' name='remember' checked = 'true')
             |  Remember me
         .form-group(style='padding-left: 48px; padding-right: 48px;')
           span
-            button#btn_login.btn.btn-primary(type='button' onclick='postLogin()') Login
+            button.btn.btn-primary(type='button' disabled) Login
           span(style='float: right')
-            button.btn.btn-danger(type='button' onclick="document.getElementById('login_dialog').style.display='none'") Cancel
+            button.btn.btn-danger(type='button') Cancel
       .container(style='background-color:#f1f1f1')
         span
           | Chưa có tài khoản 
           a.text-primary Đăng ký?
         span(style='float: right')
           a.text-primary Quên mật khẩu?
-  
+  script(src='../../js/res.login_container.js')
 
   #account_register.modal.register-modal
     form.modal-content.register-modal-content.animate(action='/res/auth/register' onsubmit='return register_submit()' enctype='multpart/form-data' method='post')
@@ -51,6 +55,8 @@ block header
               label(for='regis_restaurantName')
                 b Tên nhà hàng
               input#regis_restaurantName.form-control(type='text' name='restaurantName' placeholder='Nhập tên nhà hàng' required='' )
+              label.label-valid(for="" ) 
+                | Vui lòng nhập tên nhà hàng.
             .form-group
               label(for='')
                 b Loại hình kinh doanh  &nbsp;
@@ -62,26 +68,38 @@ block header
                 option.dropdown-item(value='606c29fb7141a71498bd32db') Đồ ăn nhanh (bánh mỳ, fast foods,...)
                 option.dropdown-item(value='606c2a067141a71498bd32dc') Đồ ăn vặt
                 option.dropdown-item(value='60829a97c0f329750c092ee0') Khác
+              label.label-valid(for="" ) 
+                | Vui lòng chọn loại nhà hàng.
             .form-group
               label(for='regis_email')
                 b Email
               input#regis_email.form-control(type='email' name='email' placeholder='Nhập email đăng ký' required='')  
+              label.label-valid(for="" ) 
+                | Email không đúng định dạng.
             .form-group
               label(for='regis_pass')
                 b Mật khẩu
-              input#regis_pass.form-control(type='password' name='password' placeholder='Nhập password' required='')            
+              input#regis_pass.form-control(type='password' name='password' placeholder='Nhập password' required='')   
+              label.label-valid(for="" ) 
+                | Password không chứa ký tự đặc biệt, gồm 8-30 ký tự.         
             .form-group
               label(for='regis_pass_confirm')
                 b Nhập lại mật khẩu
               input#regis_pass_confirm.form-control(type='password' placeholder='Nhập lại mật khẩu' required='')
+              label.label-valid(for="" ) 
+                | Password không khớp.
             .form-group
               label(for='regis_phone')
                 b Điện thoại
               input#regis_phone.form-control(type='text' name='phone' placeholder='Nhập số điện thoại' required='')
+              label.label-valid(for="" ) 
+                | Số điện thoại không hợp lệ.
             .form-group
               label(for='regis_address')
                 b Địa chỉ
               input#regis_address.form-control(type='text' name='address' placeholder='Nhập địa chỉ' required='')
+              label.label-valid(for="" ) 
+                | Vui lòng nhập địa chỉ.
           .col-sm-3
             .form-group
               img#regis_show_image.img.img-thumbnail.img-circle(width='300' height='300')
@@ -89,7 +107,7 @@ block header
               input#regis_image.form-control(type='file' name='image')
         .form-group(style='padding-top: 24px; padding-left: 48px; padding-right: 48px;')
           span
-            button#btn_register.btn.btn-primary(type='submit') Đăng ký
+            button.btn.btn-primary(type='button' disabled) Đăng ký
           span(style='float: right')
             button.btn.btn-danger(type='button' onclick="document.getElementById('account_register').style.display='none'") Hủy bỏ
       .container(style='background-color:#f1f1f1')
@@ -110,8 +128,6 @@ block header
         span(style='float: right')
           button.btn.btn-danger(type='button' onclick="document.getElementById('accountChangePass').style.display='none'") Hủy bỏ
       .container(style='background-color:#f1f1f1')
-
-  script(src='../../js/res.login_container.js')
   script(src='../../js/res.register_container.js')
   script(src='../../js/image.js')
 block content

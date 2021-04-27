@@ -9,22 +9,22 @@ const UserSchema = new mongoose.Schema({
 
   fullName: {
     type: String,
-    required: true,
+    required: false,
   },
 
   phone: {
     type: String,
-    required: true,
+    required: false,
   },
 
   address: {
     type: String,
-    required: true,
+    required: false,
   },
 
   bDate: {
     type: Date,
-    required: true,
+    required: false,
   },
 
   avatar: {
@@ -34,12 +34,12 @@ const UserSchema = new mongoose.Schema({
 
   ID: {
     type: String,
-    required: true,
+    required: false,
   },
 
   gender: {
     type: Boolean,
-    required: true,
+    default: true
   },
 
   email: {
@@ -61,9 +61,11 @@ const UserSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  resetPasswordToken: String,
-  resetPasswordExpire: Date,
-
+  OTP: {
+    type: String,
+    required: false
+  },
+  otpExpire: Date, 
   date: {
     type: Date,
     default: Date.now,

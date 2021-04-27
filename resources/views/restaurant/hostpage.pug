@@ -18,7 +18,7 @@ block header
 
   
   #accountInfo.modal.accountInfo-modal
-    form.modal-content.accountInfo-modal-content.animate(action='/teet/login' enctype='multpart/form-data' method='post')
+    form.modal-content.accountInfo-modal-content.animate(action='' onsubmit='retern false' enctype='multpart/form-data' method='post')
       div(style='background-color:#f1f1f1; text-align: center;')
         label.text-primary
           b(style='font-size: xx-large;') Thông tin cửa hàng
@@ -27,19 +27,20 @@ block header
           .col-sm-9
             .form-group
               label(for='ifrestaurantName')
-                b Tên nhà hàng 
-              i.fas.fa-edit(style='float:right')
-              input#ifrestaurantName.form-control(type='text' name='restaurantName' placeholder='Nhập tên nhà hàng' value=restaurant.restaurantName required='')
+                b Tên nhà hàng &nbsp;&nbsp;&nbsp;
+                i.fas.fa-edit
+              input#ifrestaurantName.form-control(type='text' name='restaurantName' placeholder='Nhập tên nhà hàng' value=restaurant.restaurantName disabled required='')
 
             .form-group
               label(for='')
-                b Loại hình kinh doanh:  &nbsp;
-              i.fas.fa-edit(style='float:right')
-              select(name='type' style='display:none ;width: 300px;' value='Quán cơm')
+                b Loại hình kinh doanh: 
+                b#ifb_resTypeName #{resType.typeName} &nbsp;&nbsp;&nbsp;
+                i.fas.fa-edit
+              select(name='type' style='display:none ;width: 300px;')
                 option.dropdown-item(value= null) Chọn
                 option.dropdown-item(value='606c29b97141a71498bd32d8') Quán bún, phở, hủ tiếu,...
                 option.dropdown-item(value='606c29c27141a71498bd32d9') Quán cơm
-                option.dropdown-item(value='606c29df7141a71498bd32da') Coffe, trà sữa,...
+                option.dropdown-item(value='606c29df7141a71498bd32da') Quán coffee, trà sữa,...
                 option.dropdown-item(value='606c29fb7141a71498bd32db') Đồ ăn nhanh (bánh mỳ, fast foods,...)
                 option.dropdown-item(value='606c2a067141a71498bd32dc') Đồ ăn vặt
                 option.dropdown-item(value='60829a97c0f329750c092ee0') Khác
@@ -51,26 +52,26 @@ block header
                   b #{restaurant.email}
             .form-group
               label(for='ifphone')
-                b Điện thoại
-              i.fas.fa-edit(style='float:right')
-              input#ifphone.form-control(type='text' name='phone' placeholder='Nhập số điện thoại' value=restaurant.phone  required='')
+                b Điện thoại &nbsp;&nbsp;&nbsp;
+                i.fas.fa-edit
+              input#ifphone.form-control(type='text' name='phone' placeholder='Nhập số điện thoại' value=restaurant.phone disabled required='')
             .form-group
               label(for='ifaddress')
-                b Địa chỉ
-              i.fas.fa-edit(style='float:right')
-              input#ifaddress.form-control(type='text' name='address' placeholder='Nhập số điạ chỉ' value=restaurant.address required='')
+                b Địa chỉ &nbsp;&nbsp;&nbsp;
+                i.fas.fa-edit
+              input#ifaddress.form-control(type='text' name='address' placeholder='Nhập số điạ chỉ' value=restaurant.address disabled required='')
           .col-sm-3
             .form-group
-              img#show_image.img.img-thumbnail.img-circle(width='300' height='300' src=restaurant.banner)
+              img#ifshow_image.img.img-thumbnail.img-circle(width='300' height='300' src=restaurant.banner)
             .form-group
               input#ifimage.form-control(type='file' name='image')
         .form-group(style='padding-top: 24px; padding-left: 48px; padding-right: 48px;')
           span
-            button#btn_update.btn.btn-primary(type='submit') Cập nhật
+            button.btn.btn-primary(type='button' disabled) Cập nhật
           span(style='float: right')
-            button.btn.btn-danger(type='button' onclick="document.getElementById('accountInfo').style.display='none'") Thoát
+            button.btn.btn-danger(type='button') Thoát
       .container(style='background-color:#f1f1f1')
-   
+  script(src='../../js/res.infomation.js') 
   #accountChangePass.modal.changepass-modal
     form.modal-content.changepassmodal-content.animate(action='' onsubmit='return false'  method='post')
       div(style='background-color:#f1f1f1; text-align: center;')

@@ -23,18 +23,13 @@ exports.emailIsExists = async(email) =>{
 
 //Tạo OTP
 exports.generateOTP = async (email) => {
+    const otpExpire = Date.now() + 24 * 60 * 60 * 1000 
     var authCode = 'FO-'
     for(var i = 0; i <= 5; i++)
       authCode += Math.floor(Math.random() * 10)
-  
     try{
-      const otpExpire = Date.now() + 24 * 60 * 60 * 1000 
-      await AuthCode.create({
-        email, 
-        authCode,
-        otpExpire
-      })
-      return authCode
+        await User.findOneAndUpdate({email}, {$set: {OTP: authCode, otpExpire}})
+        return authCode
     }catch(error){
         console.log(error)
         return null

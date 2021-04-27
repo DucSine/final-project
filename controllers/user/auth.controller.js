@@ -10,11 +10,12 @@ const { validationResult } = require('express-validator')
 const User = require('../../models/User')
 const sendEmail = require('../../utils/sendEmail')
 const Response = require('../../helpers/response.helper')
-const { 
-  emailIsExists, 
-  generateOTP, 
-  compareOTP 
+const {
+  emailIsExists,
+  generateOTP,
+  compareOTP
 } = require('../../config/general')
+const { use } = require('../../routes/user/auth.route')
 
 //Đăng ký
 exports.register = async (req, res, next) => {
@@ -24,23 +25,14 @@ exports.register = async (req, res, next) => {
     return res.status(400).json({ errors: errors.array() })
 
   const {
-    file,
-    body: { 
-      email,
-      username,
-      password,
-      phone,
-      address,
-      fullName,
-      gender,
-      bDate, //dd/mm/yyyy
-      ID,   
-    },
-  } = req
-console.log(req)
+    email,
+    username,
+    password,
+  } = req.body
+  console.log(req.body)
   try {
     const checkMail = await emailIsExists(email)
-    if(checkMail)
+    if (checkMail)
       throw new Error('Email đã được sử dụng!')
 
     let user = await User.findOne({ username })
@@ -48,23 +40,27 @@ console.log(req)
     if (user)
       throw new Error('Username đã được sử dụng!')
 
-    var urlUpload = ''
-  if(file){
-    let orgName = file.originalname || ''
-    orgName = orgName.trim().replace(/ /g, '-')
-    var fullPathInServ = file.path
-    var newFullPath = `${fullPathInServ}-${orgName}`
-    fs.rename(fullPathInServ, newFullPath)
-  
-    const result = await cloudinary.uploader.upload(newFullPath)
-    urlUpload = result.url.replace('http://', 'https://')
-    fs.unlinkSync(newFullPath)
-  }
-          
-    
+    // var urlUpload = ''
+    // if (file) {
+    //   let orgName = file.originalname || ''
+    //   orgName = orgName.trim().replace(/ /g, '-')
+    //   var fullPathInServ = file.path
+    //   var newFullPath = `${fullPathInServ}-${orgName}`
+    //   fs.rename(fullPathInServ, newFullPath)
 
-//
-    var dateParts = bDate.split('/')
+    //   const result = await cloudinary.uploader.upload(newFullPath)
+    //   urlUpload = result.url.replace('http://', 'https://')
+    //   fs.unlinkSync(newFullPath)
+    // }
+
+
+
+    //
+    const otpExpire = Date.now() + 24 * 60 * 60 * 1000 
+    var authCode = 'FO-'
+    for(var i = 0; i <= 5; i++)
+      authCode += Math.floor(Math.random() * 10)
+    //var dateParts = bDate.split('/')
 
     // Tạo ra salt mã hóa
     const salt = await bcrypt.genSalt(10);
@@ -72,36 +68,35 @@ console.log(req)
       username,
       email,
       password: await bcrypt.hash(password, salt),
-      avatar: urlUpload,
-      phone,
-      address,
-      fullName,
-      gender,
-      ID,
-      bDate: new Date( // dd/mm/yyyy
-        parseInt(dateParts[2], 10),
-        parseInt(dateParts[1], 10) - 1,
-        parseInt(dateParts[0], 10),
-      )
+      OTP: authCode,
+      otpExpire
+      // avatar: urlUpload,
+      // phone,
+      // address,
+      // fullName,
+      // gender,
+      // ID,
+      // bDate: new Date( // dd/mm/yyyy
+      //   parseInt(dateParts[2], 10),
+      //   parseInt(dateParts[1], 10) - 1,
+      //   parseInt(dateParts[0], 10),
+      //)
     })
     //TẠO OTP
-    var otpCode = await generateOTP(email)
-    if(otpCode == null)
-      throw new Error('Có lỗi xảy ra!')
-
+    
     //SEND MAIL
     var eMessage = `Xin chào ${username}!`
-                    +`\nMã OTP của bạn là ${otpCode} `
-                    +`\nVui lòng bỏ qua nếu không phải bạn.`
+      + `\nMã OTP của bạn là ${authCode} `
+      + `\nVui lòng bỏ qua nếu không phải bạn.`
     await sendEmail({
       email: email,
       subject: 'Xác thực tài khoản',
       message: eMessage,
     })
-  
+
     var rMessage = `Chúng tôi đã gửi một email kèm theo mã OTP đến ${email},`
-                  + `vui lòng kiểm tra email vủa bạn và nhập mã OTP để kích hoạt tài khoản`
-    return Response.success(res, { message: rMessage})
+      + `vui lòng kiểm tra email vủa bạn và nhập mã OTP để kích hoạt tài khoản`
+    return Response.success(res, { message: rMessage })
   } catch (error) {
     console.log(error.message)
     return next(error)
@@ -109,23 +104,23 @@ console.log(req)
 }
 
 //Thay đổi email đăng ký
-exports.changeEmailRegister = async(req, res, next) =>{
+exports.changeEmailRegister = async (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty())
     return res.status(400).json({ errors: errors.array() })
-  
-  const { 
+
+  const {
     username,
-    email 
+    email
   } = req.body
 
-  try{
-    let user = await User.findOne({username})
-    if(!user)
+  try {
+    let user = await User.findOne({ username })
+    if (!user)
       throw new Error('Có lỗi xảy ra!')
-    
+
     const checkMail = await emailIsExists(email)
-    if(checkMail)
+    if (checkMail)
       throw new Error('email đã được sử dụng!')
 
     //
@@ -133,13 +128,13 @@ exports.changeEmailRegister = async(req, res, next) =>{
 
     //TẠO OTP
     const otpCode = await generateOTP(email)
-    if(otpCode == null)
+    if (otpCode == null)
       throw new Error('Có lỗi xảy ra!')
 
     //SEND MAIL
     var eMessage = `Xin chào ${username}!`
-                    +`\nMã OTP của bạn là ${otpCode} `
-                    +`\nVui lòng bỏ qua nếu không phải bạn.`
+      + `\nMã OTP của bạn là ${otpCode} `
+      + `\nVui lòng bỏ qua nếu không phải bạn.`
     await sendEmail({
       email: email,
       subject: 'Xác thực tài khoản',
@@ -147,14 +142,14 @@ exports.changeEmailRegister = async(req, res, next) =>{
     })
 
     return Response.success(res, { message: 'Cập nhật thành công' });
-  }catch(error){
+  } catch (error) {
     console.log(error)
     return next(error)
   }
 }
 
 //Xác thực tài khoản
-exports.verificationAccount = async(req, res, next) =>{
+exports.verificationAccount = async (req, res, next) => {
   // Validate
   const errors = validationResult(req)
   if (!errors.isEmpty())
@@ -165,17 +160,18 @@ exports.verificationAccount = async(req, res, next) =>{
     OTP
   } = req.body
 
-  try{ 
+  try {
     let user = await User.findOne({ email })
-    if(!user)
+    if (!user)
       throw new Error('Có lỗi xảy ra')
     
-    const rs = await compareOTP(email, OTP)
-    if(!rs)
-      return Response.error(res, {message: 'OTP không hợp lệ!'})
-    let testus = await User.findByIdAndUpdate(user._id, { $set: { isVerified: true } })
-    return Response.success(res, {message: 'Kích hoạt tài khoản thành công.'})
-  }catch(err){
+    if (OTP != user.OTP || Date.now()> new Date(user.otpExpire)*1)
+    return Response.error(res, { message: 'OTP không hợp lệ!' })
+   
+    await User.findByIdAndUpdate(user._id, { $set: { isVerified: true , OTP: null, otpExpire: null} })
+    
+    return Response.success(res, { message: 'Kích hoạt tài khoản thành công.' })
+  } catch (err) {
     console.log(error.message)
     return next(error)
   }
@@ -193,11 +189,11 @@ exports.login = async (req, res, next) => {
   try {
     const user = await User.findOne({ username })
 
-    if (!user) {
+    if (!user) 
       throw new Error('username không đúng')
-    }
 
-    if (!user.isVerified) throw new Error('Tài khoản chưa được kích hoạt!')
+    if (!user.isVerified) 
+      throw new Error('Tài khoản chưa được kích hoạt!')
 
     // Result: boolean
     const result = await bcrypt.compare(password, user.password)
@@ -221,7 +217,7 @@ exports.login = async (req, res, next) => {
         return Response.success(res, { token, avatar: user.avatar })
       },
     )
-    
+
     return true
   } catch (error) {
     console.log(error.message)
@@ -231,7 +227,7 @@ exports.login = async (req, res, next) => {
 
 // Quên mật khẩu 
 // post mail xác nhận - verificationAccount
-exports.fogotPassword = async(req, res, next) =>{
+exports.fogotPassword = async (req, res, next) => {
   // Validate
   const errors = validationResult(req)
   if (!errors.isEmpty())
@@ -239,20 +235,20 @@ exports.fogotPassword = async(req, res, next) =>{
 
   const { email } = req.body
 
-  try{
+  try {
     let user = await User.findOne({ email })
-    if(!user)
+    if (!user)
       throw new Error('Địa chỉ email không đúng!')
-    
+
     //TẠO OTP
     const otpCode = await generateOTP(email)
-    if(otpCode == null)
+    if (otpCode == null)
       throw new Error('Có lỗi xảy ra!')
 
     //SEND MAIL
     const eMessage = `Xin chào ${user.username}!`
-                    +`\nMã OTP của bạn là ${otpCode} `
-                    +`\nVui lòng bỏ qua nếu không phải bạn.`
+      + `\nMã OTP của bạn là ${otpCode} `
+      + `\nVui lòng bỏ qua nếu không phải bạn.`
     await sendEmail({
       email: email,
       subject: 'Xác thực tài khoản',
@@ -262,14 +258,14 @@ exports.fogotPassword = async(req, res, next) =>{
     return Response.success(res, {
       message: 'Vui lòng kiểm tra email và nhập mã OTP'
     })
-  }catch(error){
+  } catch (error) {
     console.log(error)
     return next(error)
   }
 }
 
 // Xác thực OTP
-exports.otpResetPassword = async(req, res, next) =>{
+exports.otpResetPassword = async (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty())
     return res.status(400).json({ errors: errors.array() })
@@ -278,43 +274,43 @@ exports.otpResetPassword = async(req, res, next) =>{
     email,
     OTP
   } = req.body
-  
-  try{ 
+
+  try {
     let user = User.findOne({ email })
-    if(!user)
+    if (!user)
       throw new Error('Có lỗi xảy ra')
-      
+
     const rs = await compareOTP(email, OTP)
-    if(!rs)
-      return Response.error(res, {message: 'OTP không hợp lệ!'})
-  
-    return Response.success(res, {message: 'OTP hợp lệ.'})
-    }catch(err){
-      console.log(error.message)
-      return next(error)
-    }
+    if (!rs)
+      return Response.error(res, { message: 'OTP không hợp lệ!' })
+
+    return Response.success(res, { message: 'OTP hợp lệ.' })
+  } catch (err) {
+    console.log(error.message)
+    return next(error)
+  }
 }
 
 // Nhập mk mới - login 
-exports.resetPassword = async(req, res, next) =>{
-// Validate
+exports.resetPassword = async (req, res, next) => {
+  // Validate
   const errors = validationResult(req)
   if (!errors.isEmpty())
     return res.status(400).json({ errors: errors.array() })
 
-  const { 
-    email, 
-    newPassword 
+  const {
+    email,
+    newPassword
   } = req.body
 
-  try{
+  try {
     let user = await User.findOne({ email })
-    if (!user.isVerified) 
+    if (!user.isVerified)
       throw new Error('Tài khoản chưa được kích hoạt!')
-    
+
     const salt = await bcrypt.genSalt(10);
-    const password = await bcrypt.hash(newPassword, salt)  
-    await User.findByIdAndUpdate(user._id, {$set :{ password }})
+    const password = await bcrypt.hash(newPassword, salt)
+    await User.findByIdAndUpdate(user._id, { $set: { password } })
 
     const payload = {
       user: {
@@ -331,9 +327,9 @@ exports.resetPassword = async(req, res, next) =>{
         return Response.success(res, { token, avatar: user.avatar })
       },
     )
-    
+
     return true
-  }catch(error){
+  } catch (error) {
     console.log(error)
     return next(error)
   }
@@ -341,31 +337,31 @@ exports.resetPassword = async(req, res, next) =>{
 }
 
 // Đổi mật khẩu
-exports.changePassword = async(req, res, next) =>{
+exports.changePassword = async (req, res, next) => {
   // Validate
   const errors = validationResult(req)
   if (!errors.isEmpty())
     return res.status(400).json({ errors: errors.array() })
 
-  const { 
+  const {
     password,
     newPassword
   } = req.body
 
-  try{
-    if(password == newPassword)
+  try {
+    if (password == newPassword)
       throw new Error('Mật khẩu mới phải khác mật khẩu cũ!')
 
     const result = await bcrypt.compare(password, req.user.password)
-    if (!result) 
+    if (!result)
       throw new Error('Password sai!')
-    
+
     const salt = await bcrypt.genSalt(10);
-    const editPass = await bcrypt.hash(newPassword, salt)  
-    await User.findByIdAndUpdate(user._id, {$set :{ password: editPass }})
-    
-    return Response.success(res,{message:'Thay đổi mật khẩu thành công.'})
-  }catch(error){
+    const editPass = await bcrypt.hash(newPassword, salt)
+    await User.findByIdAndUpdate(user._id, { $set: { password: editPass } })
+
+    return Response.success(res, { message: 'Thay đổi mật khẩu thành công.' })
+  } catch (error) {
     console.log(error)
     return next(error)
   }
@@ -391,7 +387,7 @@ exports.editAccount = async (req, res, next) => {
   } = req
   try {
     const urlUpload = ''
-    if(file){   // nếu đổi ảnh đại diện 
+    if (file) {   // nếu đổi ảnh đại diện 
       let orgName = file.originalname || '';
       orgName = orgName.trim().replace(/ /g, '-');
       const fullPathInServ = file.path;
@@ -404,7 +400,7 @@ exports.editAccount = async (req, res, next) => {
     }
 
     const currentUser = await User.findByIdAndUpdate(req.user._id, {
-      $set: { 
+      $set: {
         ...req.body,
         bDate: new Date(bDate),
         avatar: urlUpload

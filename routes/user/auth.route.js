@@ -8,7 +8,6 @@ const { check } = require('express-validator')
 
 const {
   login, 
-  register,
   changeEmailRegister,
   verificationAccount,
   changePassword,
@@ -17,6 +16,7 @@ const {
   fogotPassword,
   otpResetPassword,
   resetPassword,
+  register,
 } = require('../../controllers/user/auth.controller')
 const { protect } = require('../../middlewares/user/auth')
 
@@ -38,20 +38,12 @@ router.post(
 // @access  Public
 router.post(
   '/register',
-  upload.single('avatar'),
   [
     check('username', 'username không được bỏ trống!').not().isEmpty(),
     check('password', 'Password ít nhất 8 ký tự').isLength({ min: 8 }),
     check('email', 'Bạn phải nhập đúng định dạng email').isEmail(),
-    check('password', 'Mật khẩu phải nhiều hơn 8 ký tự').isLength({ min: 8 }),
-    check('fullName', 'Bạn phải nhập họ tên').not().isEmpty(),
-    check('address', 'Bạn phải nhập địa chỉ').not().isEmpty(),
-    check('phone', 'Bạn phải nhập số điện thoại').not().isEmpty(),
-    check('gender', 'Bạn phải chọn giới tính').not().isEmpty(),
-    check('ID', 'Bạn phải nhập số CMND').not().isEmpty(),
-    check('bDate', 'Bạn phải nhập ngày sinh, định dạng dd/MM/yyyy').not().isEmpty(),
-  ], 
-  register,
+  ],
+  register
 )
 
 // @route   POST api/user/auth/changeEmailRegister

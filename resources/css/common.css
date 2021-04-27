@@ -17,6 +17,13 @@ body {
 .input-invalid{
   border-color: #dc3545;
 }
+.label-valid{
+  display: none;
+}
+.label-invalid{
+  display: inline;
+  color: #dc3545;
+}
 
 .container {
   padding: 16px;

@@ -15,5 +15,6 @@ const sendEmail = require('../../utils/sendEmail')
 exports.hostPage = async(req, res, next) => {
     const restaurant =req.restaurant 
     const name = req.restaurant.restaurantName.slice(0,14)
-    res.render('./restaurant/hostpage',{restaurant,name})
+    const resType = await RestaurantType.findById(restaurant.type)
+    res.render('./restaurant/hostpage',{restaurant, name, resType})
 }

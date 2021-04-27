@@ -36,6 +36,7 @@ const cloudinary = require('./config/cloudinaryConfig')
 const Restaurant = require('./models/Restaurant')
 const RestaurantType = require('./models/RestaurantType')
 const Food = require('./models/Food')
+const User = require('./models/User')
 const jwt = require('jsonwebtoken')
 const {emailIsExists, decodeAuthToken} = require('./config/general')
 const upload = multer({dest: './resources/uploads'})
@@ -134,5 +135,12 @@ app.post('/dev/addFood',upload.single('image'),async(req, res, next)=>{
 
 }, (req, res)=>res.send(`<script>alert('Thành công')</script>`))
 ///
+async function testdate(){
+  const date = await User.findById('6087bede17b18a2914833780')
+  console.log(Date.now() < new Date(date.otpExpire)*1)
+  console.log('now: '+  Date.now())
+  console.log('in: '+  new Date(date.otpExpire)*1)
+}
 
+testdate()
 app.listen(port, ()=>console.log(`run with http://localhost:${port}`))
