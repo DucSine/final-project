@@ -3,17 +3,52 @@ const express = require('express')
 const router = express.Router()
 
 const handleError = require('../helpers/handleError.helper')
+const { protect } = require('../middlewares/restaurant/auth')
+const { 
+    resIntroduce,
+    resHostpage 
+} = require('../controllers/restaurant/res.function.controller')
 
-router.use('/admin', require('./admin.route'))
+const{ 
+    resetPage, 
+    resetPass 
+} = require('../controllers/general.controller')
 
-router.use(handleError)
+// @route   GET /
+// @desc    restaurant introduce page
+// @access  Public
+router.get('/', resIntroduce)
 
-router.use('/res', require('./restaurant.route'))
+// @route   GET /changeMail
+// @desc    restaurant change after register
+// @access  Public
 
-router.use(handleError)
 
-router.use('/', require('./general.function.route'))
+// @route   GET /res_hostpage/
+// @desc    restaurant hostpage
+// @access  Private
+router.get('/res_hostpage', protect, resHostpage)
 
-//router.use('/auth', 
+// @route   GET /admin_signin
+// @desc    admin login
+// @access  Public
+
+// @route   GET /admin_hostpage
+// @desc    admin login
+// @access  Public
+
+
+// @route   GET /resetpass
+// @desc    Reset password page
+// @access  Public
+router.get('/reset', resetPage)
+
+// @route   GET /resetpass
+// @desc    Reset password page
+// @access  Public
+router.post('/resetpass', resetPass)
+
+// post, reset xong chuyen trang dang nhap
 
 module.exports = router
+

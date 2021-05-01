@@ -135,12 +135,7 @@ app.post('/dev/addFood',upload.single('image'),async(req, res, next)=>{
 
 }, (req, res)=>res.send(`<script>alert('Thành công')</script>`))
 ///
-async function testdate(){
-  const date = await User.findById('6087bede17b18a2914833780')
-  console.log(Date.now() < new Date(date.otpExpire)*1)
-  console.log('now: '+  Date.now())
-  console.log('in: '+  new Date(date.otpExpire)*1)
-}
-
-testdate()
+app.post('/upload_file',upload.single('banner') ,async(req,res)=>{
+  console.log(req.file)
+})
 app.listen(port, ()=>console.log(`run with http://localhost:${port}`))

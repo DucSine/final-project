@@ -37,12 +37,11 @@ exports.register = async (req, res, next) => {
       type,
     },
   } = req
-
-  console.log(req.body)
   try {
     const checkMail = await emailIsExists(email)
     if (checkMail)
       throw new Error('Email đã được sử dụng!')
+
 
     let resType = await RestaurantType.findById(type)
     if (!resType)
@@ -62,7 +61,7 @@ exports.register = async (req, res, next) => {
     }
 
     // Tạo ra salt mã hóa
-    const salt = await bcrypt.genSalt(10);
+    const salt = await bcrypt.genSalt(10)
     await Restaurant.create({
       restaurantName,
       email,
@@ -247,14 +246,19 @@ exports.fogotPassword = async (req, res, next) => {
     if (!restaurant)
       throw new Error('Địa chỉ email không đúng!')
 
-    //TẠO OTP
-    const otpCode = await generateOTP(email)
-    if (otpCode == null)
-      throw new Error('Có lỗi xảy ra!')
-
-    //SEND MAIL
+    //TẠO token
+    const payload = {
+      restaurant: {
+        id: restaurant.id,
+      },
+    }
+    const tokenResetPass = generateAuthToken(payload)
+    console.log(tokenResetPass)
+    //SEND MAIL//làm lại
     const eMessage = `Xin chào ${restaurant.restaurantName}!`
-      + `\nMã OTP của bạn là ${otpCode} `
+      + `\nVui lòng chuyển hướng đến trang`+
+      ` https://kltn-foodoffer.herokuapp.com/reset?func=01&authToken=${tokenResetPass}`
+      +`để cài lại mật khẩu.`
       + `\nVui lòng bỏ qua nếu không phải bạn.`
     await sendEmail({
       email: email,
@@ -263,7 +267,8 @@ exports.fogotPassword = async (req, res, next) => {
     })
 
     return Response.success(res, {
-      message: 'Vui lòng kiểm tra email và nhập mã OTP'
+      message: `Chúng tôi đã gửi một email đến địa chỉ ${email},`
+              +`\nVui lòng kiểm tra.`
     })
   } catch (error) {
     console.log(error)
@@ -306,7 +311,7 @@ exports.resetPassword = async (req, res, next) => {
     return res.status(400).json({ errors: errors.array() })
 
   const {
-    email,
+    email, 
     newPassword
   } = req.body
 

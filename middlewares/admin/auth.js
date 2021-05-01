@@ -4,7 +4,10 @@ const bcrypt = require('bcrypt');
 const Response = require('../../helpers/response.helper');
 
 exports.protect = async (req, res, next) => {
-  const token = req.body.token || req.query.token || req.headers.authorization;
+  const token = req.body.token 
+  || req.query.token 
+  || req.headers.authorization 
+  || req.cookies.token
 
   try {
     if (!token) throw new Error('Token not found!');

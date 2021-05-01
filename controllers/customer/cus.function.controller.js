@@ -56,7 +56,6 @@ exports.findProducts = async(req, res, next)=>{
       key, 
       p 
     } = req.query
-    console.log(typeof key)
 
     if(key == undefined || key.trim() == '')
       throw new Error('Có lỗi xảy ra!')

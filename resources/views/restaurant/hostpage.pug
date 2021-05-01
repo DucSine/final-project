@@ -9,12 +9,12 @@ block header
         i.fa.fa-bell(style='font-size:30px;')
         span.badge 0
       img.avatar(src=restaurant.banner width='70px' height='70px')
-      b  #{name}
+      b  #{name} 
   .user-container
     a#a_usInfo.text-primary Thông tin cửa hàng
     a#a_usChangePass.text-primary Đổi mật khẩu
     button#btn_logout.btn.btn-danger Đăng xuất
-  script(src='../../js/accContainer.js')
+
 
   
   #accountInfo.modal.accountInfo-modal
@@ -71,7 +71,7 @@ block header
           span(style='float: right')
             button.btn.btn-danger(type='button') Thoát
       .container(style='background-color:#f1f1f1')
-  script(src='../../js/res.infomation.js') 
+ 
   #accountChangePass.modal.changepass-modal
     form.modal-content.changepassmodal-content.animate(action='' onsubmit='return false'  method='post')
       div(style='background-color:#f1f1f1; text-align: center;')
@@ -96,20 +96,56 @@ block header
         span(style='float: right')
           button.btn.btn-danger(type='button' onclick="document.getElementById('accountChangePass').style.display='none'") Thoát
       .container(style='background-color:#f1f1f1')
-  script(src='../../js/changePass.js')
   
 block sidebar
   h4 ResName
       ul.nav.nav-pills.flex-column
         li.nav-item
-          a.nav-link.active(href='#section1') Trang chủ
+          a.nav-link.active(href='?load=hostpage') Trang chủ
         li.nav-item
-          a.nav-link(href='#section2') Sản Phẩm
+          a.nav-link(href='?load=product') Sản Phẩm
         li.nav-item
-          a.nav-link(href='#section3') Quản lý đơn hàng
+          a.nav-link(href='?load=bill') Quản lý đơn hàng
         li.nav-item
-          a.nav-link(href='#section3') Mã giảm giá
-  script(src='../../js/res.sidebar.js')
+          a.nav-link(href='?load=discount') Mã giảm giá
 
 block content
   
+  #divHostPage.div-content(style='padding-top:30px') sadasda
+  .search-container(style="padding:30px")
+    .form(style="float:right" onsubmit='return false' method='get')
+      input#inputSearch(type="text" placeholder="Search.." name="keySearch")
+      button(type="button" onclick='foodSearch()')
+        i.fa.fa-search
+  #divProduct.div-content(style='display:none;padding-top:30px')
+    p#totalPage(style='display:none') #{fPageTotal}
+    span
+      | Tổng số sản phẩm: #{foodTotal}
+    span(style='float: right; padding-right:30px')
+      button.btn.btn-primary(type='button' style='float:right') Thêm sản phẩm
+
+    ul#listProduct(style='list-style:none; padding:30px')
+      each food in foods 
+        li(onclick = 'alert(this.querySelector("p.foodId").textContent)')
+          p.foodId(style='display:none') #{food._id}
+          .media.border.p-1
+            img.mr-3.mt-3.img-thumbnail(src=food.image style='width:80px;')
+            .media-body
+              label(style="font-size: x-large;")
+                b #{food.foodName}
+              i.fas.fa-star.text-warning(style="float: right;")
+                b(style='color: black') #{food.rate}
+              p 
+                b Giá:&nbsp;#{food.price}đ
+              p #{food.buys} lượt mua
+  #divBillManager.div-content(style='display:none;padding-top:30px') sadad
+  #divDiscountCode.div-content(style='display:none;padding-top:30px') fdsfsd
+  #divDirect(style='padding:30px;')
+    span(style='padding-right:5px')
+      button#btn_pre.btn.btn-primary(type='button' onclick='previousPage()') 
+        i.fas.fa-angle-double-left
+    span(style='padding-left:5px')
+      button#btn_next.btn.btn-primary(type='button' onclick='nextPage()') 
+        i.fas.fa-angle-double-right
+  script(src='../../js/controller/res.hostpage.js')
+  script(src='../../js/functions/res.hostpage.js')

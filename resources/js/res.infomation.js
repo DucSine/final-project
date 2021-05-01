@@ -5,7 +5,7 @@ var b_resType = form_resInfo.querySelector('#ifb_resTypeName') // type name
 var regis_selectType = form_resInfo.querySelector('select')  // choose type
 var list_optionItem = regis_selectType.querySelectorAll('option.dropdown-item') // type item
 var img_banner = form_resInfo.querySelector('img#ifshow_image.img.img-thumbnail.img-circle') // banner
-var list_regis_button = form_resInfo.querySelectorAll('button.btn') // list button
+var list_login_button = form_resInfo.querySelectorAll('button.btn') // list button
 
 var resName = ''
 var resType = ''
@@ -19,12 +19,6 @@ var list_pattern = {
 }
 
 // init key style
-const NONE = 'none'
-const INLINE = 'inline'
-// init key valid
-const VALID = 'input-valid'
-const INVALID = 'input-invalid'
-// init key localStorage
 const RES_NAME = 'resName'
 const RES_TYPE = 'resType'
 const RES_TYPE_ID = 'resType_id'
@@ -58,12 +52,12 @@ window.oninput = function (e) {
             if (resName == '') {
                 alert('Tên không được để trống.')
                 list_regis_input[0].classList.add(INVALID)
-                list_regis_button[0].disabled = true
+                list_login_button[0].disabled = true
             }
             else {
                 list_regis_input[0].classList.add(VALID)
                 list_regis_input[0].classList.remove(INVALID)
-                list_regis_button[0].disabled = false
+                list_login_button[0].disabled = false
             }
             break
         case list_regis_input[1]: // res phone
@@ -71,12 +65,12 @@ window.oninput = function (e) {
             if (!resPhone.match(list_pattern.checkPhone)) {
                 alert('Số điện thoại bạn nhập không hợp lệ.')
                 list_regis_input[1].classList.add(INVALID)
-                list_regis_button[0].disabled = true
+                list_login_button[0].disabled = true
             }
             else {
                 list_regis_input[1].classList.add(VALID)
                 list_regis_input[1].classList.remove(INVALID)
-                list_regis_button[0].disabled = false
+                list_login_button[0].disabled = false
             }
             break
         case list_regis_input[2]: // res address
@@ -84,12 +78,12 @@ window.oninput = function (e) {
             if (resAddress == '') {
                 alert('Địa chỉ không được để trống')
                 list_regis_input[2].classList.add(INVALID)
-                list_regis_button[0].disabled = true
+                list_login_button[0].disabled = true
             }
             else {
                 list_regis_input[2].classList.add(VALID)
                 list_regis_input[2].classList.remove(INVALID)
-                list_regis_button[0].disabled = false
+                list_login_button[0].disabled = false
             }
             break
     }
@@ -102,16 +96,16 @@ window.onchange = function (e) {
         case regis_selectType: // choose image
             resType_id = regis_selectType.value
             if (resType_id == localStorage.getItem(RES_TYPE_ID).trim())
-                list_regis_button[0].disabled = true
+                list_login_button[0].disabled = true
             else if (resType_id == null || resType_id == 'Chọn' || resType_id == '') {
                 alert('Vui lòng chọn loại nhà hàng.')
-                list_regis_button[0].disabled = true
+                list_login_button[0].disabled = true
             }
             else {
                 for (var item of list_optionItem)
                     if (regis_selectType.value == item.value)
                         resType = item.innerText
-                list_regis_button[0].disabled = false
+                list_login_button[0].disabled = false
             }
             break
         case list_regis_input[3]:
@@ -119,10 +113,10 @@ window.onchange = function (e) {
             const fileFormat = ['gif', 'GIF', 'png', 'PNG', 'jpg', 'JPG']
             var rs = fileFormat.some((item) => item == splitFileName[splitFileName.length - 1])
             if (rs)
-                list_regis_button[0].disabled = false
+                list_login_button[0].disabled = false
             else {
                 alert('File không đúng định dạng. \nChỉ chấp nhận các định dạng sau: .gif, .png, .jpg')
-                list_regis_button[0].disabled = true
+                list_login_button[0].disabled = true
             }
             break
     }
@@ -148,13 +142,13 @@ window.onclick = function (e) {
             list_iconEditor[3].style.display = NONE
             list_regis_input[2].disabled = false
             break
-        case list_regis_button[0]:  //btn update
+        case list_login_button[0]:  //btn update
             //upload
             //post axios,
             //update localStorage
 
             break
-        case list_regis_button[1]: // btn cancle: rollback and cancle
+        case list_login_button[1]: // btn cancle: rollback and cancle
             // res name
             list_iconEditor[0].style.display = INLINE
             list_regis_input[0].value = localStorage.getItem(RES_NAME)
@@ -177,7 +171,7 @@ window.onclick = function (e) {
             //input 
             list_regis_input[3].value = ''
             // hidden form
-            list_regis_button[0].disabled = true
+            list_login_button[0].disabled = true
             document.getElementById('accountInfo').style.display = NONE
             break
     }

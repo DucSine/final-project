@@ -1,0 +1,52 @@
+extends ./common.pug
+block header
+  link(rel='stylesheet' href='../../css/res_index.css' )
+  nav.navbar.navbar-light.bg-primary
+    a.navbar-brand(href='/res/hostpage')
+      img(src='https://res.cloudinary.com/ducsine/image/upload/v1619047971/logo.png' width='200px' height='100px')
+
+
+block body 
+  #resetPass_container.container(style='height:65vh; margin-top: 5%')
+    form(onsubmit='return fresetPass()' method='post')
+      div(style='background-color:#f1f1f1; text-align: center; ')
+        label.text-primary
+          b(style='font-size: xx-large;') Đặt lại mật khẩu
+      .container
+        .form-group
+          label(for='resetPass')
+            b Password
+          input#resetPass.form-control(type='password' name='password' pattern='[A-Za-z0-9]{8,30}' title='Mật khẩu không chứa ký tự đặc biệt, gồm 8 - 30 ký tự' placeholder='Nhập mật khẩu mới' required='')
+        .form-group
+          label(for='resetPassConfirm')
+            b Password confirm
+          input#resetPassConfirm.form-control(type='password' name='password' placeholder='Nhập lại mật khẩu' required='')
+       
+        .form-group(style='padding: 48px')
+          button.btn.btn-primary(type='submit' style='width:100%') Xác nhận 
+
+  #afterRegister_container.container(style='height:65vh; margin-top: 5%')
+    span 
+      b Không nhận được email 
+      a.text-primary(onclick='a_getEmailAgain()') gửi lại?
+    span(style='display: block')
+      b Thay đổi email đăng ký 
+      a.text-primary(onclick='a_changeEmail()') Thay đổi?
+
+  #resetEmail_container.container(style='height:65vh; margin-top: 5%; display:none')
+    .form(onsubmit='return changeEmail()' method='post')
+      div(style='background-color:#f1f1f1; text-align: center; ')
+        label.text-primary
+          b(style='font-size: xx-large;') Thay đổi email đăng ký
+      .container
+        .form-group
+          label(for='resetEmail')
+            b Email
+          input#resetEmail.form-control(type='email' name='email'  placeholder='Nhập email mới' required='')
+     
+        .form-group(style='padding: 48px')
+          span
+            button.btn.btn-primary(type='submit') Xác nhận
+          span(style='float: right')
+            button.btn.btn-danger(type='button', onclick='cancleChangeEmail()') Hủy bỏ
+  script(src='../../js/reset.js') 

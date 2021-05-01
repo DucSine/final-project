@@ -16,7 +16,11 @@ const BillSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
-  discount: Number,
+  discount:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Discount',
+    required: false
+  },
   dateCreate: {
     type: Date,
     default: Date.now(),

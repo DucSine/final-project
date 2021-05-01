@@ -17,9 +17,9 @@ const {
   resetPassword 
 } = require('../../controllers/restaurant/auth.controller');
 const { protect } = require('../../middlewares/restaurant/auth')
-const { hostPage } = require('../../controllers/restaurant/views.controller')
+const { hostPage } = require('../../controllers/restaurant/res.function.controller')
 
-// @route   POST /res/auth/login
+// @route   POST api/res/auth/login
 // @desc    Đăng nhập
 // @access  Public
 router.post(
@@ -31,7 +31,7 @@ router.post(
   login
 )
 
-// @route   POST /res/auth/register
+// @route   POST api/res/auth/register
 // @desc    Đăng ký tài khoản
 // @access  Public
 router.post(
@@ -48,7 +48,7 @@ router.post(
   register,
 )
 
-// @route   POST /res/auth/changeEmailRegister
+// @route   POST api/res/auth/changeEmailRegister
 // @desc    Thay đổi email đăng ký
 // @access  Public
 router.post(
@@ -60,7 +60,7 @@ router.post(
   changeEmailRegister
 )
 
-// @route   POST /res/auth/verificationAccount
+// @route   POST api/res/auth/verificationAccount
 // @desc    Kích hoạt tài khoản
 // @access  Public
 router.post(
@@ -73,7 +73,7 @@ router.post(
 )
 
 
-// @route   POST /res/auth/changePassword
+// @route   POST api/res/auth/changePassword
 // @desc    Đổi mật khẩu
 // @access  Private
 router.post(
@@ -107,11 +107,7 @@ router.post(
 // @route   GET api/res/auth/profile
 // @desc    Lấy thông tin tài khoản
 // @access  Private
-router.get(
-  '/profile', 
-  protect, 
-  resProfile
-)
+router.get('/profile', protect, resProfile )
 
 // @route   POST api/res/auth/fogotPassword
 // @desc    Quên mật khẩu (nhận otp)
