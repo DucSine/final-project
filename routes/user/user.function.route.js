@@ -8,7 +8,14 @@ const {
     addCart,
     updateCart,
     showCart,
-    comment
+    comment,
+    createBill,
+    addFoodToBill,
+    showBillDetail,
+    cancelOrder,
+    privateDiscountCode,
+    publicDiscountCode,
+    getHistoryTransaction
 } = require('../../controllers/user/user.function.controller')
 
 // @route   POST api/user/func/addcart
@@ -26,6 +33,31 @@ router.post('/updateCart', updateCart)
 // @access  Private
 router.post('/cart', showCart)
 
+// @route   POST api/user/func/createBill
+// @desc    Tạo đơn hàng
+// @access  Private
+router.post('/createBill', createBill)
+
+// @route   POST api/user/func/addProductToBill
+// @desc    Thêm sản phẩm vào đơn hàng
+// @access  Private
+router.post('/addProductToBill', addFoodToBill)
+
+// @route   GET api/user/func/billDetail
+// @desc    Xem chi tiết đơn hàng
+// @access  Private
+router.post('/billDetail', showBillDetail)
+
+// @route   POST api/user/func/billCancel
+// @desc    Hủy đơn hàng
+// @access  Private
+router.post('/billCancel', cancelOrder)
+
+// @route   GET api/user/func/transecsion
+// @desc    Lịch sử giao dịch
+// @access  Private
+router.post('/transecsion', getHistoryTransaction)
+
 // @route   POST api/user/func/rate
 // @desc    Đánh giá
 // @access  Private
@@ -41,5 +73,14 @@ router.post('/editRate', editRate)
 // @access  Private
 router.post('/comment', comment)
 
-//còn thiếu: add giỏ hàng,mua hàng, thanh toán
+// @route   GET api/user/func/publicDiscount
+// @desc    Mã giảm giá chung
+// @access  Private
+router.post('/publicDiscount', publicDiscountCode)
+
+// @route   GET api/user/func/privateDiscount
+// @desc    Mã giảm giá riêng
+// @access  Private
+router.post('/privateDiscount', privateDiscountCode)
+
 module.exports = router;

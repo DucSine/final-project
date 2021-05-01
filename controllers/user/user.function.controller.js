@@ -11,10 +11,33 @@ const Comment = require('../../models/Comment')
 const { Error } = require('mongoose')
 const Bill = require('../../models/Bill')
 const BillDetail = require('../../models/Bill_Detail')
+const Discount_code = require('../../models/Discount_code')
 const limit = 20
 
 //Danh sách mã giảm giá 
-exports.discountCodeList = async (req, res, next) => { }
+exports.publicDiscountCode = async (req, res, next) => {
+  try {
+    let public = await Discount_code.find({ user: null })
+    if (!public)
+      throw new Error('Không có mã giảm giá.')
+    Response.success(res, { public })
+  } catch (error) {
+    console.log(error)
+    return next(error)
+  }
+}
+
+exports.privateDiscountCode = async (req, res, next) => {
+  try {
+    let private = await Discount_code.find({ user: req.user._id })
+    if (!private)
+      throw new Error('Không có mã giảm giá.')
+    Response.success(res, { private })
+  } catch (error) {
+    console.log(error)
+    return next(error)
+  }
+}
 
 //Thêm vào giỏ hàng
 exports.addCart = async (req, res, next) => {
@@ -95,19 +118,32 @@ exports.showCart = async (req, res, next) => {
 exports.createBill = async (req, res, next) => {
   const {
     restaurant,
-    discountCode
+    discountCode //id
   } = req.body
   try {
-    var discount = ''
-    if (discountCode)
-      discount = discountCode
+    const discount = await Discount_code.findById( discountCode)
+    if (!discount)
+      throw new Error('Mã giảm giá không tồn tại.')
+
+    if (Number(discount.dateExprite) < Date.now())
+      throw new Error('Mã giảm giá đã hết hạn.')
+
+    if (Number(discount.amount) == 0)
+      throw new Error('Mã giảm giá đã hết.')
+
+    // var discount = ''
+    // if (discountCode)
+    //   discount = discountCode
 
     let bill = await Bill.create({
       restaurant,
       user: req.user._id,
-      discount
+      discount: discount._id
     })
-
+      
+    var current_amount = Number(discount.amount)-1
+    await Discount_code.findByIdAndUpdate(discount._id, {$set: {amount: current_amount}})
+    
     Response.success(req, { bill_id: bill._id })
   } catch (error) {
     console.log(error)
@@ -164,13 +200,13 @@ exports.cancelOrder = async (req, res, next) => {
     let bill = await Bill.findById(bill_id)
     if (!bill)
       throw new Error('Đơn hàng không tồn tại.')
-    
-    if(bill.status != 'đang xử lý' )
-      throw new Error('Đơn hàng không thể hủy vì đang được giao hoặc đã hoàn tất.')
-    
-    await Bill.findByIdAndUpdate(bill_id, {$set: {status: 'Đã hủy'}})
 
-    Response.success(res, {message: 'Đã hoàn tất.'})
+    if (bill.status != 'đang xử lý')
+      throw new Error('Đơn hàng không thể hủy vì đang được giao hoặc đã hoàn tất.')
+
+    await Bill.findByIdAndUpdate(bill_id, { $set: { status: 'Đã hủy' } })
+
+    Response.success(res, { message: 'Đã hoàn tất.' })
   } catch (error) {
     console.log(error)
     return next(error)
@@ -178,13 +214,13 @@ exports.cancelOrder = async (req, res, next) => {
 }
 
 //Lịch sử giao dịch
-exports.getHistoryTransaction = async (req, res, next)=> {
+exports.getHistoryTransaction = async (req, res, next) => {
   try {
-    let hisTran = await Bill.find({user: req.user._id})
-    if(!hisTran)
+    let hisTran = await Bill.find({ user: req.user._id })
+    if (!hisTran)
       throw new Error('Không có giao dịch nào.')
-    
-    Response.success(res,{hisTran})
+
+    Response.success(res, { hisTran })
   } catch (error) {
     console.log(error)
     return next(error)
