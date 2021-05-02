@@ -17,11 +17,12 @@ const {
     publicDiscountCode,
     getHistoryTransaction
 } = require('../../controllers/user/user.function.controller')
+const { protect } = require('../../middlewares/user/auth')
 
 // @route   POST api/user/func/addcart
 // @desc    Thêm vào giỏ hàng
 // @access  Private
-router.post('/addCart', addCart)
+router.post('/addCart',protect, addCart)
 
 // @route   POST api/user/func/updateCart
 // @desc    Cập nhật giỏ hàng

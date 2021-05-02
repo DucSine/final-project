@@ -12,8 +12,6 @@ router.use(handleError)
  
 router.use('/func', require('./user/user.function.route'))
 
-router.use(protect)
-
 router.use(handleError)
 
 module.exports = router
