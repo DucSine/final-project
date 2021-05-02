@@ -53,7 +53,7 @@ exports.addCart = async (req, res, next) => {
       throw new Error('Món không tồn tại!')
 
     await Cart.create({
-      user: req.user._id,
+      user: req.user.id,
       food: food._id,
       amount
     })
