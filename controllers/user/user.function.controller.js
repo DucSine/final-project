@@ -45,6 +45,7 @@ exports.addCart = async (req, res, next) => {
     foodID,
     amount
   } = req.body
+  console.log(req.user)
   console.log(req.body)
   try {
     let food = await Food.findById(foodID)
