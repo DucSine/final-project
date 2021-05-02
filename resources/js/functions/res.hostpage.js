@@ -1,89 +1,108 @@
+//header
+function accInfoSubmit() {
+    if (
+        _fileFormat == ''
+        || Boolean(_fileFormat.match(/JPG/ig))
+        || Boolean(_fileFormat.match(/GIF/ig))
+        || Boolean(_fileFormat.match(/PNG/ig))
+    ){
+        alert('ok')
+        return true
+    }
+    else
+        return false
+}
+
+function accInfoCancel() {
+    _list_input_accInfo[0].value = _restaurantName_if
+    _list_input_accInfo[0].disabled = true
+    _list_ic_editor[0].style.display = INLINE
+
+    _list_input_accInfo[1].value = _restaurantPhone_if
+    _list_input_accInfo[1].disabled = true
+    _list_ic_editor[2].style.display = INLINE
+
+    _list_input_accInfo[2].value = _restaurantAddress_if
+    _list_input_accInfo[2].disabled = true
+    _list_ic_editor[3].style.display = INLINE
+
+    _select_resType.style.display = NONE
+    _b_resType.style.display = INLINE
+    _list_ic_editor[1].style.display = INLINE
+
+    _div_accInfo.style.display = NONE
+}
+
+function changePassSubmit() {
+    alert('dd')
+    return false
+}
+
+
+
+
+
+
+
+//body
 set_btn_direct_food()
 
-// function showListProduct(page) {
-//     axios.get(GET_PRODUCT + `?p=${page}`)
-//         .then(res => {
-//             if (res.data.status == 'success') {
-//                 _p_productsTotal.innerText = `Tổng sản phẩm: ${res.data.data.foodTotal}`
-//                 for (var item of res.data.data.food) {
-//                     var productItem = `<li onclick="alert()">
-//                                 <div class="media border p-1">
-//                                     <img src="${item.image}" class="mr-3 mt-3 img-thumbnail" style="width:80px;">
-//                                     <div class="media-body">
-//                                         <label style="font-size: x-large;"><b>${item.foodName}</b></label>
-//                                         <i class="fas fa-star text-warning" style="float: right;"> 
-//                                             <b style="color: black">${item.rate}</b>
-//                                         </i>
-//                                         <p><b>Giá:&nbsp;</b>${item.price}đ</p>  
-//                                         <p>${item.buys} lượt mua </p>    
-//                                     </div>
-//                                 </div>
-//                             </li>`
-
-//                     var prli = document.createElement('li')
-//                     prli.innerHTML = productItem
-//                     _ul_product.appendChild(prli)
-//                 }
-//                 // for(var page = 2; page <= Number(res.data.data.pageTotal); page++){
-//                 //     var btn_page = document.createElement('button')
-//                 //     btn_page.classList.add('btn')
-//                 //     btn_page.innerText = page;
-//                 //     _list_btn_next.appendChild(btn_page)
-//                 // }
-
-//             }
-//             else
-//                 alert('Có lỗi xảy ra.')
-//         })
-//         .catch(error => alert(error.message))
-// }
-
-
-
-
-
-
-
-
-function reportContent() {
-
-}
-function billContent() {
-
-}
-function discountCodeContent() {
-
+function search() {
+    location.replace(`?load=${_load}&p=${_page}&keySearch=${_charsSearch}`)
 }
 
-//init page after click sidebar
-// function initPageFunctions(tagA, tagDiv) {
-//     for (var aItem of _a_sidebars)
-//         (aItem == tagA) ?
-//             aItem.classList.add(CLASS_ACTIVE) :
-//             aItem.classList.remove(CLASS_ACTIVE)
-//     for (var divItem of _div_contents)
-//         (divItem == tagDiv) ?
-//             divItem.style.display = BLOCK :
-//             divItem.style.display = NONE
-// }
+//hostpage
 
 
-function foodSearch(){
-    var isKey = location.href.search('&keySearch')
-    if(isKey = -1) 
-        location.replace(location.href + `&keySearch=${_charsSearch}`)
-    else
-        location.replace(location.href.slice(0,isKey) + `&keySearch=${_charsSearch}`)
+//food
+
+function showProductDetail(value) {
+    alert('day la: ' + value)
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//cuoi cung
 function nextPage() {
     set_btn_direct_food()
     var p = Number(_page) + 1
     _keySearch != '' ?
         window.location = `?load=${_load}&p=${p}&keySearch=${_keySearch}`
         : window.location = `?load=${_load}&p=${p}`
-
 }
 
 function previousPage() {
@@ -95,22 +114,16 @@ function previousPage() {
 }
 
 function set_btn_direct_food() {
-    if (_foodPage == '1') {
-        _btn_next.disabled == true
+    if (_pageTotal == '1') {
+        _btn_next.disabled = true
         _btn_pre.disabled = true
-    } else {
-        if (_page == '1')
-            _btn_pre.disabled = true
-        else
-            _btn_pre.disabled = false
+    } else if (_page == _pageTotal)
+        _btn_next.disabled = true
+    else
+        _btn_pre.disabled = false
 
-        if (_page == _foodPage)
-            _btn_next.disabled = true
-        else
-            _btn_next.disabled = false
-    }
-}
-
-function getPageTotal() {
-
+    if (_page == '1')
+        _btn_pre.disabled = true
+    else
+        _btn_pre.disabled = false
 }

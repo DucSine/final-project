@@ -45,9 +45,10 @@ exports.addCart = async (req, res, next) => {
     foodID,
     amount
   } = req.body
-
+  console.log(req.body)
   try {
     let food = await Food.findById(foodID)
+    console.log(food)
     if (!food)
       throw new Error('Món không tồn tại!')
 

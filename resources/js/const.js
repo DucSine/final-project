@@ -8,6 +8,7 @@ const CLASS_ACTIVE = 'active'
 const CLASS_SHOW = 'show'
 
 // key localStorage
+  //login
 const CB_SAVE = 'cb_save'
 const EMAIL_SIGN = '_emailSign'
 const PASSWORD_SIGN = '_passwordSign'
@@ -21,11 +22,9 @@ const LIST_PATTERM = {
 
 //URI
 const POST_LOGIN = 'api/res/auth/login'
-const POST_REGISTER = ''
+const POST_REGISTER = 'api/res/auth/register'
 const POST_FOGOT_PASSWORD = 'api/res/auth/fogotPassword'
 
-const GET_PRODUCT = 'api/res/func/getFood'
-const GET_FIND_PRODUCT = ''
 const POST_ADD_PRODUCT = ''
 const POST_EDIT_PRODUCT = ''
 const POST_DEL_PRODUCT = ''

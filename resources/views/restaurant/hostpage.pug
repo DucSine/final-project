@@ -18,7 +18,7 @@ block header
 
   
   #accountInfo.modal.accountInfo-modal
-    form.modal-content.accountInfo-modal-content.animate(action='' onsubmit='retern false' enctype='multpart/form-data' method='post')
+    form.modal-content.accountInfo-modal-content.animate(onsubmit='return accInfoSubmit()' enctype='multpart/form-data' method='post')
       div(style='background-color:#f1f1f1; text-align: center;')
         label.text-primary
           b(style='font-size: xx-large;') Thông tin cửa hàng
@@ -54,26 +54,26 @@ block header
               label(for='ifphone')
                 b Điện thoại &nbsp;&nbsp;&nbsp;
                 i.fas.fa-edit
-              input#ifphone.form-control(type='text' name='phone' placeholder='Nhập số điện thoại' value=restaurant.phone disabled required='')
+              input#ifphone.form-control(type='text' name='phone' pattern="(09|03|07|08|05)+([0-9]{8})" title='Số điện thoại không hợp lệ.' placeholder='Nhập số điện thoại' value=restaurant.phone disabled required='')
             .form-group
               label(for='ifaddress')
                 b Địa chỉ &nbsp;&nbsp;&nbsp;
                 i.fas.fa-edit
-              input#ifaddress.form-control(type='text' name='address' placeholder='Nhập số điạ chỉ' value=restaurant.address disabled required='')
+              input#ifaddress.form-control(type='text' name='address' placeholder='Nhập điạ chỉ' value=restaurant.address disabled required='')
           .col-sm-3
             .form-group
-              img#ifshow_image.img.img-thumbnail.img-circle(width='300' height='300' src=restaurant.banner)
+              img#ifshow_image.img.img-thumbnail.img-circle(width='300' height='300' src=restaurant.banner )
             .form-group
-              input#ifimage.form-control(type='file' name='image')
+              input#ifimage.form-control(type='file' name='image' accept='image/*')
         .form-group(style='padding-top: 24px; padding-left: 48px; padding-right: 48px;')
           span
-            button.btn.btn-primary(type='button' disabled) Cập nhật
+            button.btn.btn-primary(type='submit') Cập nhật
           span(style='float: right')
-            button.btn.btn-danger(type='button') Thoát
+            button.btn.btn-danger(type='button' onclick='accInfoCancel()') Thoát
       .container(style='background-color:#f1f1f1')
  
   #accountChangePass.modal.changepass-modal
-    form.modal-content.changepassmodal-content.animate(action='' onsubmit='return false'  method='post')
+    form.modal-content.changepassmodal-content.animate(onsubmit='return changePassSubmit()'  method='post')
       div(style='background-color:#f1f1f1; text-align: center;')
         label.text-primary
           b(style='font-size: xx-large;') Đổi mật khẩu
@@ -92,7 +92,7 @@ block header
           input#cppasswordConfirm.form-control(type='password' name='passwordConfirm' placeholder='Nhập lại mật khẩu' pattern='[A-Za-z0-9]{8,30}' title='Mật khẩu không chứa ký tự đặc biệt, gồm 8-30 ký tự' required='')
       .form-group(style='padding: 32px 48px 32px 48px')
         span
-          button.btn.btn-primary(type='button' onclick='changePass()') Cập nhật
+          button.btn.btn-primary(type='submit') Cập nhật
         span(style='float: right')
           button.btn.btn-danger(type='button' onclick="document.getElementById('accountChangePass').style.display='none'") Thoát
       .container(style='background-color:#f1f1f1')
@@ -115,7 +115,7 @@ block content
   .search-container(style="padding:30px")
     .form(style="float:right" onsubmit='return false' method='get')
       input#inputSearch(type="text" placeholder="Search.." name="keySearch")
-      button(type="button" onclick='foodSearch()')
+      button(type="button" onclick='search()')
         i.fa.fa-search
   #divProduct.div-content(style='display:none;padding-top:30px')
     p#totalPage(style='display:none') #{fPageTotal}
@@ -126,7 +126,7 @@ block content
 
     ul#listProduct(style='list-style:none; padding:30px')
       each food in foods 
-        li(onclick = 'alert(this.querySelector("p.foodId").textContent)')
+        li(onclick='showProductDetail(this.querySelector("p.foodId").textContent)')
           p.foodId(style='display:none') #{food._id}
           .media.border.p-1
             img.mr-3.mt-3.img-thumbnail(src=food.image style='width:80px;')
@@ -138,7 +138,32 @@ block content
               p 
                 b Giá:&nbsp;#{food.price}đ
               p #{food.buys} lượt mua
-  #divBillManager.div-content(style='display:none;padding-top:30px') sadad
+  #divBillManager.div-content.container.mt-3(style='display:none')
+      // Nav tabs
+      ul.nav.nav-tabs
+        li.nav-item
+          a.nav-link.active(data-toggle='tab' href='#billWait')
+            h4 Đang chờ
+        li.nav-item
+          a.nav-link(data-toggle='tab' href='#historyTransaction')
+            h4 Lịch sử giao dịch
+      // Tab panes
+      .tab-content
+        #billWait.container.tab-pane.active
+          br
+          h3 Đơn hàng mới: 
+          p
+            | Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        #historyTransaction.container.tab-pane.fade
+          br
+          h3 Lịch sử giao dịch
+          div(style='margin-right: 0px;')
+            label(for='') Từ ngày:  &nbsp;
+            input(type='date') 
+            label(for='') &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Đến ngày: &nbsp;
+            input(type='date') 
+          p
+            | Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
   #divDiscountCode.div-content(style='display:none;padding-top:30px') fdsfsd
   #divDirect(style='padding:30px;')
     span(style='padding-right:5px')

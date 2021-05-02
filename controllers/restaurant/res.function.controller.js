@@ -25,16 +25,16 @@ exports.resHostpage = async (req, res, next) => {
 
     const page = parseInt(p,10)
     var foodTotal = await Food.find({restaurant: restaurant._id}).count()
-    var fPageTotal = Math.ceil(foodTotal / 5)
+    var fPageTotal = Math.ceil(foodTotal / limit)
     var foods = await Food.find({restaurant: restaurant._id,})
         .sort({rate:-1, price: 1 , dateCreate: -1 })
-        .skip((page - 1) * 5)
+        .skip((page - 1) * limit)
         .limit(5);
 
     if(keySearch){
-        foodTotal = await Food.find({restaurant: restaurant._id,foodName: new RegExp(keySearch,'i')}).count()
+        foodTotal = await Food.find({restaurant: restaurant._id, foodName: new RegExp(keySearch,'i')}).count()
         fPageTotal = Math.ceil(foodTotal / limit)
-        foods = await Food.find({restaurant: restaurant._id,foodName: new RegExp(keySearch,'i')})
+        foods = await Food.find({restaurant: restaurant._id, foodName: new RegExp(keySearch,'i')})
         .sort({rate:-1, price: 1 , dateCreate: -1 })
         .skip((page - 1) * limit)
         .limit(limit);
