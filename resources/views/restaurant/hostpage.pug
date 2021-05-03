@@ -18,7 +18,7 @@ block header
 
   
   #accountInfo.modal.accountInfo-modal
-    form.modal-content.accountInfo-modal-content.animate(onsubmit='return accInfoSubmit()' enctype='multpart/form-data' method='post')
+    form.modal-content.accountInfo-modal-content.animate(action='/api/res/auth/editAccount' method='post' enctype='multipart/form-data' onsubmit='return accInfoSubmit()'  )
       div(style='background-color:#f1f1f1; text-align: center;')
         label.text-primary
           b(style='font-size: xx-large;') Thông tin cửa hàng
@@ -29,14 +29,14 @@ block header
               label(for='ifrestaurantName')
                 b Tên nhà hàng &nbsp;&nbsp;&nbsp;
                 i.fas.fa-edit
-              input#ifrestaurantName.form-control(type='text' name='restaurantName' placeholder='Nhập tên nhà hàng' value=restaurant.restaurantName disabled required='')
+              input#ifrestaurantName.form-control(type='text' name='restaurantName' placeholder='Nhập tên nhà hàng' value= restaurant.restaurantName disabled required='')
 
             .form-group
               label(for='')
                 b Loại hình kinh doanh: 
                 b#ifb_resTypeName #{resType.typeName} &nbsp;&nbsp;&nbsp;
                 i.fas.fa-edit
-              select(name='type' style='display:none ;width: 300px;')
+              select(name='type' style='display:none ;width: 300px;' value=restaurant.type )
                 option.dropdown-item(value= null) Chọn
                 option.dropdown-item(value='606c29b97141a71498bd32d8') Quán bún, phở, hủ tiếu,...
                 option.dropdown-item(value='606c29c27141a71498bd32d9') Quán cơm
@@ -48,13 +48,13 @@ block header
               label(for='')
                 b Email
               p
-                label(for='')
+                label#lb_email(for='')
                   b #{restaurant.email}
             .form-group
               label(for='ifphone')
                 b Điện thoại &nbsp;&nbsp;&nbsp;
                 i.fas.fa-edit
-              input#ifphone.form-control(type='text' name='phone' pattern="(09|03|07|08|05)+([0-9]{8})" title='Số điện thoại không hợp lệ.' placeholder='Nhập số điện thoại' value=restaurant.phone disabled required='')
+              input#ifphone.form-control(type='text' name='phone' pattern="(09|03|07|08|05)+([0-9]{8})" title='Số điện thoại không hợp lệ.' placeholder='Nhập số điện thoại' value= restaurant.phone disabled required='')
             .form-group
               label(for='ifaddress')
                 b Địa chỉ &nbsp;&nbsp;&nbsp;
@@ -64,7 +64,7 @@ block header
             .form-group
               img#ifshow_image.img.img-thumbnail.img-circle(width='300' height='300' src=restaurant.banner )
             .form-group
-              input#ifimage.form-control(type='file' name='image' accept='image/*')
+              input#ifimage.form-control(type='file' name='banner' accept='image/*')
         .form-group(style='padding-top: 24px; padding-left: 48px; padding-right: 48px;')
           span
             button.btn.btn-primary(type='submit') Cập nhật
@@ -73,7 +73,7 @@ block header
       .container(style='background-color:#f1f1f1')
  
   #accountChangePass.modal.changepass-modal
-    form.modal-content.changepassmodal-content.animate(onsubmit='return changePassSubmit()'  method='post')
+    form.modal-content.changepassmodal-content.animate(action='api/res/auth/changePassword' onsubmit='return changePassSubmit()'  method='post')
       div(style='background-color:#f1f1f1; text-align: center;')
         label.text-primary
           b(style='font-size: xx-large;') Đổi mật khẩu

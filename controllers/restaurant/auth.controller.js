@@ -3,9 +3,9 @@ const jwt = require('jsonwebtoken')
 
 //upload file
 const cloudinary = require('../../config/cloudinaryConfig')
+const fs = require('fs-promise')
 //validate
 const { validationResult } = require('express-validator')
-
 // Models
 const User = require('../../models/User')
 const RestaurantType = require('../../models/RestaurantType')
@@ -71,16 +71,16 @@ exports.register = async (req, res, next) => {
       address,
       type: resType._id
     })
-    
-    const restaurant = await Restaurant.findOne({email})
+
+    const restaurant = await Restaurant.findOne({ email })
     const payload = {
       restaurant: {
         id: restaurant.id,
       },
     }
     const authToken = generateAuthToken(payload)
-    console.log('token:  '+ authToken)
-    console.log('url:  '+ `https://kltn-foodoffer.herokuapp.com/auth?tokenAuth=${authToken}`)
+    console.log('token:  ' + authToken)
+    console.log('url:  ' + `https://kltn-foodoffer.herokuapp.com/auth?tokenAuth=${authToken}`)
     //SEND MAIL
     const eMessage = `Xin chào ${restaurantName}!`
       + `\nLink kích hoạt tài khoản của bạn là: https://kltn-foodoffer.herokuapp.com/auth?tokenAuth=${authToken} `
@@ -91,13 +91,13 @@ exports.register = async (req, res, next) => {
       subject: 'Xác thực tài khoản',
       message: eMessage,
     })
-    
+
     res.send(
       `<script>
       alert('Đăng ký thành công, vui lòng kiểm tra email')
       window.location = '/'
       </script>`)
-    
+
 
     return true
   } catch (error) {
@@ -200,8 +200,8 @@ exports.login = async (req, res, next) => {
 
     if (!restaurant.isVerified)
       throw new Error('Tài khoản chưa được kích hoạt!')
-    
-      if (restaurant.isLock)
+
+    if (restaurant.isLock)
       throw new Error('Tài khoản đã bị khóa!')
 
     // Result: boolean
@@ -224,7 +224,7 @@ exports.login = async (req, res, next) => {
 
     res.cookie('token', token)
 
-    return Response.success(res,{message: 'Đăng nhập thành công'})
+    return Response.success(res, { message: 'Đăng nhập thành công' })
   } catch (error) {
     console.log(error.message)
     return next(error)
@@ -256,9 +256,9 @@ exports.fogotPassword = async (req, res, next) => {
     console.log(tokenResetPass)
     //SEND MAIL//làm lại
     const eMessage = `Xin chào ${restaurant.restaurantName}!`
-      + `\nVui lòng chuyển hướng đến trang`+
+      + `\nVui lòng chuyển hướng đến trang` +
       ` https://kltn-foodoffer.herokuapp.com/reset?func=01&authToken=${tokenResetPass}`
-      +`để cài lại mật khẩu.`
+      + `để cài lại mật khẩu.`
       + `\nVui lòng bỏ qua nếu không phải bạn.`
     await sendEmail({
       email: email,
@@ -268,7 +268,7 @@ exports.fogotPassword = async (req, res, next) => {
 
     return Response.success(res, {
       message: `Chúng tôi đã gửi một email đến địa chỉ ${email},`
-              +`\nVui lòng kiểm tra.`
+        + `\nVui lòng kiểm tra.`
     })
   } catch (error) {
     console.log(error)
@@ -311,7 +311,7 @@ exports.resetPassword = async (req, res, next) => {
     return res.status(400).json({ errors: errors.array() })
 
   const {
-    email, 
+    email,
     newPassword
   } = req.body
 
@@ -370,8 +370,7 @@ exports.changePassword = async (req, res, next) => {
     const salt = await bcrypt.genSalt(10);
     const editPass = await bcrypt.hash(newPassword, salt)
     await Restaurant.findByIdAndUpdate(req.restaurant._id, { $set: { password: editPass } })
-
-    return Response.success(res, { message: 'Thay đổi mật khẩu thành công.' })
+    return Response.success(res,{message: 'Cập nhật thành công.'})
   } catch (error) {
     console.log(error)
     return next(error)
@@ -387,15 +386,16 @@ exports.editAccount = async (req, res, next) => {
 
   const {
     file,
-    body: {
-      restaurantName, // có thể trùng vì 1 nhà hàng có nhiều chi nhánh
-      phone,
-      address,
-      type
-    }
+    body
   } = req
+  console.log(req.body)
   try {
-    const urlUpload = ''
+    const restaurant = await Restaurant.findById(req.restaurant.id)
+    const type = restaurant.type
+    await Restaurant.findByIdAndUpdate(req.restaurant._id, {
+      $set: { ...req.body, type },
+    })
+
     if (file) {   // nếu đổi ảnh đại diện 
       let orgName = file.originalname || '';
       orgName = orgName.trim().replace(/ /g, '-');
@@ -404,16 +404,17 @@ exports.editAccount = async (req, res, next) => {
       fs.rename(fullPathInServ, newFullPath);
 
       const result = await cloudinary.uploader.upload(newFullPath);
-      urlUpload = result.url
       fs.unlinkSync(newFullPath);
+      await Restaurant.findByIdAndUpdate(req.restaurant._id, {
+        $set: { ...req.body, type, banner: result.url },
+      })
     }
 
-    const currentRestaurant = await Restaurant.findByIdAndUpdate(req.restaurant._id, {
-      $set: { ...req.body, banner: urlUpload },
-    })
-
-    if (!currentRestaurant) throw new Error('Có lỗi xảy ra')
-    return Response.success(res, { message: 'Cập nhật thành công' })
+    res.send(`<script>
+      alert('Cập nhật thành công.')
+      window.location= '/res_hostpage'
+    </script>`)
+    //return Response.success(res, { message: 'Cập nhật thành công' })
   } catch (error) {
     console.log(error)
     return next(error)

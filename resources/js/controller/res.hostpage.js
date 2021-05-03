@@ -10,11 +10,17 @@ const _list_ic_editor = _div_accInfo.querySelectorAll('i.fas.fa-edit')
 const _list_input_accInfo = _div_accInfo.querySelectorAll('input')
 const _select_resType = _div_accInfo.querySelector('select')
 const _b_resType = _div_accInfo.querySelector('b#ifb_resTypeName')
+const _img_Banner = _div_accInfo.querySelector('img#ifshow_image.img.img-thumbnail.img-circle')
 
+var _restaurantType_if = _b_resType.textContent
 var _restaurantName_if = _list_input_accInfo[0].value
 var _restaurantPhone_if = _list_input_accInfo[1].value
 var _restaurantAddress_if = _list_input_accInfo[2].value
-var _fileFormat = ''
+var _restaurantBanner_if = _img_Banner.src
+
+// form change pass
+const _div_changePass = document.getElementById('accountChangePass')
+const _list_input_changePass = _div_changePass.querySelectorAll('input')
 
 //body
 const _a_sidebars = document.querySelectorAll('a.nav-link')
@@ -57,9 +63,6 @@ if (query != '') {
     }
 }
 
-console.log(_load)
-console.log(_page)
-console.log(_keySearch)
 var _charsSearch = ''
 _ip_search.oninput = function () {
     _charsSearch = this.value
@@ -130,15 +133,6 @@ window.onclick = function (e) {
     }
 }
 
-window.oninput = function (e) {
-    switch (e.target) {
-        case _list_input_accInfo[3]:
-            _fileFormat = e.target.value.split('.')[1]
-            alert(_fileFormat)
-            break;
-
-    }
-}
 
 
 

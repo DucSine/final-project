@@ -21,9 +21,12 @@ const LIST_PATTERM = {
 }
 
 //URI
+const GET_HOST_PAGE = '/res_hostpage'
 const POST_LOGIN = 'api/res/auth/login'
 const POST_REGISTER = 'api/res/auth/register'
 const POST_FOGOT_PASSWORD = 'api/res/auth/fogotPassword'
+
+const POST_CHANGE_PASS = 'api/res/auth/changePassword'
 
 const POST_ADD_PRODUCT = ''
 const POST_EDIT_PRODUCT = ''

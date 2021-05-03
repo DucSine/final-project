@@ -91,16 +91,9 @@ router.post(
 // @access  Private
 router.post(
   '/editAccount',
-  [
-    check('restaurantName', 'Bạn phải nhập tên nhà hàng').not().isEmpty(),
-    check('address', 'Bạn phải nhập địa chỉ').not().isEmpty(),
-    check('phone', 'Bạn phải nhập số điện thoại').not().isEmpty(),
-    check('gender', 'Bạn phải chọn giới tính').not().isEmpty(),
-    check('ID', 'Bạn phải nhập số CMND').not().isEmpty(),
-    check('bDate', 'Bạn phải nhập ngày sinh').not().isEmpty(),
-  ],
-  protect,
+ 
   upload.single('banner'),
+  protect,
   editAccount,
 )
 

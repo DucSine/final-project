@@ -23,6 +23,7 @@ function login() {
                 window.location = '/res_hostpage'
         })
         .catch(error => alert(console.error()))
+
     return false
 }
 
