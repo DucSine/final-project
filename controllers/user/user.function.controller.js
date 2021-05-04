@@ -96,6 +96,7 @@ exports.showCart = async (req, res, next) => {
   try {
     // đếm món
     let cart = await Cart.find({ user: req.user._id })
+    .populate('food')
     if (!cart)
       throw new Error('Không có sản phẩm!')
 

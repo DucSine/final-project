@@ -23,7 +23,7 @@ router.use(handleError)
 // @route   GET /api/auth/checkemail
 // @desc    check mail exists
 // @access  Public
-router.get('/api/auth/checkemail', checkEmail)
+router.get('/auth/checkemail', checkEmail)
 
 // @route   GET /api/auth/checkemail
 // @desc    verification restaurant Account 

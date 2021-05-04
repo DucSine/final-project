@@ -5,7 +5,6 @@ function accInfoSubmit() {
     return true
 }
 
-
 function accInfoCancel() {
     assignValueToController()
 

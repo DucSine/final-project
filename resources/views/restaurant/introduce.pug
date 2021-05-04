@@ -39,7 +39,7 @@ block header
           a.text-primary Quên mật khẩu?
   
   #account_register.modal.register-modal
-    form.modal-content.register-modal-content.animate(action='/res/auth/register' enctype='multpart/form-data' method='post')
+    form.modal-content.register-modal-content.animate(action='api/res/auth/register' method='post' enctype='multipart/form-data' onsubmit='return register()' )
       div(style='background-color:#f1f1f1; text-align: center;')
         label.text-primary
           b(style='font-size: xx-large;') Đăng ký cửa hàng
@@ -53,7 +53,7 @@ block header
             .form-group
               label(for='')
                 b Loại hình kinh doanh  &nbsp;
-              select(name='type' style='width: 300px;' value='' required)
+              select(name='type' style='width: 300px;' required)
                 option.dropdown-item(value='') Chọn
                 option.dropdown-item(value='606c29b97141a71498bd32d8') Quán bún, phở, hủ tiếu,...
                 option.dropdown-item(value='606c29c27141a71498bd32d9') Quán cơm
@@ -71,7 +71,7 @@ block header
               input#regis_pass.form-control(type='password' name='password' placeholder='Nhập mật khẩu' pattern='[A-Za-z0-9]{8,30}' title='Mật khẩu không chứa ký tự đặc biệt, gồm 8-30 ký tự.' required='')
               label(for='regis_passConfirm')
                 b Nhập lại mật khẩu
-              input#regis_passConfirm.form-control(type='password' name='password' placeholder='Nhập lại mật khẩu' title='Mật khẩu không khớp' required='')
+              input#regis_passConfirm.form-control(type='password' name='passwordConfirm' placeholder='Nhập lại mật khẩu' title='Mật khẩu không khớp' required='')
             .form-group
               label(for='regis_phone')
                 b Điện thoại
@@ -84,7 +84,7 @@ block header
             .form-group
               img#regis_show_image.img.img-thumbnail.img-circle(width='300' height='300')
             .form-group
-              input#regis_image.form-control(type='file' name='banner')
+              input#regis_image.form-control(type='file' name='banner' accept='image/*')
         .form-group(style='padding-top: 24px; padding-left: 48px; padding-right: 48px;')
           span
             button.btn.btn-primary(type='submit') Đăng ký

@@ -32,11 +32,14 @@ exports.register = async (req, res, next) => {
       restaurantName, // có thể trùng vì 1 nhà hàng có nhiều chi nhánh
       email, // duy nhất (dùng để đăng nhập)
       password,
+      passwordConfirm,
       phone,
       address,
       type,
-    },
+    }
   } = req
+console.log(req.file)
+console.log(req.body)
   try {
     const checkMail = await emailIsExists(email)
     if (checkMail)
@@ -46,8 +49,8 @@ exports.register = async (req, res, next) => {
     let resType = await RestaurantType.findById(type)
     if (!resType)
       throw new Error('Loại hình đăng ký không tồn tại.')
+      const salt = await bcrypt.genSalt(10)
 
-    const urlUpload = ''
     if (file) {   // nếu upload ảnh đại diện 
       let orgName = file.originalname || '';
       orgName = orgName.trim().replace(/ /g, '-');
@@ -56,26 +59,33 @@ exports.register = async (req, res, next) => {
       fs.rename(fullPathInServ, newFullPath);
 
       const result = await cloudinary.uploader.upload(newFullPath);
-      urlUpload = result.url
+
       fs.unlinkSync(newFullPath);
+      
+      await Restaurant.create({
+        restaurantName,
+        email,
+        password: await bcrypt.hash(password, salt),
+        banner:  result.url,
+        phone,
+        address,
+        type: resType._id
+      })
+    }else{
+      await Restaurant.create({
+        restaurantName,
+        email,
+        password: await bcrypt.hash(password, salt),
+        phone,
+        address,
+        type: resType._id
+      })
     }
-
-    // Tạo ra salt mã hóa
-    const salt = await bcrypt.genSalt(10)
-    await Restaurant.create({
-      restaurantName,
-      email,
-      password: await bcrypt.hash(password, salt),
-      banner: urlUpload,
-      phone,
-      address,
-      type: resType._id
-    })
-
+  
     const restaurant = await Restaurant.findOne({ email })
     const payload = {
       restaurant: {
-        id: restaurant.id,
+        id: restaurant._id,
       },
     }
     const authToken = generateAuthToken(payload)
@@ -92,14 +102,7 @@ exports.register = async (req, res, next) => {
       message: eMessage,
     })
 
-    res.send(
-      `<script>
-      alert('Đăng ký thành công, vui lòng kiểm tra email')
-      window.location = '/'
-      </script>`)
-
-
-    return true
+    return Response.success(res, {message: 'Đăng ký thành công, vui lòng kiểm tra email.'})
   } catch (error) {
     console.log(error.message)
     return next(error)

@@ -36,6 +36,7 @@ router.post(
 // @access  Public
 router.post(
   '/register',
+  upload.single('banner'),
   [
     check('email', 'Bạn phải nhập đúng định dạng email').isEmail(),
     check('password', 'Mật khẩu phải nhiều hơn 8 ký tự').isLength({ min: 8 }),
@@ -44,7 +45,6 @@ router.post(
     check('phone', 'Bạn phải nhập số điện thoại').not().isEmpty(),
     check('type', 'Bạn phải chọn loại hình nhà hàng').not().isEmpty(),
   ],
-  upload.single('banner'),
   register,
 )
 
