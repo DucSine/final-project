@@ -35,24 +35,25 @@ function register() {
 
     formdata.append('restaurantName', _list_inputRegister[0].value)
     formdata.append('email', _list_inputRegister[1].value)
-    formdata.append('pasword', _list_inputRegister[2].value)
+    formdata.append('password', _list_inputRegister[2].value)
     formdata.append('phone', _list_inputRegister[4].value)
     formdata.append('address', _list_inputRegister[5].value)
     formdata.append('type', _selectTypeRegister.value)
 
-    axios.post('api/res/auth/register', formdata, {
+    axios.post('/api/res/auth/register', formdata, {
         headers: {
             'Content-Type': 'multipart/form-data'
         },
     })
     .then(res => {
-        
-        (res.data.status == 'success') ?
-        alert(res.data.message):    
-        alert(res.data.error.message) 
+        if(res.data.status == 'success'){
+            alert(res.data.data.message)
+            location.reload()
+        }   
+         alert(res.data.error.message) 
             
     })
-    .catch(error => alert(console.error()))
+    .catch(error => alert(error.mesage))
 
     return false
 }

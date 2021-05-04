@@ -38,13 +38,10 @@ exports.register = async (req, res, next) => {
       type,
     }
   } = req
-console.log(req.file)
-console.log(req.body)
   try {
     const checkMail = await emailIsExists(email)
     if (checkMail)
       throw new Error('Email đã được sử dụng!')
-
 
     let resType = await RestaurantType.findById(type)
     if (!resType)

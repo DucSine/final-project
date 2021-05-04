@@ -106,14 +106,6 @@ exports.showCart = async (req, res, next) => {
     console.log(error)
     return next(error)
   }
-
-
-
-
-
-
-
-
 }
 
 // Đặt hàng
