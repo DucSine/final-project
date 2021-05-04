@@ -116,7 +116,8 @@ exports.createBill = async (req, res, next) => {
     discountCode //id
   } = req.body
   try {
-    const discount = await Discount_code.findById( discountCode)
+    if(discountCode){
+      const discount = await Discount_code.findById( discountCode)
     if (!discount)
       throw new Error('Mã giảm giá không tồn tại.')
 
@@ -125,6 +126,8 @@ exports.createBill = async (req, res, next) => {
 
     if (Number(discount.amount) == 0)
       throw new Error('Mã giảm giá đã hết.')
+    }
+    
 
     // var discount = ''
     // if (discountCode)

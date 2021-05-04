@@ -44,12 +44,12 @@ router.post('/createBill', protect, createBill)
 // @access  Private
 router.post('/addProductToBill', protect, addFoodToBill)
 
-// @route   GET api/user/func/billDetail
+// @route   GET api/user/func/billDetail?bill_id='????'
 // @desc    Xem chi tiết đơn hàng
 // @access  Private
-router.post('/billDetail', protect, showBillDetail)
+router.get('/billDetail', protect, showBillDetail)
 
-// @route   POST api/user/func/billCancel
+// @route   POST api/user/func/billCancel?bill_id='????'
 // @desc    Hủy đơn hàng
 // @access  Private
 router.post('/billCancel', protect, cancelOrder)
@@ -57,7 +57,7 @@ router.post('/billCancel', protect, cancelOrder)
 // @route   GET api/user/func/transecsion
 // @desc    Lịch sử giao dịch
 // @access  Private
-router.post('/transecsion', protect, getHistoryTransaction)
+router.get('/transecsion', protect, getHistoryTransaction)
 
 // @route   POST api/user/func/rate
 // @desc    Đánh giá
