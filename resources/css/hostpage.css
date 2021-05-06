@@ -52,8 +52,17 @@
 
 .changepass-modal {
     padding-top: 60px;
-  }
+}
 
-.changepassmodal-content {
+.changepass-modal-content {
     width: 60%;
+}
+
+.addProduct-modal{
+    padding-top: 30px;
+}
+
+.addProduct-modal-content{
+    width: 60%;
+
 }

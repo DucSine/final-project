@@ -27,18 +27,26 @@ const _a_sidebars = document.querySelectorAll('a.nav-link')
 const _div_contents = document.querySelectorAll('.div-content')
 const _p_productsTotal = document.getElementById('productsTotal')
 const _ul_product = document.getElementById('listProduct')
+const _btn_addProduct = document.getElementById('btn_addProduct')
+
 const _list_btn_next = document.getElementById('listButtonPage')
 const _div_searchForm = document.querySelector('.search-container')
 const _ip_search = _div_searchForm.querySelector('input#inputSearch')
-
-
 
 
 const _div_direct = document.querySelector('#divDirect')
 const _btn_next = document.querySelector('#btn_next.btn.btn-primary')
 const _btn_pre = document.querySelector('#btn_pre.btn.btn-primary')
 
+const _div_productDetailModal = document.getElementById('addProduct')
+const _b_labelFormAddProduct = document.getElementById('headerFormAddProduct')
+const _list_input_productDetail = _div_productDetailModal.querySelectorAll('input')
+const _textArea_caption = _div_productDetailModal.querySelector('textarea')
+const _imgProduct = _div_productDetailModal.querySelector('img')
+const _list_btn_productDetail = _div_productDetailModal.querySelectorAll('button')
 //
+var flag_product = 1
+var _food_id = ''
 //
 var _pageTotal = document.getElementById('totalPage').textContent // if else thay doi
 
@@ -126,7 +134,19 @@ window.onclick = function (e) {
             _list_input_accInfo[2].disabled = false
             break
 
-
+        case _btn_addProduct:
+            _div_productDetailModal.style.display = BLOCK
+            removeDataToFormAddProduct()
+            flag_product = 0
+            _b_labelFormAddProduct.innerText = 'Thêm sản phẩm'
+            _list_btn_productDetail[0].innerText = 'Thêm'
+            _list_btn_productDetail[2].classList.add('collapse')
+            break
+        //form add Product 
+        case _list_btn_productDetail[1]:
+            removeDataToFormAddProduct()
+            _div_productDetailModal.style.display = NONE
+            break
         default:
             _div_userContainer.classList.remove(CLASS_SHOW)
             break
@@ -146,10 +166,41 @@ window.onclick = function (e) {
 
 
 
+function removeDataToFormAddProduct() {
+    _imgProduct.removeAttribute('src')
+    _list_input_productDetail[0].value = ''
+    _list_input_productDetail[1].value = ''
+    _textArea_caption.value = ''
+}
+// load banner
+function readBannerURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        
+        reader.onload = function (e) {
+            $('#ifshow_image').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+$("#ifimage").change(function(){
+    readBannerURL(this);
+});
 
-
-
-
+// load image Product
+function readImageURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        
+        reader.onload = function (e) {
+            $('#ap_show_image').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+$("#ap_image").change(function(){
+    readImageURL(this);
+});
 
 function initPageFunctions(tagA, tagDiv, status) {
     for (var aItem of _a_sidebars)

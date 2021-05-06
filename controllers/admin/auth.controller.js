@@ -37,14 +37,15 @@ exports.login = async (req, res, next) => {
       },
     }
 
-    jwt.sign(
+    const token = jwt.sign(
       payload,
       process.env.JWT_SECRET,
-      { expiresIn: 360000 },
-      (err, token) => err ? next(err) : Response.success(res, { token })
+      { expiresIn: 432000 }, // 5 ngày
     )
 
-    return true
+    res.cookie('token', token)
+
+    return Response.success(res, { message: 'Đăng nhập thành công' })
   } catch (error) {
     console.log(error)
     return next(new Error('Có lỗi xảy ra!'))

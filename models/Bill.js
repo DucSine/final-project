@@ -25,6 +25,18 @@ const BillSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
+  total:{
+    type: Number,
+    default: 0    
+  },
+  pay: {
+    type: Number,
+    default: 0
+  },
+  message: {
+    type: String,
+    default: null
+  }
 });
 
 const Bill = mongoose.model('Bill', BillSchema, 'bills');

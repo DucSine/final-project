@@ -11,16 +11,18 @@ function login() {
         localStorage.setItem(PASSWORD_SIGN, '')
     }
 
-    axios.post(POST_LOGIN,
+    axios.post(POST_RES_LOGIN,
         {
             email: _email_sign,
             password: _password_sign
         }
     )
         .then(res => {
-            (res.data.status == 'failed') ?
-                alert(res.data.error.message) :
-                window.location = '/res_hostpage'
+            if(res.data.status != 'failed'){
+                alert(res.data.data.message)
+                window.location = GET_RES_HOST_PAGE
+            }
+            else alert(res.data.error.message)
         })
         .catch(error => alert(console.error()))
 
@@ -40,7 +42,7 @@ function register() {
     formdata.append('address', _list_inputRegister[5].value)
     formdata.append('type', _selectTypeRegister.value)
 
-    axios.post('/api/res/auth/register', formdata, {
+    axios.post(POST_RES_REGISTER, formdata, {
         headers: {
             'Content-Type': 'multipart/form-data'
         },
@@ -58,10 +60,8 @@ function register() {
     return false
 }
 
-
-
 function fogotPassword() {
-    axios.post(POST_FOGOT_PASSWORD,
+    axios.post(POST_RES_FORGOT_PASSWORD,
         {
             email: _email_fogotPass
         }
@@ -71,12 +71,10 @@ function fogotPassword() {
                 alert(res.data.error.message)
             else {
                 alert('Vui lòng kiểm tra email')
-                window.location = '/res_hostpage'
+                window.location = GET_RES_HOST_PAGE
             }
-
         })
         .catch(error => alert(console.error()))
 
     return false
-
 }

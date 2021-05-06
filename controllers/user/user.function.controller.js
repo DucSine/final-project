@@ -45,7 +45,7 @@ exports.addCart = async (req, res, next) => {
     foodID,
     amount
   } = req.body
-  console.log('user: '+  req.user)
+  console.log('user: ' + req.user)
   console.log(req.body)
   try {
     let food = await Food.findById(foodID)
@@ -96,7 +96,7 @@ exports.showCart = async (req, res, next) => {
   try {
     // đếm món
     let cart = await Cart.find({ user: req.user._id })
-    .populate('food')
+      .populate('food')
     if (!cart)
       throw new Error('Không có sản phẩm!')
 
@@ -116,32 +116,38 @@ exports.createBill = async (req, res, next) => {
     discountCode //id
   } = req.body
   try {
-    if(discountCode){
-      const discount = await Discount_code.findById( discountCode)
-    if (!discount)
-      throw new Error('Mã giảm giá không tồn tại.')
+    let bill
 
-    if (Number(discount.dateExprite) < Date.now())
-      throw new Error('Mã giảm giá đã hết hạn.')
+    if (discountCode) {
+      const discount = await Discount_code.findById(discountCode)
+      if (!discount)
+        throw new Error('Mã giảm giá không tồn tại.')
 
-    if (Number(discount.amount) == 0)
-      throw new Error('Mã giảm giá đã hết.')
+      if (discount.restaurant != restaurant)
+        throw new Error('Mã giảm giá không áp dụng cho đơn hàng này')
+
+      if (Number(discount.dateExprite) < Date.now())
+        throw new Error('Mã giảm giá đã hết hạn.')
+
+      if (Number(discount.amount) == 0)
+        throw new Error('Mã giảm giá đã hết.')
+
+      bill = await Bill.create({
+        restaurant,
+        user: req.user._id,
+        discount: discount._id
+      })
     }
-    
 
-    // var discount = ''
-    // if (discountCode)
-    //   discount = discountCode
-
-    let bill = await Bill.create({
+    bill = await Bill.create({
       restaurant,
       user: req.user._id,
-      discount: discount._id
+      discount: null
     })
-      
-    var current_amount = Number(discount.amount)-1
-    await Discount_code.findByIdAndUpdate(discount._id, {$set: {amount: current_amount}})
-    
+
+    var current_amount = Number(discount.amount) - 1
+    await Discount_code.findByIdAndUpdate(discount._id, { $set: { amount: current_amount } })
+
     Response.success(req, { bill_id: bill._id })
   } catch (error) {
     console.log(error)
@@ -225,7 +231,30 @@ exports.getHistoryTransaction = async (req, res, next) => {
   }
 }
 
+exports.getTotalBill = async(req, res, next) => {
+  const bill_id = req.query.bill_id
+  try {
+    let bill = await Bill.findById(bill_id)
+    if (!bill)
+      throw new Error('Đơn hàng không tồn tại.')
+    
+    var sum = 0
+    var bill_detail = await BillDetail.find({bill: bill._id})
+    for(var item of bill_detail){
+      var food = await Food.findById(item.food)
+      sum += (food.price * item.amount)
+    }
 
+    if(bill.discount != null){
+      var discount = await Discount_code.findById(bill.discount)
+      sum = sum* Number(discount.discount)/100
+    }
+    return Response.success(res, {sum})
+  } catch (error) {
+    console.log(error)
+    return next(error)
+  }
+}
 //Đánh giá 
 exports.rate = async (req, res, next) => {
   try {

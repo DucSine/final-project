@@ -1,0 +1,66 @@
+extends ../layouts/common.pug
+
+block header
+  link(rel='stylesheet' href='../../css/res_index.css' )
+  nav.navbar.navbar-light.bg-primary
+    a.navbar-brand(href='/res/hostpage')
+      img(src='https://res.cloudinary.com/ducsine/image/upload/v1619047971/logo.png' width='200px' height='100px')
+
+block body
+  #adLogin.container 
+      form.modal-content.animate(action='api/admin/auth/login' method='post' onsubmit='return adLogin()')
+        div(style='background-color:#f1f1f1; text-align: center;')
+          label.text-primary
+            b(style='font-size: xx-large;') Đăng nhập
+        .container
+          .form-group
+            label(for='email')
+              b Tên đăng nhập
+            input#email.form-control(type='text' name='username' placeholder='Nhập tên đăng nhập' value='admin' required='')
+          .form-group
+            label(for='password')
+              b Password
+            input#password.form-control(type='password' name='password' placeholder='Nhập Password' pattern='[A-Za-z0-9]{8,30}' title='Mật khẩu không chứa ký tự đặc biệt, gồm 8-30 ký tự' required='')
+          .form-group.form-check
+            label.form-check-label
+              input.form-check-input(type='checkbox' name='remember' checked='true')
+              |  Remember me
+          .form-group(style='padding-left: 48px; padding-right: 48px;')
+            span
+              button#btn_login.btn.btn-primary(type='submit') Login
+            span(style='float: right')
+              button.btn.btn-danger(type='button' onclick="document.getElementById('login_dialog').style.display='none'") Cancel
+        .container(style='background-color:#f1f1f1')
+          span(style='float: right')
+            a.text-primary(onclick='document.getElementById("resetPass").style.display="block"') Quên mật khẩu?
+  
+  #resetPass.modal.resetPass-modal
+    form.modal-content.resetPass-modal-content.animate(onsubmit='return fogotPassword()' method='post')
+      div(style='background-color:#f1f1f1; text-align: center;')
+        label.text-primary
+          b(style='font-size: xx-large;') Lấy lại mật khẩu
+      .container
+        .form-group
+          label(for='fg_email')
+            b Email đăng nhập
+          input#fg_email.form-control(type='email' name='email' placeholder='Nhập email đăng nhập' required='')
+      .form-group(style='padding: 32px 48px 32px 48px')
+        span
+          button#btn_fogotPassword.btn.btn-primary(type='submit') Xác nhận
+        span(style='float: right')
+          button.btn.btn-danger(type='button' onclick="document.getElementById('resetPass').style.display='none'") Hủy bỏ
+      .container(style='background-color:#f1f1f1')
+  script(src='../../js/controller/ad.login.js')
+  script(src='../../js/functions/ad.login.js')
+  
+            
+
+
+
+
+
+
+
+
+
+
