@@ -148,121 +148,132 @@ block content
                 b Giá:&nbsp;#{food.price}đ
               p #{food.buys} lượt mua
               
+      #divDirect(style='padding:30px;')
+        span(style='padding-right:5px')
+          button#btn_pre.btn.btn-primary(type='button' onclick='previousPage()') 
+            i.fas.fa-angle-double-left
+        span(style='padding-left:5px')
+          button#btn_next.btn.btn-primary(type='button' onclick='nextPage()') 
+            i.fas.fa-angle-double-right
+
+
+
   #divBillManager.div-content.container.mt-3(style='display:none')
-      // Nav tabs
-      ul.nav.nav-tabs
-        li.nav-item
-          a.nav-link.active(data-toggle='tab' href='#billWait')
-            h4 Đang chờ
-        li.nav-item
-          a.nav-link(data-toggle='tab' href='#billConfirm')
-            h4 Đã xác nhận
-        li.nav-item
-          a.nav-link(data-toggle='tab' href='#billDone')
-            h4 Đã thanh toán
-        li.nav-item
-          a.nav-link(data-toggle='tab' href='#billCancle')
-            h4 Đã Hủy
-      // Tab panes
-      .tab-content
-        #billWait.container.tab-pane.active
-          br
-          div(style)
-            ul#listProduct(style='list-style:none;')
-              each bill in curentTransasion
-                li
-                  .media.border.p-1
-                    .media-body(style='padding-left: 30px; padding-right: 30px')
-                      label(style='font-size: x-large;')
-                        b Bill ID: 
-                        | #{bill._id}
-                      i.fas.fa-clock.text-warning(style='float: right;')
-                        b(style='color: black')  Chờ xác nhận
-                      p
-                        b Ngày tạo đơn hàng: 
-                        | #{bill.dateCreate} 
-                      p
-                        b Khách hàng: 
-                        |  #{bill.user.username}
-                      p
-                        b Thành tiền 
+    // Nav tabs
+    ul.nav.nav-tabs
+      li.nav-item
+        a.nav-link.active(data-toggle='tab' href='#billWait')
+          h4 Đang chờ
+      li.nav-item
+        a.nav-link(data-toggle='tab' href='#billConfirm')
+          h4 Đã xác nhận
+      li.nav-item
+        a.nav-link(data-toggle='tab' href='#billDone')
+          h4 Đã thanh toán
+      li.nav-item
+        a.nav-link(data-toggle='tab' href='#billCancle')
+          h4 Đã Hủy
+    // Tab panes
+    .tab-content
+      #billWait.container.tab-pane.active
+        br
+        div(style)
+          ul#listProduct(style='list-style:none;')
+            each bill in curentTransasion
+              li(onclick='getWaitBillDetail(this.querySelector("#billId").textContent)')
+                .media.border.p-1
+                  .media-body(style='padding-left: 30px; padding-right: 30px')
+                    label#billId(style='font-size: x-large;')
+                      b Bill ID: 
+                      | #{bill._id}
+                    i.fas.fa-clock.text-warning(style='float: right;')
+                      b(style='color: black')  Chờ xác nhận
+                    p
+                      b Ngày tạo đơn hàng: 
+                      | #{bill.dateCreate} 
+                    p
+                      b Khách hàng: 
+                      | #{bill.user.username}
+                    p
+                      b Thành tiền 
+                      | #{bill.resPay}
         
-        #billConfirm.container.tab-pane.fade
-          br
-          div(style)
-            ul#listProduct(style='list-style:none;')
-              each bill in confrimTransasion
-                li
-                  .media.border.p-1
-                    .media-body(style='padding-left: 30px; padding-right: 30px')
-                      label(style='font-size: x-large;')
-                        b Bill ID: 
-                        | #{bill._id}
-                      i.fas.fa-clock.text-warning(style='float: right;')
-                        b(style='color: black')  Chờ xác nhận
-                      p
-                        b Ngày tạo đơn hàng: 
-                        | #{bill.dateCreate} 
-                      p
-                        b Khách hàng: 
-                        |  #{bill.user.username}
-                      p
-                        b Thành tiền 
+      #billConfirm.container.tab-pane.fade
+        br
+        div(style)
+          ul#listProduct(style='list-style:none;')
+            each bill in confrimTransasion
+              li(onclick='getWaitBillDetail(this.querySelector("#cfbillId").textContent)')
+                .media.border.p-1
+                  .media-body(style='padding-left: 30px; padding-right: 30px')
+                    label#cfbillId(style='font-size: x-large;')
+                      b Bill ID: 
+                      | #{bill._id}
+                    i.fas.fa-calendar-check.text-primary(style='float: right;')
+                      b(style='color: black')  Đã xác nhận
+                    p
+                      b Ngày tạo đơn hàng: 
+                      | #{bill.dateCreate} 
+                    p
+                      b Khách hàng: 
+                      |  #{bill.user.username}
+                    p
+                      b Thành tiền 
 
-
-        #billDone.container.tab-pane.fade
-          br
-          div(style='margin-right: 0px;')
-            label(for='') Từ ngày:  &nbsp;
-            input(type='date') 
-            label(for='') &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Đến ngày: &nbsp;
-            input(type='date') 
+      #billDone.container.tab-pane.fade
+        br
+        div(style='margin-right: 0px;')
+          label(for='') Từ ngày:  &nbsp;
+          input(type='date') 
+          label(for='') &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Đến ngày: &nbsp;
+          input(type='date') 
           
-          div(style)
-            ul#listProduct(style='list-style:none;')
-              each bill in doneTransasion
-                li
-                  .media.border.p-1
-                    .media-body(style='padding-left: 30px; padding-right: 30px')
-                      label(style='font-size: x-large;')
-                        b Bill ID: 
-                        | #{bill._id}
-                      i.fas.fa-clock.text-warning(style='float: right;')
-                        b(style='color: black')  Chờ xác nhận
-                      p
-                        b Ngày tạo đơn hàng: 
-                        | #{bill.dateCreate} 
-                      p
-                        b Khách hàng: 
-                        |  #{bill.user.username}
-                      p
-                        b Thành tiền 
-        #billCancle.container.tab-pane.fade
-          br
-          div(style='margin-right: 0px;')
-            label(for='') Từ ngày:  &nbsp;
-            input(type='date') 
-            label(for='') &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Đến ngày: &nbsp;
-            input(type='date') 
-          div(style)
-            ul#listProduct(style='list-style:none;')
-              each bill in cancelTransasion
-                li
-                  .media.border.p-1
-                    .media-body(style='padding-left: 30px; padding-right: 30px')
-                      label(style='font-size: x-large;')
-                        b Bill ID: 
-                        | #{bill._id}
-                      i.fas.fa-clock.text-warning(style='float: right;')
-                        b(style='color: black')  Chờ xác nhận
-                      p
-                        b Ngày tạo đơn hàng: 
-                        | #{bill.dateCreate} 
-                      p
-                        b Khách hàng: 
-                        |  #{bill.user.username}
-                      p
-                        b Thành tiền 
+        div(style)
+          ul#listProduct(style='list-style:none;')
+            each bill in doneTransasion
+              li
+                .media.border.p-1
+                  .media-body(style='padding-left: 30px; padding-right: 30px')
+                    label(style='font-size: x-large;')
+                      b Bill ID: 
+                      | #{bill._id}
+                    i.fas.fa-clock.text-warning(style='float: right;')
+                      b(style='color: black')  Chờ xác nhận
+                    p
+                      b Ngày tạo đơn hàng: 
+                      | #{bill.dateCreate} 
+                    p
+                      b Khách hàng: 
+                      |  #{bill.user.username}
+                    p
+                      b Thành tiền 
+      
+      #billCancle.container.tab-pane.fade
+        br
+        div(style='margin-right: 0px;')
+          label(for='') Từ ngày:  &nbsp;
+          input(type='date') 
+          label(for='') &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Đến ngày: &nbsp;
+          input(type='date') 
+        div(style)
+          ul#listProduct(style='list-style:none;')
+            each bill in cancelTransasion
+              li
+                .media.border.p-1
+                  .media-body(style='padding-left: 30px; padding-right: 30px')
+                    label(style='font-size: x-large;')
+                      b Bill ID: 
+                      | #{bill._id}
+                    i.fas.fa-clock.text-warning(style='float: right;')
+                      b(style='color: black')  Chờ xác nhận
+                    p
+                      b Ngày tạo đơn hàng: 
+                      | #{bill.dateCreate} 
+                    p
+                      b Khách hàng: 
+                      |  #{bill.user.username}
+                    p
+                      b Thành tiền 
   
   #divDiscountCode.div-content(style='display:none;padding-top:30px')
       ul.nav.nav-tabs
@@ -376,15 +387,8 @@ block content
                   span
                     button.btn.btn-primary(type='submit') Tạo
                   span(style='float: right')
-                    button.btn.btn-danger(type='button') Hủy bỏ
+                    button.btn.btn-danger(type='button' onclick='cancelCreateDiscount()') Hủy bỏ
 
-  #divDirect(style='padding:30px;')
-    span(style='padding-right:5px')
-      button#btn_pre.btn.btn-primary(type='button' onclick='previousPage()') 
-        i.fas.fa-angle-double-left
-    span(style='padding-left:5px')
-      button#btn_next.btn.btn-primary(type='button' onclick='nextPage()') 
-        i.fas.fa-angle-double-right
 
   #addProduct.modal.addProduct-modal
     form.modal-content.addProduct-modal-content.animate( method='post' enctype='multipart/form-data' onsubmit='return editProduct()' )
@@ -418,6 +422,47 @@ block content
             button.btn.btn-danger(type='button') Hủy bỏ
       .container(style='background-color:#f1f1f1')
         button.btn.btn-warning.form-control.collapse(type='button') Xóa món
+
+  #billDetail.modal.billDetail-modal
+    form.modal-content.billDetail-modal-content.animate( method='post' onsubmit='return editBill()')
+      div(style='background-color:#f1f1f1; text-align: center;')
+        label.text-primary
+          b#headerFormAddProduct(style='font-size: xx-large;') Chi tiết đơn hàng
+      .container
+        label(for="" style="font-size: x-large;")
+          b.text-primary Bill ID: &nbsp;
+          b#b_billID
+        i.fas.fa-clock.text-warning(style="float: right")
+          b#b_billStatus(style="color: black") &nbsp;Chờ xác nhận
+        p
+          b.text-primary Ngày tạo đơn hàng:&nbsp; 
+          b#b_billDateCreate
+        p
+          b.text-primary Khách hàng:&nbsp;
+          b#b_billUser
+        p
+          b.text-primary Mã giảm giá:
+          b#b_billDiscount
+        p#p_billReason(style='display:none')
+          b.text-primary Lý do: &nbsp;
+          b#b_billReason
+        hr
+        table.table.table-borderless
+          thead
+            tr.text-primary(style="font-weight: bold; font-size: x-large;")
+              th(style="text-align: center;") Sản phẩm
+                hr
+              th Số lượng 
+                hr
+              th Giá 
+                hr
+          tbody#bodyBillDetail
+
+        .form-group(style='padding-top: 24px; padding-left: 48px; padding-right: 48px;')
+          span
+            button.btn.btn-primary(type='submit') Xác nhận 
+          span(style='float: right')
+            button.btn.btn-danger(type='button' onclick='fBillCancle()') Hủy đơn
 
   script(src='../../js/controller/res.hostpage.js')
   script(src='../../js/functions/res.hostpage.js')

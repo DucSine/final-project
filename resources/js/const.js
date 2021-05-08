@@ -33,25 +33,20 @@ const POST_ADMIN_LOGIN = '/api/admin/auth/login'
 const POST_ADMIN_FORGOT_PASSWORD = '/api/admin/auth/fogotPassword'
 
 const GET_ADMIN_HOST_PAGE = '/admin/index'
-
-
-
 const GET_RES_HOST_PAGE = '/res_hostpage'
+
 const GET_PODUCT_PAGE = '/res_hostpage?load=product'
 const GET_BILL_PAGE = '/res_hostpage?load=bill'
 const GET_DISCOUNT_PAGE = '/res_hostpage?load=discount'
 
-const POST_CHANGE_PASS = 'api/res/auth/changePassword'
+const POST_CHANGE_PASS = '/api/res/auth/changePassword'
 
-const GET_PODUCT = 'api/res/func/getFood?food_id='
-const POST_ADD_PRODUCT = 'api/res/func/addFood'
-const POST_EDIT_PRODUCT = 'api/res/func/editFood'
-const POST_DEL_PRODUCT = 'api/res/func/delFood?foodId='
+const GET_PODUCT = '/api/res/func/getFood?food_id='
+const POST_ADD_PRODUCT = '/api/res/func/addFood'
+const POST_EDIT_PRODUCT = '/api/res/func/editFood'
+const POST_DEL_PRODUCT = '/api/res/func/delFood?foodId='
 
-const GET_BILL_HISTORY = ''
-const GET_WAIT_BILL_AUTH = ''
-const GET_FIND_BILL_BY_ID = ''
-const POST_EDIT_BILL = ''
+const POST_RES_CONFIRM_BILL = '/api/res/func/confirmBill?billId='
 
 const GET_LOYAL_USERS = ''
 const GET_MY_DISCOUNT_CODE=''

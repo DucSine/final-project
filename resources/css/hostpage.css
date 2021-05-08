@@ -35,7 +35,7 @@
     flex-direction: column;
 }
 .show{
-    display: flex;
+    display: block;
 }
 
 .user-container a {
@@ -64,5 +64,15 @@
 
 .addProduct-modal-content{
     width: 60%;
+
+}
+
+.billDetail-modal{
+    padding-top: 20px;
+    overflow: scroll;
+}
+
+.billDetail-modal-content{
+    width: 70%;
 
 }

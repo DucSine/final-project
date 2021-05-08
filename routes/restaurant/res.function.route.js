@@ -9,7 +9,9 @@ const {
     getFood, 
     addFood, 
     editFood ,
-    delFood
+    delFood,
+    getBillDetail,
+    confirmBill
 } = require('../../controllers/restaurant/res.function.controller')
 const { protect } = require('../../middlewares/restaurant/auth')
 
@@ -48,5 +50,15 @@ router.post(
 // @desc    Xóa sản phẩm
 // @access  Private
 router.post('/delFood', protect, delFood)
-    
+
+// @route   GET api/res/func/getBillDetail
+// @desc    Xóa sản phẩm
+// @access  Private
+router.get('/getBillDetail', protect, getBillDetail)
+
+// @route   POST api/res/func/confirmBill?foodId=
+// @desc    Xóa sản phẩm
+// @access  Private
+router.post('/confirmBill', protect, confirmBill)
+
 module.exports = router

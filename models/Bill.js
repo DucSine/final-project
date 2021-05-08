@@ -19,7 +19,8 @@ const BillSchema = new mongoose.Schema({
   discount:{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Discount',
-    required: false
+    required: false,
+    default: null
   },
   dateCreate: {
     type: Date,
@@ -30,6 +31,10 @@ const BillSchema = new mongoose.Schema({
     default: 0    
   },
   pay: {
+    type: Number,
+    default: 0
+  },
+  resPay: {
     type: Number,
     default: 0
   },

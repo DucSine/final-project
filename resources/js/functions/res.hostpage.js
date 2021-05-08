@@ -236,17 +236,185 @@ _list_btn_productDetail[2].onclick = function () {
 
       })
       .catch(error => alert(error.mesage))
-    
+
 }
 
 //bill
+function getWaitBillDetail(value) {
+  var id = value.split(':')[1].trim()
+  alert(id)
+  axios.get('api/res/func/getBillDetail?bill_id=' + id)
+    .then(res => {
+      if (res.data.status == 'success') {
+        // lấy data
+        var BILL = res.data.data.bill
+        var BILL_DETAIL = res.data.data.bill_detail
+        _div_billDetail.classList.add(CLASS_SHOW)
+
+        _b_billId.innerText = BILL._id
+        _b_billStatus.innerText = BILL.status
+        _b_billDateCreate.innerText = BILL.dateCreate
+        _b_billUser.innerText = BILL.user.username
+        _b_billReason.innerText = BILL.message
+
+        if (BILL.discount != 'null' && BILL.discount != null)
+          _b_billDiscount.innerText = BILL.discount.code
+
+        _i_iconStatus.classList.remove(
+          _i_iconStatus.classList.item(1),
+          _i_iconStatus.classList.item(2)
+        )
+        switch (BILL.status) {
+          case 'đã xác nhận':
+            flag_bill = 0
+            _p_billReason.style.display = NONE
+            _i_iconStatus.classList.add('fa-calendar-check', 'text-primary')
+            _list_btn_billDetail[0].style.display = NONE
+            _list_btn_billDetail[1].innerText = 'Thoát'
+            break
+          case 'đã hủy':
+            _p_billReason.style.display = INLINE
+            flag_bill = 0
+            _i_iconStatus.classList.add('fa-exclamation-triangle', 'text-danger')
+            _list_btn_billDetail[0].style.display = NONE
+            _list_btn_billDetail[1].innerText = 'Thoát'
+            break
+          case 'đã thanh toán':
+            _p_billReason.style.display = NONE
+            flag_bill = 0
+            _i_iconStatus.classList.add('fa-check-circle', 'text-primary')
+            _list_btn_billDetail[0].style.display = NONE
+            _list_btn_billDetail[1].innerText = 'Thoát'
+            break
+          default:
+            _p_billReason.style.display = NONE
+            flag_bill = 1
+            _i_iconStatus.classList.add('fa-clock', 'text-warning')
+            _list_btn_billDetail[0].style.display = INLINE
+            _list_btn_billDetail[1].innerText = 'Hủy đơn'
+            break
+        }
+        for (var product of BILL_DETAIL) {
+          console.log(product)
+          var tr = document.createElement('tr')
+          var td_fName = document.createElement('td')
+          var imgF = document.createElement('img')
+          var bName = document.createElement('b')
+          imgF.width = 80
+          imgF.src = product.food.image
+          bName.innerText = product.food.foodName
+          td_fName.appendChild(imgF)
+          td_fName.appendChild(bName)
+
+          var td_amount = document.createElement('td')
+          var bAmount = document.createElement('b')
+          bAmount.innerText = product.amount
+          td_amount.appendChild(bAmount)
+
+          var td_total = document.createElement('td')
+          var bTotal = document.createElement('b')
+          bTotal.innerText = product.amount * product.food.price
+          td_total.appendChild(bTotal)
+
+          tr.appendChild(td_fName)
+          tr.appendChild(td_amount)
+          tr.appendChild(td_total)
+          // tr.outerHTML = 
+          //  `<tr>
+          //   <td><img src="${product.food.image}" width="80px"> &nbsp; ${product.food.foodName}</td>
+          //   <td>${product.amount}</td>
+          //   <td>${product.amount * product.food.price}</td>
+          // </tr>`
+          _tbody.appendChild(tr)
+        }
+        //_totalPrice.innerText = BILL.total
+      }
+      else {
+        alert(res.data.error.message)
+      }
+
+
+    })
+    .catch(error => {
+      alert(error.mesage)
+      console.log(error)
+    })
+}
+
+function editBill() {
+  axios.post(POST_RES_CONFIRM_BILL + _b_billId.innerText)
+    .then(res => {
+      if (res.data.status == 'success') {
+        alert('Cập nhật thành công.')
+        _div_billDetail.classList.remove(CLASS_SHOW)
+      }
+      else
+        alert(res.data.error.message)
+
+    })
+    .catch(error => alert(error.mesage))
+  return false
+}
+
+function fBillCancle() {
+  _tbody.outerHTML = '<tbody></tbody>'
+  _tbody = _div_billDetail.querySelector('tbody')
+  _div_billDetail.classList.remove(CLASS_SHOW)
+
+  //if(flag_bill == 0)
+
+  // //else{
+  //   var reason = prompt('Lý do hủy đơn:')
+  //   if(resson!= '')
+  // }
+}
 
 
 //discount
+function createDiscount() {
+  axios.pos()
+  return false
+}
 
+function cancelCreateDiscount() {
+  _list_input_createDiscount[0].value = ''
+  _list_input_createDiscount[1].value = ''
+  _list_input_createDiscount[2].value = ''
+  _list_input_createDiscount[3].value = ''
+}
 
+function replace() {
 
-
+  var dom = `
+  <tbody>
+    <tr id="listProductInBill">
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>
+        <hr />
+      </td>
+      <td>
+        <hr />
+      </td>
+      <td>
+        <hr />
+      </td>
+    </tr>
+    <tr class="text-primary" style="font-weight: bold; font-size: x-large;">
+      <td>Tổng cộng</td>
+      <td></td>
+      <td id="totalPrice"></td>
+    </tr>
+    <tr class="text-primary" style="font-weight: bold; font-size: x-large;">
+      <td>Thực nhận</td>
+      <td></td>
+      <td id="realTotalPrice"></td>
+    </tr>
+  </tbody>`
+}
 
 
 

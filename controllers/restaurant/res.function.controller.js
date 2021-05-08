@@ -13,6 +13,7 @@ const RestaurantType = require('../../models/RestaurantType')
 const Restaurant = require('../../models/Restaurant')
 const Food = require('../../models/Food')
 const Bill = require('../../models/Bill')
+const Bill_Detail = require('../../models/Bill_Detail')
 
 const Response = require('../../helpers/response.helper')
 const limit = 10
@@ -38,6 +39,7 @@ exports.resHostpage = async (req, res, next) => {
     var curentTransasionPage = Math.ceil(curentTransasionTotal / limit)
     var curentTransasion = await Bill.find({ status: 'đang xử lý' })
         .sort({ dateCreate: -1 })
+        .populate('user')
         .skip((page - 1) * limit)
         .limit(limit)
 
@@ -45,6 +47,7 @@ exports.resHostpage = async (req, res, next) => {
     var confrimTransasionPage = Math.ceil(confrimTransasionTotal / limit)
     var confrimTransasion = await Bill.find({ status: 'đã xác nhận' })
         .sort({ dateCreate: -1 })
+        .populate('user')
         .skip((page - 1) * limit)
         .limit(limit)
 
@@ -52,6 +55,7 @@ exports.resHostpage = async (req, res, next) => {
     var doneTransasionPage = Math.ceil(doneTransasionTotal / limit)
     var doneTransasion = await Bill.find({ status: 'đã thanh toán' })
         .sort({ dateCreate: -1 })
+        .populate('user')
         .skip((page - 1) * limit)
         .limit(limit)
 
@@ -59,6 +63,7 @@ exports.resHostpage = async (req, res, next) => {
     var cancelTransasionPage = Math.ceil(cancelTransasionTotal / limit)
     var cancelTransasion = await Bill.find({ status: 'đã hủy' })
         .sort({ dateCreate: -1 })
+        .populate('user')
         .skip((page - 1) * limit)
         .limit(limit)
 
@@ -91,7 +96,7 @@ exports.resHostpage = async (req, res, next) => {
             confrimTransasion,
             doneTransasionTotal,
             doneTransasionPage,
-            doneTransasion, 
+            doneTransasion,
             cancelTransasionTotal,
             cancelTransasionPage,
             cancelTransasion,
@@ -244,6 +249,40 @@ exports.getFood = async (req, res, next) => {
             throw new Error('Có lỗi xảy ra.')
 
         return Response.success(res, { food })
+    } catch (error) {
+        console.log(error)
+        return next(error)
+    }
+}
+
+exports.getBillDetail = async(req, res, next)=>{
+    const bill_id = req.query.bill_id
+    try {
+        let bill = await Bill.findById(bill_id)
+        .populate('user')
+        .populate('discount_code')
+        if(!bill)
+            throw new Error('Bill không tồn tại.')
+        
+        const bill_detail = await Bill_Detail.find({bill: bill_id})
+        .populate('food')
+
+        return Response.success(res, {bill, bill_detail})
+    } catch (error) {
+        console.log(error)
+        return next(error)
+    }
+}
+
+exports.confirmBill = async (req,res, next)=>{
+    const bill_ID = req.query.billId
+    try {
+        const bill = await Bill.findById(bill_ID)
+        if(!bill)
+            throw new Error('Có lỗi xảy ra.')
+        var rs = await Bill.findByIdAndUpdate(bill_ID, {$set: {status: 'đã xác nhận'}})
+        
+        return Response.success(res, {mesage: 'Cập nhật thành công.'})
     } catch (error) {
         console.log(error)
         return next(error)

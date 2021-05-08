@@ -40,7 +40,9 @@ const User = require('./models/User')
 const jwt = require('jsonwebtoken')
 const {emailIsExists, decodeAuthToken} = require('./config/general')
 const upload = multer({dest: './resources/uploads'})
+
 app.get('/dev/addRes', (req,res) => res.render('addRes') )
+
 app.post('/dev/addRes', async (req,res, next) => {
   const errors = validationResult(req) 
   if (!errors.isEmpty())
@@ -82,7 +84,6 @@ app.post('/dev/addRes', async (req,res, next) => {
       return next(error)
     }
 },(req, res)=>res.send(`<script>alert('Thành công')</script>`))
-
 
 app.get('/dev/addFood',async(req,res)=>{
   let restaurant = await Restaurant.find()
@@ -135,7 +136,5 @@ app.post('/dev/addFood',upload.single('image'),async(req, res, next)=>{
 
 }, (req, res)=>res.send(`<script>alert('Thành công')</script>`))
 ///
-app.post('/upload_file',upload.single('banner') ,async(req,res)=>{
-  console.log(req.file)
-})
+
 app.listen(port, ()=>console.log(`run with http://localhost:${port}`))

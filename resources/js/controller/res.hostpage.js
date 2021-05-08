@@ -33,21 +33,46 @@ const _list_btn_next = document.getElementById('listButtonPage')
 const _div_searchForm = document.querySelector('.search-container')
 const _ip_search = _div_searchForm.querySelector('input#inputSearch')
 
-
-const _div_direct = document.querySelector('#divDirect')
-const _btn_next = document.querySelector('#btn_next.btn.btn-primary')
-const _btn_pre = document.querySelector('#btn_pre.btn.btn-primary')
-
 const _div_productDetailModal = document.getElementById('addProduct')
 const _b_labelFormAddProduct = document.getElementById('headerFormAddProduct')
 const _list_input_productDetail = _div_productDetailModal.querySelectorAll('input')
 const _textArea_caption = _div_productDetailModal.querySelector('textarea')
 const _imgProduct = _div_productDetailModal.querySelector('img')
 const _list_btn_productDetail = _div_productDetailModal.querySelectorAll('button')
+const _div_direct = document.querySelector('#divDirect')
+const _btn_next = document.querySelector('#btn_next.btn.btn-primary')
+const _btn_pre = document.querySelector('#btn_pre.btn.btn-primary')
+
+
+//bill detail
+const _div_billDetail = document.getElementById('billDetail')
+const _list_btn_billDetail = _div_billDetail.querySelectorAll('button')
+const _b_billId = _div_billDetail.querySelector('#b_billID')
+const _b_billStatus = _div_billDetail.querySelector('#b_billStatus')
+const _b_billDateCreate = _div_billDetail.querySelector('#b_billDateCreate')
+const _b_billUser = _div_billDetail.querySelector('#b_billUser')
+const _b_billDiscount = _div_billDetail.querySelector('#b_billDiscount')
+const _b_billReason = _div_billDetail.querySelector('#b_billReason')
+const _i_iconStatus = _div_billDetail.querySelector('i')
+const _p_billReason = _div_billDetail.querySelector('p#p_billReason')
+
+var _tbody = _div_billDetail.querySelector('tbody')
+const _totalPrice = _div_billDetail.querySelector('#totalPrice')
+const _real_totalPrice = _div_billDetail.querySelector('#realTotalPrice')
+
+
+var flag_bill = 1
+var _bill_id = ''
 //
+
+//
+const _div_createDiscount = document.getElementById('createDiscount')
+const _list_input_createDiscount = _div_createDiscount.querySelectorAll('input')
 var flag_product = 1
 var _food_id = ''
+
 //
+
 var _pageTotal = document.getElementById('totalPage').textContent // if else thay doi
 
 var query = location.search

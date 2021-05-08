@@ -109,74 +109,7 @@ exports.showCart = async (req, res, next) => {
 }
 
 // Đặt hàng
-//tạo bill
-exports.createBill = async (req, res, next) => {
-  const {
-    restaurant,
-    discountCode //id
-  } = req.body
-  try {
-    let bill
 
-    if (discountCode) {
-      const discount = await Discount_code.findById(discountCode)
-      if (!discount)
-        throw new Error('Mã giảm giá không tồn tại.')
-
-      if (discount.restaurant != restaurant)
-        throw new Error('Mã giảm giá không áp dụng cho đơn hàng này')
-
-      if (Number(discount.dateExprite) < Date.now())
-        throw new Error('Mã giảm giá đã hết hạn.')
-
-      if (Number(discount.amount) == 0)
-        throw new Error('Mã giảm giá đã hết.')
-
-      bill = await Bill.create({
-        restaurant,
-        user: req.user._id,
-        discount: discount._id
-      })
-    }
-
-    bill = await Bill.create({
-      restaurant,
-      user: req.user._id,
-      discount: null
-    })
-
-    var current_amount = Number(discount.amount) - 1
-    await Discount_code.findByIdAndUpdate(discount._id, { $set: { amount: current_amount } })
-
-    Response.success(req, { bill_id: bill._id })
-  } catch (error) {
-    console.log(error)
-    return next(error)
-  }
-}
-//add sp vào bill
-exports.addFoodToBill = async (req, res, next) => {
-  const {
-    bill,
-    food,
-    amount
-  } = req.body
-
-  try {
-    const rs = await BillDetail.create({
-      bill,
-      food,
-      amount
-    })
-    if (!rs)
-      throw new Error('Có lỗi xảy ra.')
-
-    Response.success(res, { message: 'Tạo thành công.' })
-  } catch (error) {
-    console.log(error)
-    return next(error)
-  }
-}
 
 exports.showBillDetail = async (req, res, next) => {
   const bill_id = req.query.bill_id
@@ -231,25 +164,25 @@ exports.getHistoryTransaction = async (req, res, next) => {
   }
 }
 
-exports.getTotalBill = async(req, res, next) => {
+exports.getTotalBill = async (req, res, next) => {
   const bill_id = req.query.bill_id
   try {
     let bill = await Bill.findById(bill_id)
     if (!bill)
       throw new Error('Đơn hàng không tồn tại.')
-    
+
     var sum = 0
-    var bill_detail = await BillDetail.find({bill: bill._id})
-    for(var item of bill_detail){
+    var bill_detail = await BillDetail.find({ bill: bill._id })
+    for (var item of bill_detail) {
       var food = await Food.findById(item.food)
       sum += (food.price * item.amount)
     }
 
-    if(bill.discount != null){
+    if (bill.discount != null) {
       var discount = await Discount_code.findById(bill.discount)
-      sum = sum* Number(discount.discount)/100
+      sum = sum * Number(discount.discount) / 100
     }
-    return Response.success(res, {sum})
+    return Response.success(res, { sum })
   } catch (error) {
     console.log(error)
     return next(error)
@@ -374,3 +307,67 @@ exports.comment = async (req, res, next) => {
 
 ///
 
+exports.order = async (req, res, next) => {
+  const {
+    food,
+    amount,
+    discount
+  } = req.body
+
+  try {
+    let foodRes = await Food.findById(food[0])
+    const restaurant = foodRes.restaurant
+
+    const bill = await Bill.create({
+      restaurant,
+      user: req.user._id //'606875e70981ea23580f52a1'
+    })
+
+    var sale = 0
+    var total = 0
+    var pay = 0
+    var resPay = 0
+
+    for (var index in food) {
+      await BillDetail.create({
+        food: food[index],
+        amount: amount[index],
+        bill: bill._id
+      })
+      var _food = await Food.findById(food[index])
+      total += (amount[index] * _food.price)
+    }
+
+    if (discount != 'null') {
+      var discountCode = await Discount_code.findById(discount)
+
+      if (discountCode.restaurant != null || discountCode.restaurant != restaurant)
+        throw new Error('Mã giảm giá không hợp lệ.')
+
+      if (Number(discountCode.dateExprite) < Date.now())
+        throw new Error('Mã giảm giá đã hết hạn.')
+
+      if (Number(discountCode.amount) == 0)
+        throw new Error('Mã giảm giá đã lượt sử dụng.')
+
+      sale = Number(discountCode.discount)
+      pay = total - (total * sale / 100)
+
+      if  (discount != 'null')
+        resPay = pay - (pay * 10 / 100)
+      else
+        resPay = total - (total * 10 / 100)
+    }
+
+    var billUpdate = await Bill.findByIdAndUpdate(
+      { _id: bill._id },
+      { $set: { total, pay, resPay } },
+      { new: true, useFindAndModify: false }
+    )
+
+    return Response.success(res, { billUpdate })
+  } catch (error) {
+    console.log(error)
+    return next(error)
+  }
+}

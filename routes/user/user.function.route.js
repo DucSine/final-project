@@ -15,7 +15,9 @@ const {
     cancelOrder,
     privateDiscountCode,
     publicDiscountCode,
-    getHistoryTransaction
+    getHistoryTransaction,
+    billtes,
+    order
 } = require('../../controllers/user/user.function.controller')
 const { protect } = require('../../middlewares/user/auth')
 
@@ -34,15 +36,10 @@ router.post('/updateCart', protect, updateCart)
 // @access  Private
 router.post('/cart', protect, showCart)
 
-// @route   POST api/user/func/createBill
-// @desc    Tạo đơn hàng
+// @route   POST api/user/func/order
+// @desc    Đặt hàng
 // @access  Private
-router.post('/createBill', protect, createBill)
-
-// @route   POST api/user/func/addProductToBill
-// @desc    Thêm sản phẩm vào đơn hàng
-// @access  Private
-router.post('/addProductToBill', protect, addFoodToBill)
+router.post('/order', protect, order)
 
 // @route   GET api/user/func/billDetail?bill_id='????'
 // @desc    Xem chi tiết đơn hàng
@@ -83,5 +80,9 @@ router.post('/publicDiscount', protect, publicDiscountCode)
 // @desc    Mã giảm giá riêng
 // @access  Private
 router.post('/privateDiscount', protect, privateDiscountCode)
+
+
+//text
+
 
 module.exports = router;
