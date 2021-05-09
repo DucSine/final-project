@@ -53,7 +53,9 @@ router.post('/resetpass', resetPass)
 
 // post, reset xong chuyen trang dang nhap
 
-
-router.post('/auth', resAuthToken)
+// @route   POST /auth
+// @desc    Xác thực tài khoản
+// @access  Public
+router.get('/auth', resAuthToken)
 module.exports = router
 
