@@ -65,9 +65,10 @@ var flag_bill = 1
 var _bill_id = ''
 //
 
-//
-const _div_createDiscount = document.getElementById('createDiscount')
+//discount
+const _div_createDiscount = document.querySelector('#createDiscount.modal.createDiscount-modal')
 const _list_input_createDiscount = _div_createDiscount.querySelectorAll('input')
+
 var flag_product = 1
 var _food_id = ''
 
@@ -173,7 +174,7 @@ window.onclick = function (e) {
             _div_productDetailModal.style.display = NONE
             break
         default:
-            _div_userContainer.classList.remove(CLASS_SHOW)
+            _div_userContainer.classList.remove(CLASS_SHOW_FLEX)
             break
     }
 }

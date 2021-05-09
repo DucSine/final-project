@@ -18,10 +18,8 @@ function login() {
         }
     )
         .then(res => {
-            if(res.data.status != 'failed'){
-                alert(res.data.data.message)
+            if(res.data.status == 'success')
                 window.location = GET_RES_HOST_PAGE
-            }
             else alert(res.data.error.message)
         })
         .catch(error => alert(console.error()))

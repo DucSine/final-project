@@ -126,6 +126,7 @@ block content
       input#inputSearch(type="text" placeholder="Search.." name="keySearch")
       button(type="button" onclick='search()')
         i.fa.fa-search
+
   #divProduct.div-content(style='display:none;padding-top:30px')
     p#totalPage(style='display:none') #{fPageTotal}
     span
@@ -155,8 +156,6 @@ block content
         span(style='padding-left:5px')
           button#btn_next.btn.btn-primary(type='button' onclick='nextPage()') 
             i.fas.fa-angle-double-right
-
-
 
   #divBillManager.div-content.container.mt-3(style='display:none')
     // Nav tabs
@@ -231,14 +230,14 @@ block content
         div(style)
           ul#listProduct(style='list-style:none;')
             each bill in doneTransasion
-              li
+              li(onclick='getWaitBillDetail(this.querySelector("#dbillId").textContent)')
                 .media.border.p-1
                   .media-body(style='padding-left: 30px; padding-right: 30px')
-                    label(style='font-size: x-large;')
+                    label#dbillId(style='font-size: x-large;')
                       b Bill ID: 
                       | #{bill._id}
-                    i.fas.fa-clock.text-warning(style='float: right;')
-                      b(style='color: black')  Chờ xác nhận
+                    i.fas.fa-check-circle.text-primary(style='float: right;')
+                      b(style='color: black')  Đã hoàn tất
                     p
                       b Ngày tạo đơn hàng: 
                       | #{bill.dateCreate} 
@@ -280,119 +279,27 @@ block content
                       | #{bill.message}
   
   #divDiscountCode.div-content(style='display:none;padding-top:30px')
-      ul.nav.nav-tabs
-        li.nav-item
-          a.nav-link.active(data-toggle='tab' href='#loyalCustomer')
-            h4 Khách hàng thân thiết
-        li.nav-item
-          a.nav-link(data-toggle='tab' href='#discount')
-            h4 Mã giảm giá
-        li.nav-item
-          a.nav-link(data-toggle='tab' href='#hisDiscount')
-            h4 Mã hết hạn
-        li.nav-item
-          a.nav-link(data-toggle='tab' href='#createDiscount')
-            h4 Tạo mã giảm giá
-      // Tab panes
-      .tab-content
-        #loyalCustomer.container.tab-pane.active
-          br
-          div(style)
-            ul#listProduct(style='list-style:none;')
-              each bill in curentTransasion
-                li
-                  .media.border.p-1
-                    .media-body(style='padding-left: 30px; padding-right: 30px')
-                      label(style='font-size: x-large;')
-                        b Bill ID: 
-                        | #{bill._id}
-                      i.fas.fa-clock.text-warning(style='float: right;')
-                        b(style='color: black')  Chờ xác nhận
-                      p
-                        b Ngày tạo đơn hàng: 
-                        | #{bill.dateCreate} 
-                      p
-                        b Khách hàng: 
-                        |  #{bill.user.username}
-                      p
-                        b Thành tiền 
+    div(style='float:right; padding-right:30px')
+      button#btn_createDiscount.btn.btn-primary(type='button' onclick='show_div_createDiscount()') Tạo mã giảm giá
+    ul.nav.nav-tabs
+      li.nav-item
+        a.nav-link.active(data-toggle='tab' href='#loyalCustomer')
+          h4 Khách hàng thân thiết
+      li.nav-item
+        a.nav-link(data-toggle='tab' href='#discount')
+          h4 Mã giảm giá
+      li.nav-item
+        a.nav-link(data-toggle='tab' href='#hisDiscount')
+          h4 Mã hết hạn
+    // Tab panes
+    .tab-content
+      #loyalCustomer.container.tab-pane.active
+        |  ƯQQW
         
-        #discount.container.tab-pane.fade
-          br
-          div(style)
-            ul#listProduct(style='list-style:none;')
-              each bill in confrimTransasion
-                li
-                  .media.border.p-1
-                    .media-body(style='padding-left: 30px; padding-right: 30px')
-                      label(style='font-size: x-large;')
-                        b Bill ID: 
-                        | #{bill._id}
-                      i.fas.fa-clock.text-warning(style='float: right;')
-                        b(style='color: black')  Chờ xác nhận
-                      p
-                        b Ngày tạo đơn hàng: 
-                        | #{bill.dateCreate} 
-                      p
-                        b Khách hàng: 
-                        |  #{bill.user.username}
-                      p
-                        b Thành tiền 
+      #discount.container.tab-pane.fade
+        |SDF 
 
-        #hisDiscount.container.tab-pane.fade
-          br
-          div(style='margin-right: 0px;')
-            label(for='') Từ ngày:  &nbsp;
-            input(type='date') 
-            label(for='') &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Đến ngày: &nbsp;
-            input(type='date') 
-          
-          div(style)
-            ul#listProduct(style='list-style:none;')
-              each bill in doneTransasion
-                li
-                  .media.border.p-1
-                    .media-body(style='padding-left: 30px; padding-right: 30px')
-                      label(style='font-size: x-large;')
-                        b Bill ID: 
-                        | #{bill._id}
-                      i.fas.fa-clock.text-warning(style='float: right;')
-                        b(style='color: black')  Chờ xác nhận
-                      p
-                        b Ngày tạo đơn hàng: 
-                        | #{bill.dateCreate} 
-                      p
-                        b Khách hàng: 
-                        |  #{bill.user.username}
-                      p
-                        b Thành tiền 
-        #createDiscount.container.tab-pane.fade
-          br
-          div(style='margin-right: 0px;')
-            form( onsubmit='return login()' method='post')
-              .container
-                .form-group
-                  label(for='li_email')
-                    b Code
-                  input#li_email.form-control(type='email' name='email' placeholder='Nhập mã code' required='')
-                .form-group
-                  label(for='li_email')
-                    b Sale
-                  input#li_email.form-control(type='email' name='email' placeholder='Nhập phần trăm giảm' required='')
-                .form-group
-                  label(for='li_email')
-                    b Số lượng mã
-                  input#li_email.form-control(type='email' name='email' placeholder='Nhập phần trăm giảm' required='')
-                .form-group
-                  label(for='li_email')
-                    b Ngày hết hạn
-                  input#li_email.form-control(type='email' name='email' placeholder='Nhập phần trăm giảm' required='')
-                .form-group(style='padding-left: 48px; padding-right: 48px;')
-                  span
-                    button.btn.btn-primary(type='submit') Tạo
-                  span(style='float: right')
-                    button.btn.btn-danger(type='button' onclick='cancelCreateDiscount()') Hủy bỏ
-
+      #hisDiscount.container.tab-pane.fade
 
   #addProduct.modal.addProduct-modal
     form.modal-content.addProduct-modal-content.animate( method='post' enctype='multipart/form-data' onsubmit='return editProduct()' )
@@ -468,5 +375,30 @@ block content
           span(style='float: right')
             button.btn.btn-danger(type='button' onclick='fBillCancle()') Hủy đơn
 
+  #createDiscount.modal.createDiscount-modal 
+    form.modal-content.createDiscount-modal-content.animate( method='post' onsubmit='return fCreateDiscount()')
+      .container
+        .form-group
+          label(for='li_email')
+            b Code
+          input#li_email.form-control(type='email' name='email' placeholder='Nhập mã code' required='')
+        .form-group
+          label(for='li_email')
+            b Sale
+          input#li_email.form-control(type='email' name='email' placeholder='Nhập phần trăm giảm' required='')
+        .form-group
+          label(for='li_email')
+            b Số lượng mã
+          input#li_email.form-control(type='email' name='email' placeholder='Nhập phần trăm giảm' required='')
+        .form-group
+          label(for='li_email')
+            b Ngày hết hạn
+          input#li_email.form-control(type='datetime-local' name='email' placeholder='Nhập phần trăm giảm' required='')
+        .form-group(style='padding-left: 48px; padding-right: 48px;')
+          span
+            button.btn.btn-primary(type='submit') Tạo
+          span(style='float: right')
+            button.btn.btn-danger(type='button' onclick='cancelCreateDiscount()') Hủy bỏ
+  
   script(src='../../js/controller/res.hostpage.js')
   script(src='../../js/functions/res.hostpage.js')

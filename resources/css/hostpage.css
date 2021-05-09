@@ -80,3 +80,10 @@
     width: 70%;
 
 }
+
+.createDiscount-modal {
+    padding-top: 30px;
+}
+.createDiscount-modal-content{
+    width: 50%;
+}

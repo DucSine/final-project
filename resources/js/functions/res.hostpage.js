@@ -420,6 +420,10 @@ function fBillCancle() {
 
 
 //discount
+function show_div_createDiscount(){
+  _div_createDiscount.classList.add(CLASS_SHOW_FLEX)
+}
+
 function createDiscount() {
   axios.pos()
   return false
