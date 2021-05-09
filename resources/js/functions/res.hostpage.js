@@ -319,15 +319,44 @@ function getWaitBillDetail(value) {
           tr.appendChild(td_fName)
           tr.appendChild(td_amount)
           tr.appendChild(td_total)
-          // tr.outerHTML = 
-          //  `<tr>
-          //   <td><img src="${product.food.image}" width="80px"> &nbsp; ${product.food.foodName}</td>
-          //   <td>${product.amount}</td>
-          //   <td>${product.amount * product.food.price}</td>
-          // </tr>`
+
           _tbody.appendChild(tr)
         }
-        //_totalPrice.innerText = BILL.total
+        var tr_total = document.createElement('tr')
+        
+        var td_lable_total = document.createElement('td')
+        var td_sp1 = document.createElement('td')
+        var td_bill_total = document.createElement('td')
+
+        td_lable_total.innerText='Tổng cộng: '
+        td_bill_total.innerText = BILL.total
+        
+        tr_total.classList.add('text-primary')
+        tr_total.style.fontWeight = 'bold'
+        tr_total.style.fontSize = 'x-large'
+        
+        tr_total.appendChild(td_lable_total)
+        tr_total.appendChild(td_sp1)
+        tr_total.appendChild(td_bill_total)
+        _tbody.appendChild(tr_total)
+
+        var tr_pay = document.createElement('tr')
+        
+        var td_lable_pay = document.createElement('td')
+        var td_sp2 = document.createElement('td')
+        var td_bill_pay = document.createElement('td')
+
+        td_lable_pay.innerText='Thực nhận: '
+        td_bill_pay.innerText = BILL.pay
+        
+        tr_pay.classList.add('text-primary')
+        tr_pay.style.fontWeight = 'bold'
+        tr_pay.style.fontSize = 'x-large'
+        
+        tr_pay.appendChild(td_lable_pay)
+        tr_pay.appendChild(td_sp2)
+        tr_pay.appendChild(td_bill_pay)
+        _tbody.appendChild(tr_pay)
       }
       else {
         alert(res.data.error.message)
@@ -347,6 +376,7 @@ function editBill() {
       if (res.data.status == 'success') {
         alert('Cập nhật thành công.')
         _div_billDetail.classList.remove(CLASS_SHOW)
+        location.reload()
       }
       else
         alert(res.data.error.message)
@@ -357,16 +387,31 @@ function editBill() {
 }
 
 function fBillCancle() {
-  _tbody.outerHTML = '<tbody></tbody>'
-  _tbody = _div_billDetail.querySelector('tbody')
-  _div_billDetail.classList.remove(CLASS_SHOW)
+  if(flag_bill == 0 ){
+    _tbody.outerHTML = '<tbody></tbody>'
+    _tbody = _div_billDetail.querySelector('tbody')
+    _div_billDetail.classList.remove(CLASS_SHOW)
+  }
+  else{
+    var reason = prompt('Lý do hủy đơn')
+    while (reason == '') {
+      alert('Vui lòng nêu lý do hủy đơn')
+      reason = prompt('Lý do hủy đơn')
+    }
+    
+    axios.post(POST_RES_CANCEL_BILL + _b_billId.innerText.trim(), {mesage: reason}) // lỗi
+    .then(res => {
+      if (res.data.status == 'success') {
+        alert('Cập nhật thành công.')
+        _div_billDetail.classList.remove(CLASS_SHOW)
+        location.reload()
+      }
+      else
+        alert(res.data.error.message)
 
-  //if(flag_bill == 0)
-
-  // //else{
-  //   var reason = prompt('Lý do hủy đơn:')
-  //   if(resson!= '')
-  // }
+    })
+    .catch(error => alert(error.mesage))
+  }
 }
 
 

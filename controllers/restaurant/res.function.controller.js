@@ -289,8 +289,20 @@ exports.confirmBill = async (req,res, next)=>{
     }
 }
 
-exports.setBillStatus = async () => {
+exports.cancelBill = async (res, req, body) =>{
+    const bill_id = req.query.bill_id
+    const {message} = req.body
 
+    try {
+        let bill = await Bill.findById(bill_id)
+        if(!bill)
+        throw new Error('Có lỗi xảy ra.')
+
+        const rs = await Bill.findByIdAndUpdate(bill_id, {$set: {status: 'đã hủy', message}})
+    } catch (error) {
+        console.log(error)
+        return next(error)
+    }
 }
 
 exports.getLoyalCustomers = async () => {

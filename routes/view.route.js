@@ -11,7 +11,8 @@ const {
 
 const{ 
     resetPage, 
-    resetPass 
+    resetPass, 
+    resAuthToken
 } = require('../controllers/general.controller')
 const { adminLogin } = require('../controllers/admin/admin.function.comtroller')
 
@@ -52,5 +53,7 @@ router.post('/resetpass', resetPass)
 
 // post, reset xong chuyen trang dang nhap
 
+
+router.post('/auth', resAuthToken)
 module.exports = router
 
