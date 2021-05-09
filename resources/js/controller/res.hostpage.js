@@ -124,19 +124,19 @@ window.onclick = function (e) {
     switch (e.target) {
         // image login
         case _img_Avatar:
-            _div_userContainer.classList.toggle(CLASS_SHOW)
+            _div_userContainer.classList.toggle(CLASS_SHOW_FLEX)
             break
         case _a_usContainer[0]:
-            _div_userContainer.classList.toggle(CLASS_SHOW)
+            _div_userContainer.classList.toggle(CLASS_SHOW_FLEX)
             document.getElementById('accountInfo').style.display = BLOCK
             break
         case _a_usContainer[1]:
-            _div_userContainer.classList.toggle(CLASS_SHOW)
+            _div_userContainer.classList.toggle(CLASS_SHOW_FLEX)
             document.getElementById('accountChangePass').style.display = BLOCK
             break
         case _btn_logout:
             document.cookie = "token="
-            _div_userContainer.classList.toggle(CLASS_SHOW)
+            _div_userContainer.classList.toggle(CLASS_SHOW_FLEX)
             window.location = "/";
             break
 

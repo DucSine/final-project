@@ -242,7 +242,6 @@ _list_btn_productDetail[2].onclick = function () {
 //bill
 function getWaitBillDetail(value) {
   var id = value.split(':')[1].trim()
-  alert(id)
   axios.get('api/res/func/getBillDetail?bill_id=' + id)
     .then(res => {
       if (res.data.status == 'success') {
@@ -399,7 +398,12 @@ function fBillCancle() {
       reason = prompt('Lý do hủy đơn')
     }
     
-    axios.post(POST_RES_CANCEL_BILL + _b_billId.innerText.trim(), {mesage: reason}) // lỗi
+    axios.post(POST_RES_CANCEL_BILL, 
+      { 
+        bill_id: _b_billId.innerText.trim(),
+        message: reason 
+      }
+    ) // lỗi
     .then(res => {
       if (res.data.status == 'success') {
         alert('Cập nhật thành công.')
@@ -427,65 +431,6 @@ function cancelCreateDiscount() {
   _list_input_createDiscount[2].value = ''
   _list_input_createDiscount[3].value = ''
 }
-
-function replace() {
-
-  var dom = `
-  <tbody>
-    <tr id="listProductInBill">
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td>
-        <hr />
-      </td>
-      <td>
-        <hr />
-      </td>
-      <td>
-        <hr />
-      </td>
-    </tr>
-    <tr class="text-primary" style="font-weight: bold; font-size: x-large;">
-      <td>Tổng cộng</td>
-      <td></td>
-      <td id="totalPrice"></td>
-    </tr>
-    <tr class="text-primary" style="font-weight: bold; font-size: x-large;">
-      <td>Thực nhận</td>
-      <td></td>
-      <td id="realTotalPrice"></td>
-    </tr>
-  </tbody>`
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

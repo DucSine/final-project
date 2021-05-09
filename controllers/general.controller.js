@@ -24,7 +24,7 @@ exports.resAuthToken = async (req, res, next) => {
             return false
         }
         await Restaurant.findByIdAndUpdate(decode.restaurant.id, {$set: { isVerified: true }})
-        res.send("<script>alert('Tài khoản đã được kích hoạt thành công.')</script>")
+        res.send("<script>alert('Tài khoản đã được kích hoạt thành công.')</script>; window.location = '/'")
         return true
         
     } catch (error) {

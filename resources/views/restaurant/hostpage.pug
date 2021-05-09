@@ -258,14 +258,14 @@ block content
         div(style)
           ul#listProduct(style='list-style:none;')
             each bill in cancelTransasion
-              li
+              li(onclick='getWaitBillDetail(this.querySelector("#ccbillId").textContent)')
                 .media.border.p-1
                   .media-body(style='padding-left: 30px; padding-right: 30px')
-                    label(style='font-size: x-large;')
+                    label#ccbillId(style='font-size: x-large;')
                       b Bill ID: 
                       | #{bill._id}
-                    i.fas.fa-clock.text-warning(style='float: right;')
-                      b(style='color: black')  Chờ xác nhận
+                    i.fas.fa-exclamation-triangle.text-danger(style='float: right;')
+                      b(style='color: black')  Đã hủy
                     p
                       b Ngày tạo đơn hàng: 
                       | #{bill.dateCreate} 
@@ -274,6 +274,10 @@ block content
                       |  #{bill.user.username}
                     p
                       b Thành tiền 
+                      | #{bill.total}
+                    p 
+                      b Lý do hủy 
+                      | #{bill.message}
   
   #divDiscountCode.div-content(style='display:none;padding-top:30px')
       ul.nav.nav-tabs

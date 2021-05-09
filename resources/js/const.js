@@ -6,7 +6,7 @@ const BLOCK = 'block'
 //init key class
 const CLASS_ACTIVE = 'active'
 const CLASS_SHOW = 'show'
-
+CLASS_SHOW_FLEX = 'show-flex'
 // key localStorage
   //login
 const CB_SAVE = 'cb_save'
@@ -47,7 +47,7 @@ const POST_EDIT_PRODUCT = '/api/res/func/editFood'
 const POST_DEL_PRODUCT = '/api/res/func/delFood?foodId='
 
 const POST_RES_CONFIRM_BILL = '/api/res/func/confirmBill?billId='
-const POST_RES_CANCEL_BILL = '/api/res/func/cancelBill?bill_id='
+const POST_RES_CANCEL_BILL = '/api/res/func/cancelBill'
 
 const GET_LOYAL_USERS = ''
 const GET_MY_DISCOUNT_CODE=''

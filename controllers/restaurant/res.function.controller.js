@@ -255,54 +255,60 @@ exports.getFood = async (req, res, next) => {
     }
 }
 
-exports.getBillDetail = async(req, res, next)=>{
+exports.getBillDetail = async (req, res, next) => {
     const bill_id = req.query.bill_id
     try {
         let bill = await Bill.findById(bill_id)
-        .populate('user')
-        .populate('discount_code')
-        if(!bill)
+            .populate('user')
+            .populate('discount_code')
+        if (!bill)
             throw new Error('Bill không tồn tại.')
-        
-        const bill_detail = await Bill_Detail.find({bill: bill_id})
-        .populate('food')
 
-        return Response.success(res, {bill, bill_detail})
+        const bill_detail = await Bill_Detail.find({ bill: bill_id })
+            .populate('food')
+
+        return Response.success(res, { bill, bill_detail })
     } catch (error) {
         console.log(error)
         return next(error)
     }
 }
 
-exports.confirmBill = async (req,res, next)=>{
+exports.confirmBill = async (req, res, next) => {
     const bill_ID = req.query.billId
     try {
         const bill = await Bill.findById(bill_ID)
-        if(!bill)
+        if (!bill)
             throw new Error('Có lỗi xảy ra.')
-        var rs = await Bill.findByIdAndUpdate(bill_ID, {$set: {status: 'đã xác nhận'}})
-        
-        return Response.success(res, {mesage: 'Cập nhật thành công.'})
+        var rs = await Bill.findByIdAndUpdate(bill_ID, { $set: { status: 'đã xác nhận' } })
+
+        return Response.success(res, { mesage: 'Cập nhật thành công.' })
     } catch (error) {
         console.log(error)
         return next(error)
     }
 }
 
-exports.cancelBill = async (res, req, body) =>{
-    const bill_id = req.query.bill_id
-    const {message} = req.body
+exports.cancelBill = async(req, res, next) =>{
+    const{
+        bill_id,
+        message
+    } = req.body
+    console.log(req.body)
 
     try {
         let bill = await Bill.findById(bill_id)
         if(!bill)
-        throw new Error('Có lỗi xảy ra.')
-
-        const rs = await Bill.findByIdAndUpdate(bill_id, {$set: {status: 'đã hủy', message}})
+            throw new Error('Đơn hàng không tồn tại.')
+        
+        const rs = await Bill.findByIdAndUpdate(bill_id, {$set: {status:'đã hủy', message}})
+        return Response.success(res,{mesage:'Đơn hàng đã hủy.'})
     } catch (error) {
         console.log(error)
         return next(error)
     }
+
+
 }
 
 exports.getLoyalCustomers = async () => {

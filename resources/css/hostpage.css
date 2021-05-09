@@ -38,6 +38,10 @@
     display: block;
 }
 
+.show-flex{
+    display: flex;
+}
+
 .user-container a {
     text-decoration: none;
     padding-bottom: 8px; 
