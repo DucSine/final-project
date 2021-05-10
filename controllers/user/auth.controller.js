@@ -386,7 +386,6 @@ exports.editAccount = async (req, res, next) => {
     }
   } = req
   try {
-    const urlUpload = ''
     if (file) {   // nếu đổi ảnh đại diện 
       let orgName = file.originalname || '';
       orgName = orgName.trim().replace(/ /g, '-');
@@ -395,18 +394,23 @@ exports.editAccount = async (req, res, next) => {
       fs.rename(fullPathInServ, newFullPath);
 
       const result = await cloudinary.uploader.upload(newFullPath);
-      urlUpload = result.url
       fs.unlinkSync(newFullPath);
+      await User.findByIdAndUpdate(req.user._id, {
+        $set: {
+          ...req.body,
+          bDate: new Date(bDate),
+          avatar: result.url
+        },
+      })
+    }else{
+      await User.findByIdAndUpdate(req.user._id, {
+        $set: {
+          ...req.body,
+          bDate: new Date(bDate),
+        },
+      })
     }
-
-    const currentUser = await User.findByIdAndUpdate(req.user._id, {
-      $set: {
-        ...req.body,
-        bDate: new Date(bDate),
-        avatar: urlUpload
-      },
-    })
-    if (!currentUser) throw new Error('Có lỗi xảy ra')
+    
     return Response.success(res, { message: 'Cập nhật thành công' })
   } catch (error) {
     console.log(error)
