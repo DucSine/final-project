@@ -89,6 +89,7 @@ router.post(
 // @access  Private
 router.post(
   '/editAccount',
+  upload.single('avatar'),
   [
     check('fullName', 'Bạn phải nhập họ tên').not().isEmpty(),
     check('address', 'Bạn phải nhập địa chỉ').not().isEmpty(),
@@ -98,7 +99,6 @@ router.post(
     check('bDate', 'Bạn phải nhập ngày sinh').not().isEmpty(),
   ],
   protect,
-  upload.single('avatar'),
   editAccount,
 )
 
