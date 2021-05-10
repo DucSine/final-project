@@ -24,6 +24,7 @@ exports.resHostpage = async (req, res, next) => {
     const restaurant = req.restaurant
     const p = req.query.p
     const keySearch = req.query.keySearch
+    const load = req.query.load
     const name = req.restaurant.restaurantName.slice(0, 14)
     const resType = await RestaurantType.findById(restaurant.type)
 
@@ -67,15 +68,48 @@ exports.resHostpage = async (req, res, next) => {
         .skip((page - 1) * limit)
         .limit(limit)
 
+    //
+    var loyalCustomerTotal = await Bill.find({ restaurant: restaurant._id })
+        .populate('user')
+
+    var us=[]
+    for(var item of loyalCustomerTotal)
+        us.push(item.user)
+    var usFilter = [...new Set(us)]
 
     //final
     if (keySearch) {
-        foodTotal = await Food.find({ restaurant: restaurant._id, foodName: new RegExp(keySearch, 'i') }).count()
-        fPageTotal = Math.ceil(foodTotal / limit)
-        foods = await Food.find({ restaurant: restaurant._id, foodName: new RegExp(keySearch, 'i') })
-            .sort({ rate: -1, price: 1, dateCreate: -1 })
-            .skip((page - 1) * limit)
-            .limit(limit);
+        switch (load) {
+            case 'product':
+                foodTotal = await Food.find({ restaurant: restaurant._id, foodName: new RegExp(keySearch, 'i') }).count()
+                fPageTotal = Math.ceil(foodTotal / limit)
+                foods = await Food.find({ restaurant: restaurant._id, foodName: new RegExp(keySearch, 'i') })
+                    .sort({ rate: -1, price: 1, dateCreate: -1 })
+                    .skip((page - 1) * limit)
+                    .limit(limit);
+                break
+            case 'bill':
+                doneTransasionTotal = await Bill.find({ status: 'đã thanh toán' }).count()
+                doneTransasionPage = Math.ceil(doneTransasionTotal / limit)
+                doneTransasion = await Bill.find({ status: 'đã thanh toán' })
+                    .sort({ dateCreate: -1 })
+                    .populate('user')
+                    .skip((page - 1) * limit)
+                    .limit(limit)
+
+                cancelTransasionTotal = await Bill.find({ _id: new RegExp(keySearch, 'i'), status: 'đã hủy' }).count()
+                cancelTransasionPage = Math.ceil(cancelTransasionTotal / limit)
+                cancelTransasion = await Bill.find({ _id: new RegExp(keySearch, 'i'), status: 'đã hủy' })
+                    .sort({ dateCreate: -1 })
+                    .populate('user')
+                    .skip((page - 1) * limit)
+                    .limit(limit)
+                break
+            case 'discount':
+                break
+            default:
+                break
+        }
     }
 
 
@@ -101,6 +135,7 @@ exports.resHostpage = async (req, res, next) => {
             cancelTransasionPage,
             cancelTransasion,
             //discountcode
+            usFilter
 
         })
 }
@@ -289,8 +324,8 @@ exports.confirmBill = async (req, res, next) => {
     }
 }
 
-exports.cancelBill = async(req, res, next) =>{
-    const{
+exports.cancelBill = async (req, res, next) => {
+    const {
         bill_id,
         message
     } = req.body
@@ -298,11 +333,11 @@ exports.cancelBill = async(req, res, next) =>{
 
     try {
         let bill = await Bill.findById(bill_id)
-        if(!bill)
+        if (!bill)
             throw new Error('Đơn hàng không tồn tại.')
-        
-        const rs = await Bill.findByIdAndUpdate(bill_id, {$set: {status:'đã hủy', message}})
-        return Response.success(res,{mesage:'Đơn hàng đã hủy.'})
+
+        const rs = await Bill.findByIdAndUpdate(bill_id, { $set: { status: 'đã hủy', message } })
+        return Response.success(res, { mesage: 'Đơn hàng đã hủy.' })
     } catch (error) {
         console.log(error)
         return next(error)

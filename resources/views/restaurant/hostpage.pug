@@ -294,7 +294,17 @@ block content
     // Tab panes
     .tab-content
       #loyalCustomer.container.tab-pane.active
-        |  ƯQQW
+        br
+        div(style)
+          ul#listProduct(style='list-style:none; padding:30px')
+            each user in usFilter 
+              li(onclick='showProductDetail(this.querySelector("p.usId").textContent)')
+                p.usId(style='display:none') #{user._id}
+                .media.border.p-1
+                  img.mr-3.mt-3.img-thumbnail(src=user.avatar style='width:80px;')
+                  .media-body
+                    label(style="font-size: x-large;")
+                      b #{user.username}
         
       #discount.container.tab-pane.fade
         |SDF 

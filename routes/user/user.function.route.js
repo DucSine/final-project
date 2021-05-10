@@ -9,14 +9,11 @@ const {
     updateCart,
     showCart,
     comment,
-    createBill,
-    addFoodToBill,
     showBillDetail,
     cancelOrder,
     privateDiscountCode,
     publicDiscountCode,
     getHistoryTransaction,
-    billtes,
     order
 } = require('../../controllers/user/user.function.controller')
 const { protect } = require('../../middlewares/user/auth')

@@ -322,36 +322,36 @@ function getWaitBillDetail(value) {
           _tbody.appendChild(tr)
         }
         var tr_total = document.createElement('tr')
-        
+
         var td_lable_total = document.createElement('td')
         var td_sp1 = document.createElement('td')
         var td_bill_total = document.createElement('td')
 
-        td_lable_total.innerText='Tổng cộng: '
+        td_lable_total.innerText = 'Tổng cộng: '
         td_bill_total.innerText = BILL.total
-        
+
         tr_total.classList.add('text-primary')
         tr_total.style.fontWeight = 'bold'
         tr_total.style.fontSize = 'x-large'
-        
+
         tr_total.appendChild(td_lable_total)
         tr_total.appendChild(td_sp1)
         tr_total.appendChild(td_bill_total)
         _tbody.appendChild(tr_total)
 
         var tr_pay = document.createElement('tr')
-        
+
         var td_lable_pay = document.createElement('td')
         var td_sp2 = document.createElement('td')
         var td_bill_pay = document.createElement('td')
 
-        td_lable_pay.innerText='Thực nhận: '
-        td_bill_pay.innerText = BILL.pay
-        
+        td_lable_pay.innerText = 'Thực nhận:'
+        td_bill_pay.innerText = BILL.resPay
+
         tr_pay.classList.add('text-primary')
         tr_pay.style.fontWeight = 'bold'
         tr_pay.style.fontSize = 'x-large'
-        
+
         tr_pay.appendChild(td_lable_pay)
         tr_pay.appendChild(td_sp2)
         tr_pay.appendChild(td_bill_pay)
@@ -386,42 +386,48 @@ function editBill() {
 }
 
 function fBillCancle() {
-  if(flag_bill == 0 ){
+  if (flag_bill == 0) {
     _tbody.outerHTML = '<tbody></tbody>'
     _tbody = _div_billDetail.querySelector('tbody')
     _div_billDetail.classList.remove(CLASS_SHOW)
   }
-  else{
+  else {
     var reason = prompt('Lý do hủy đơn')
-    while (reason == '') {
-      alert('Vui lòng nêu lý do hủy đơn')
-      reason = prompt('Lý do hủy đơn')
-    }
-    
-    axios.post(POST_RES_CANCEL_BILL, 
-      { 
-        bill_id: _b_billId.innerText.trim(),
-        message: reason 
-      }
-    ) // lỗi
-    .then(res => {
-      if (res.data.status == 'success') {
-        alert('Cập nhật thành công.')
-        _div_billDetail.classList.remove(CLASS_SHOW)
-        location.reload()
-      }
-      else
-        alert(res.data.error.message)
 
-    })
-    .catch(error => alert(error.mesage))
+    while (true) {
+      if (reason == '' || reason == null) {
+        alert('Vui lòng nêu lý do hủy đơn')
+        reason = prompt('Lý do hủy đơn')
+      } else {
+        axios.post(POST_RES_CANCEL_BILL,
+          {
+            bill_id: _b_billId.innerText.trim(),
+            message: reason
+          }
+        ) // lỗi
+          .then(res => {
+            if (res.data.status == 'success') {
+              alert('Cập nhật thành công.')
+              _div_billDetail.classList.remove(CLASS_SHOW)
+              location.reload()
+            }
+            else
+              alert(res.data.error.message)
+
+          })
+          .catch(error => alert(error.mesage))
+          break
+      }
+    }
+
   }
+
 }
 
 
 //discount
-function show_div_createDiscount(){
-  _div_createDiscount.classList.add(CLASS_SHOW_FLEX)
+function show_div_createDiscount() {
+  _div_createDiscount.classList.add(CLASS_SHOW)
 }
 
 function createDiscount() {
@@ -434,6 +440,7 @@ function cancelCreateDiscount() {
   _list_input_createDiscount[1].value = ''
   _list_input_createDiscount[2].value = ''
   _list_input_createDiscount[3].value = ''
+  _div_createDiscount.classList.remove(CLASS_SHOW)
 }
 
 
