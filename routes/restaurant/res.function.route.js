@@ -31,7 +31,7 @@ router.post(
     [
         check('foodName', 'Bạn phải nhập tên món').not().isEmpty(),
         check('price', 'Bạn phải nhập giá sản phẩm.').isFloat(),
-    ],
+    ], 
     addFood)
 
 // @route   POST api/res/func/editFood

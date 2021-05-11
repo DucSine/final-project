@@ -10,12 +10,12 @@ const { validationResult } = require('express-validator')
 // Models
 const User = require('../../models/User')
 const RestaurantType = require('../../models/RestaurantType')
-const Restaurant = require('../../models/Restaurant')
 const Food = require('../../models/Food')
 const Bill = require('../../models/Bill')
 const Bill_Detail = require('../../models/Bill_Detail')
 
 const Response = require('../../helpers/response.helper')
+const Loyal_user = require('../../models/Loyal_user')
 const limit = 10
 
 exports.resIntroduce = async (req, res) => res.render('./restaurant/introduce')
@@ -69,14 +69,9 @@ exports.resHostpage = async (req, res, next) => {
         .limit(limit)
 
     //
-    var loyalCustomerTotal = await Bill.find({ restaurant: restaurant._id })
-        .populate('user')
-
-    var us=[]
-    for(var item of loyalCustomerTotal)
-        us.push(item.user)
-    var usFilter = [...new Set(us)]
-
+    var loyal_user = await Loyal_user.find({ restaurant: restaurant._id })
+    .populate('user')
+    console.log(loyal_user)
     //final
     if (keySearch) {
         switch (load) {
@@ -116,13 +111,13 @@ exports.resHostpage = async (req, res, next) => {
     res.render(
         './restaurant/hostpage',
         {
-            restaurant,
-            name,
+            restaurant,             //res
+            name,   
             resType,
-            foodTotal,
+            foodTotal,              //food
             fPageTotal,
             foods,
-            curentTransasionTotal,
+            curentTransasionTotal,  //transacsion
             curentTransasionPage,
             curentTransasion,
             confrimTransasionTotal,
@@ -134,8 +129,8 @@ exports.resHostpage = async (req, res, next) => {
             cancelTransasionTotal,
             cancelTransasionPage,
             cancelTransasion,
-            //discountcode
-            usFilter
+            loyal_user,            //discountcode
+            
 
         })
 }
@@ -180,8 +175,6 @@ exports.addFood = async (req, res, next) => {
         } else
             throw new Error('Vui lòng post ảnh cho sản phẩm')
 
-
-
         return Response.success(res, { mesage: 'Đăng thành công.' })
 
     } catch (error) {
@@ -195,7 +188,6 @@ exports.editFood = async (req, res, next) => {
     if (!errors.isEmpty())
         return res.status(400).json({ errors: errors.array() })
 
-    const restaurant = req.restaurant.id
     const {
         file,
         body: {
@@ -311,11 +303,33 @@ exports.getBillDetail = async (req, res, next) => {
 
 exports.confirmBill = async (req, res, next) => {
     const bill_ID = req.query.billId
+    const restaurant = req.restaurant.id
     try {
         const bill = await Bill.findById(bill_ID)
         if (!bill)
             throw new Error('Có lỗi xảy ra.')
+
         var rs = await Bill.findByIdAndUpdate(bill_ID, { $set: { status: 'đã xác nhận' } })
+        if (!rs)
+            throw new Error('Có lỗi xảy ra.')
+
+        //Điểm tich lũy
+        const loyal_user = await Loyal_user.findOne({ restaurant, user: bill.user })
+        if (loyal_user) {
+            var point = loyal_user.point + Math.ceil(bill.total / 1000)
+            rs = await Loyal_user.findByIdAndUpdate(loyal_user._id, { $set: { point } })
+        }
+        else {
+            var point = Math.ceil(bill.total / 1000)
+            rs = await Loyal_user.create({
+                restaurant,
+                user: bill.user,
+                point
+            })
+        }
+
+        if (!rs)
+            throw new Error('Có lỗi xảy ra.')
 
         return Response.success(res, { mesage: 'Cập nhật thành công.' })
     } catch (error) {
@@ -345,21 +359,3 @@ exports.cancelBill = async (req, res, next) => {
 
 
 }
-
-exports.getLoyalCustomers = async () => {
-
-}
-
-exports.createDiscountCode = async () => {
-
-}
-
-exports.senDiscountCode = async () => {
-
-}
-
-exports.report = async () => {
-    //Tổng đơn hàng
-    //T
-}
-

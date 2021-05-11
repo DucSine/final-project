@@ -13,7 +13,6 @@ const Comment = require('../../models/Comment')
 const Bill = require('../../models/Bill')
 const BillDetail = require('../../models/Bill_Detail')
 const Discount_code = require('../../models/Discount_code')
-const Loyal_User = require('../../models/Loyal_user')
 const limit = 20
 
 //Danh sách mã giảm giá 
@@ -343,7 +342,7 @@ exports.order = async (req, res, next) => {
     if (discount != 'null') {
       var discountCode = await Discount_code.findById(discount)
 
-      if (discountCode.restaurant != null || discountCode.restaurant != restaurant)
+      if (discountCode.restaurant != null || discountCode.restaurant != foodRes.restaurant)
         throw new Error('Mã giảm giá không hợp lệ.')
 
       if (Number(discountCode.dateExprite) < Date.now())
@@ -369,21 +368,6 @@ exports.order = async (req, res, next) => {
       { $set: { total, pay, resPay } },
       { new: true, useFindAndModify: false }
     )
-     
-    //Điểm tich lũy
-    const loyal_user = await Loyal_User.findOne({restaurant, user: req.user._id })
-    if(loyal_user){
-      var point = loyal_user.point + Math.ceil(total/1000)
-      await Loyal_User.findByIdAndUpdate(loyal_user._id, {$set: {point }})
-    }
-    else{
-      var point = Math.ceil(total/1000)
-      await Loyal_User.create({
-        restaurant,
-        user: req.user._id,
-        point
-      })
-    }
       
     return Response.success(res, { billUpdate })
   } catch (error) {

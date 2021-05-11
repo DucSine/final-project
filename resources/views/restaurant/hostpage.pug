@@ -297,14 +297,14 @@ block content
         br
         div(style)
           ul#listProduct(style='list-style:none; padding:30px')
-            each user in usFilter 
+            each row in loyal_user 
               li(onclick='showProductDetail(this.querySelector("p.usId").textContent)')
-                p.usId(style='display:none') #{user._id}
+                p.usId(style='display:none') #{row.user._id}
                 .media.border.p-1
-                  img.mr-3.mt-3.img-thumbnail(src=user.avatar style='width:80px;')
+                  img.mr-3.mt-3.img-thumbnail(src=row.user.avatar style='width:80px;')
                   .media-body
                     label(style="font-size: x-large;")
-                      b #{user.username}
+                      b #{row.user.username}
         
       #discount.container.tab-pane.fade
         |SDF 
