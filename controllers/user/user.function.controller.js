@@ -314,18 +314,17 @@ exports.order = async (req, res, next) => {
     amount,
     discount
   } = req.body
-console.log(req.body)
+  console.log(req.body)
   try {
     let foodRes = await Food.findById(food[0])
     if (!foodRes)
-    throw new Error('Không hợp lệ')
+      throw new Error('Không hợp lệ')
     const restaurant = foodRes.restaurant
 
     const bill = await Bill.create({
       restaurant,
-      user: req.user._id 
+      user: req.user._id
     })
-    console.log('id:'+ restaurant)
     var sale = 0
     var total = 0
     var pay = 0
@@ -356,11 +355,11 @@ console.log(req.body)
       sale = Number(discountCode.discount)
       pay = total - (total * sale / 100)
 
-      if  (discount != 'null')
+      if (discount != 'null')
         resPay = pay - (pay * 10 / 100)
       else
         resPay = total - (total * 10 / 100)
-    }else{
+    } else {
       pay = total
       resPay = pay - (pay * 10 / 100)
     }
@@ -370,7 +369,7 @@ console.log(req.body)
       { $set: { total, pay, resPay } },
       { new: true, useFindAndModify: false }
     )
-      
+
     return Response.success(res, { billUpdate })
   } catch (error) {
     console.log(error)
