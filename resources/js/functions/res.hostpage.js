@@ -173,6 +173,7 @@ function editProduct() {
   var formData = new FormData()
   if (_list_input_productDetail[2].files[0])
     formData.append('image', _list_input_productDetail[2].files[0])
+
   formData.append('foodName', _list_input_productDetail[0].value)
   formData.append('price', _list_input_productDetail[1].value)
 
@@ -195,7 +196,7 @@ function editProduct() {
         alert(res.data.error.message)
 
       })
-      .catch(error => alert(error.mesage))
+      .catch(error => console.log(error.mesage))
   }
   else {
     //Edit product
