@@ -321,20 +321,7 @@ exports.order = async (req, res, next) => {
       throw new Error('Không hợp lệ')
 
     const restaurant = foodRes.restaurant
-    for(var foodR of food){
-      foodRes = await Food.findById(foodR)
-      console.log('const: ' + restaurant)
-      console.log('var: '+  foodRes.restaurant)
-      console.log(restaurant.toString().trim() != foodRes.restaurant.toString().trim())
-      if(restaurant != foodRes.restaurant){
-        throw new Error('Các sản phẩm không cùng 1 nhà hàng.')
-      }
-        
-
-    }
     
-
-
     const bill = await Bill.create({
       restaurant,
       user: req.user._id
