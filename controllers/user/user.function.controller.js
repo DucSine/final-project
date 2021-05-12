@@ -323,8 +323,13 @@ exports.order = async (req, res, next) => {
     const restaurant = foodRes.restaurant
     for(var foodR of food){
       foodRes = await Food.findById(foodR)
-      if(restaurant != foodRes.restaurant)
-      throw new Error('Các sản phẩm không cùng 1 nhà hàng.')
+      console.log('const: ' + restaurant)
+      console.log('var: '+  foodRes.restaurant)
+      console.log(restaurant != foodRes.restaurant)
+      if(restaurant != foodRes.restaurant){
+        throw new Error('Các sản phẩm không cùng 1 nhà hàng.')
+      }
+        
 
     }
     

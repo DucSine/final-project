@@ -73,7 +73,6 @@ exports.resHostpage = async (req, res, next) => {
     var loyal_user = await Loyal_user.find({ restaurant: restaurant._id })
     .sort({ point: -1 })
     .populate('user')
-    console.log(loyal_user)
     //final
     if (keySearch) {
         switch (load) {
