@@ -6,6 +6,7 @@ const Food = require('../../models/Food')
 const Response = require('../../helpers/response.helper')
 const { Error } = require('mongoose')
 
+const Restaurant = require('../../models/Restaurant')
 const Star = require('../../models/Star')
 const User = require('../../models/User')
 const Cart = require('../../models/Cart')
@@ -98,7 +99,6 @@ exports.showCart = async (req, res, next) => {
     // đếm món
     let cart = await Cart.find({ user: req.user._id })
       .populate('food')
-      .populate('restaurant')
     if (!cart)
       throw new Error('Không có sản phẩm!')
 
@@ -110,7 +110,19 @@ exports.showCart = async (req, res, next) => {
   }
 }
 
-// Đặt hàng
+exports.getRestaurantById = async (req, res, next) => {
+  const res_id = req.query.res_id
+  try {
+    let restaurant = await Restaurant.findById(res_id)
+    if (!restaurant)
+      throw new Error('Nhà hàng không tồn tại')
+
+    return Response.success(res, { restaurant })
+  } catch (error) {
+    console.log(error)
+    return next(error)
+  }
+}
 
 
 exports.showBillDetail = async (req, res, next) => {

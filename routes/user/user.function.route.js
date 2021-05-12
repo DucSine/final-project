@@ -8,6 +8,7 @@ const {
     addCart,
     updateCart,
     showCart,
+    getRestaurantById,
     comment,
     showBillDetail,
     cancelOrder,
@@ -31,7 +32,13 @@ router.post('/updateCart', protect, updateCart)
 // @route   GET api/user/func/cart
 // @desc    Xem giỏ hàng
 // @access  Private
-router.post('/cart', protect, showCart)
+router.get('/cart', protect, showCart)
+
+
+// @route   GET api/user/func/getRestaurantById
+// @desc    Xem giỏ hàng
+// @access  Private
+router.get('/getRestaurantById', protect, getRestaurantById)
 
 // @route   POST api/user/func/order
 // @desc    Đặt hàng
