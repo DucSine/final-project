@@ -16,7 +16,8 @@ const Bill_Detail = require('../../models/Bill_Detail')
 
 const Response = require('../../helpers/response.helper')
 const Loyal_user = require('../../models/Loyal_user')
-const limit = 10
+const f_limit = 10
+const b_limit = 7
 
 exports.resIntroduce = async (req, res) => res.render('./restaurant/introduce')
 
@@ -30,46 +31,47 @@ exports.resHostpage = async (req, res, next) => {
 
     const page = parseInt(p, 10)
     var foodTotal = await Food.find({ restaurant: restaurant._id }).count()
-    var fPageTotal = Math.ceil(foodTotal / limit)
+    var fPageTotal = Math.ceil(foodTotal / f_limit)
     var foods = await Food.find({ restaurant: restaurant._id, })
         .sort({ rate: -1, price: 1, dateCreate: -1 })
-        .skip((page - 1) * limit)
-        .limit(limit)
+        .skip((page - 1) * f_limit)
+        .limit(f_limit)
 
     var curentTransasionTotal = await Bill.find({ status: 'đang xử lý' }).count()
-    var curentTransasionPage = Math.ceil(curentTransasionTotal / limit)
+    var curentTransasionPage = Math.ceil(curentTransasionTotal / f_limit)
     var curentTransasion = await Bill.find({ status: 'đang xử lý' })
         .sort({ dateCreate: -1 })
         .populate('user')
-        .skip((page - 1) * limit)
-        .limit(limit)
+        .skip((page - 1) * f_limit)
+        .limit(f_limit)
 
     var confrimTransasionTotal = await Bill.find({ status: 'đã xác nhận' }).count()
-    var confrimTransasionPage = Math.ceil(confrimTransasionTotal / limit)
+    var confrimTransasionPage = Math.ceil(confrimTransasionTotal / f_limit)
     var confrimTransasion = await Bill.find({ status: 'đã xác nhận' })
         .sort({ dateCreate: -1 })
         .populate('user')
-        .skip((page - 1) * limit)
-        .limit(limit)
+        .skip((page - 1) * f_limit)
+        .limit(f_limit)
 
     var doneTransasionTotal = await Bill.find({ status: 'đã thanh toán' }).count()
-    var doneTransasionPage = Math.ceil(doneTransasionTotal / limit)
+    var doneTransasionPage = Math.ceil(doneTransasionTotal / f_limit)
     var doneTransasion = await Bill.find({ status: 'đã thanh toán' })
         .sort({ dateCreate: -1 })
         .populate('user')
-        .skip((page - 1) * limit)
-        .limit(limit)
+        .skip((page - 1) * f_limit)
+        .limit(f_limit)
 
     var cancelTransasionTotal = await Bill.find({ status: 'đã hủy' }).count()
-    var cancelTransasionPage = Math.ceil(cancelTransasionTotal / limit)
+    var cancelTransasionPage = Math.ceil(cancelTransasionTotal / f_limit)
     var cancelTransasion = await Bill.find({ status: 'đã hủy' })
         .sort({ dateCreate: -1 })
         .populate('user')
-        .skip((page - 1) * limit)
-        .limit(limit)
+        .skip((page - 1) * b_limit)
+        .limit(b_limit)
 
     //
     var loyal_user = await Loyal_user.find({ restaurant: restaurant._id })
+    .sort({ point: -1 })
     .populate('user')
     console.log(loyal_user)
     //final
@@ -77,28 +79,28 @@ exports.resHostpage = async (req, res, next) => {
         switch (load) {
             case 'product':
                 foodTotal = await Food.find({ restaurant: restaurant._id, foodName: new RegExp(keySearch, 'i') }).count()
-                fPageTotal = Math.ceil(foodTotal / limit)
+                fPageTotal = Math.ceil(foodTotal / f_limit)
                 foods = await Food.find({ restaurant: restaurant._id, foodName: new RegExp(keySearch, 'i') })
                     .sort({ rate: -1, price: 1, dateCreate: -1 })
-                    .skip((page - 1) * limit)
-                    .limit(limit);
+                    .skip((page - 1) * f_limit)
+                    .limit(f_limit);
                 break
             case 'bill':
                 doneTransasionTotal = await Bill.find({ status: 'đã thanh toán' }).count()
-                doneTransasionPage = Math.ceil(doneTransasionTotal / limit)
+                doneTransasionPage = Math.ceil(doneTransasionTotal / f_limit)
                 doneTransasion = await Bill.find({ status: 'đã thanh toán' })
                     .sort({ dateCreate: -1 })
                     .populate('user')
-                    .skip((page - 1) * limit)
-                    .limit(limit)
+                    .skip((page - 1) * f_limit)
+                    .limit(f_limit)
 
                 cancelTransasionTotal = await Bill.find({ _id: new RegExp(keySearch, 'i'), status: 'đã hủy' }).count()
-                cancelTransasionPage = Math.ceil(cancelTransasionTotal / limit)
+                cancelTransasionPage = Math.ceil(cancelTransasionTotal / f_limit)
                 cancelTransasion = await Bill.find({ _id: new RegExp(keySearch, 'i'), status: 'đã hủy' })
                     .sort({ dateCreate: -1 })
                     .populate('user')
-                    .skip((page - 1) * limit)
-                    .limit(limit)
+                    .skip((page - 1) * f_limit)
+                    .limit(f_limit)
                 break
             case 'discount':
                 break

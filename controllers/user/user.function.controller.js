@@ -319,7 +319,16 @@ exports.order = async (req, res, next) => {
     let foodRes = await Food.findById(food[0])
     if (!foodRes)
       throw new Error('Không hợp lệ')
+
     const restaurant = foodRes.restaurant
+    for(var foodR of food){
+      foodRes = await Food.findById(foodR)
+      if(restaurant != foodRes.restaurant)
+      throw new Error('Không hợp lệ')
+
+    }
+    
+
 
     const bill = await Bill.create({
       restaurant,

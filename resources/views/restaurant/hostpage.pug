@@ -8,7 +8,7 @@ block header
       a.notification(href='/res_hostpage?load=bill')
         i.fa.fa-bell(style='font-size:30px;')
         span.badge #{curentTransasionTotal}
-      img.avatar(src=restaurant.banner width='70px' height='70px')
+      img.avatar(src=restaurant.banner)
       b  #{name} 
   .user-container
     a#a_usInfo.text-primary Thông tin cửa hàng
@@ -120,19 +120,20 @@ block content
         option(value="1") Năm nay
     .chart
       canvas#reschart
-  
-  .search-container(style="padding:30px")
-    .form(style="float:right" onsubmit='return false' method='get')
-      input#inputSearch(type="text" placeholder="Search.." name="keySearch")
-      button(type="button" onclick='search()')
-        i.fa.fa-search
 
   #divProduct.div-content(style='display:none;padding-top:30px')
+    .search-container(style="float:right; padding-right:30px;")
+      .form(onsubmit='return false' method='get')
+        input#inputSearch(type="text" placeholder="Search.." name="keySearch")
+        button(type="button" onclick='search()')
+          i.fa.fa-search
+
     p#totalPage(style='display:none') #{fPageTotal}
-    span
+    div(style='padding-top:40px;')
+      span
       | Tổng số sản phẩm: #{foodTotal}
-    span(style='float: right; padding-right:30px')
-      button#btn_addProduct.btn.btn-primary(type='button' style='float:right') Thêm sản phẩm
+      span(style='float: right; padding-right:30px;')
+        button#btn_addProduct.btn.btn-primary(type='button' style='float:right') Thêm sản phẩm
 
     ul#listProduct(style='list-style:none; padding:30px')
       each food in foods 
@@ -222,11 +223,18 @@ block content
       #billDone.container.tab-pane.fade
         br
         div(style='margin-right: 0px;')
-          label(for='') Từ ngày:  &nbsp;
-          input(type='date') 
-          label(for='') &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Đến ngày: &nbsp;
-          input(type='date') 
-          
+          span
+            label(for='') Từ ngày:  &nbsp;
+            input(type='date') 
+            label(for='') &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Đến ngày: &nbsp;
+            input(type='date')
+          span 
+            .search-container(style="float:right; padding-right:30px;")
+              .form(onsubmit='return false' method='get')
+                input#inputSearch(type="text" placeholder="Search.." name="keySearch")
+                button(type="button" onclick='search()')
+                  i.fa.fa-search
+               
         div(style)
           ul#listProduct(style='list-style:none;')
             each bill in doneTransasion
@@ -250,10 +258,18 @@ block content
       #billCancle.container.tab-pane.fade
         br
         div(style='margin-right: 0px;')
-          label(for='') Từ ngày:  &nbsp;
-          input(type='date') 
-          label(for='') &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Đến ngày: &nbsp;
-          input(type='date') 
+          span
+            label(for='') Từ ngày:  &nbsp;
+            input(type='date') 
+            label(for='') &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Đến ngày: &nbsp;
+            input(type='date')
+          span 
+            .search-container(style="float:right; padding-right:30px;")
+              .form(onsubmit='return false' method='get')
+                input#inputSearch(type="text" placeholder="Search.." name="keySearch")
+                button(type="button" onclick='search()')
+                  i.fa.fa-search
+               
         div(style)
           ul#listProduct(style='list-style:none;')
             each bill in cancelTransasion
@@ -295,16 +311,27 @@ block content
     .tab-content
       #loyalCustomer.container.tab-pane.active
         br
+        .search-container(style="float:right; padding-right:30px;")
+          .form(onsubmit='return false' method='get')
+            input#inputSearch(type="text" placeholder="Search.." name="keySearch")
+            button(type="button" onclick='search()')
+              i.fa.fa-search
+        p
         div(style)
           ul#listProduct(style='list-style:none; padding:30px')
             each row in loyal_user 
-              li(onclick='showProductDetail(this.querySelector("p.usId").textContent)')
+              li(onclick='alert(this.querySelector("p.usId").textContent)')
                 p.usId(style='display:none') #{row.user._id}
                 .media.border.p-1
-                  img.mr-3.mt-3.img-thumbnail(src=row.user.avatar style='width:80px;')
+                  img.mr-3.mt-3.avatar(src=row.user.avatar)
                   .media-body
-                    label(style="font-size: x-large;")
-                      b #{row.user.username}
+                    div(style='padding-top:20px')
+                      label(style="font-size: x-large;")
+                        b #{row.user.username}
+                    div
+                      label
+                        b Điểm tích lũy: 
+                        b #{row.point}  
         
       #discount.container.tab-pane.fade
         |SDF 
