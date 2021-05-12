@@ -324,7 +324,7 @@ exports.order = async (req, res, next) => {
     for(var foodR of food){
       foodRes = await Food.findById(foodR)
       if(restaurant != foodRes.restaurant)
-      throw new Error('Không hợp lệ')
+      throw new Error('Các sản phẩm không cùng 1 nhà hàng.')
 
     }
     
