@@ -52,7 +52,7 @@ exports.addCart = async (req, res, next) => {
     console.log(food)
     if (!food)
       throw new Error('Món không tồn tại!')
-    
+
     await Cart.create({
       user: req.user.id,
       food: food._id,
@@ -98,6 +98,7 @@ exports.showCart = async (req, res, next) => {
     // đếm món
     let cart = await Cart.find({ user: req.user._id })
       .populate('food')
+      .populate('restaurant')
     if (!cart)
       throw new Error('Không có sản phẩm!')
 
