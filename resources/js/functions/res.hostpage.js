@@ -139,9 +139,7 @@ let massPopChart = new Chart(myChart, {
   }
 });
 
-
 //food
-
 function showProductDetail(value) {
   _food_id = value
   axios.get(GET_PODUCT + value)
@@ -427,6 +425,13 @@ function fBillCancle() {
 
 
 //discount
+function show_loyal_cus_detail(value){
+  document.querySelector('#loyal_customer_detail').classList.add(CLASS_SHOW)
+}
+function formLoyal_customer(){
+
+}
+
 function show_div_createDiscount() {
   _div_createDiscount.classList.add(CLASS_SHOW)
 }
@@ -443,8 +448,6 @@ function cancelCreateDiscount() {
   _list_input_createDiscount[3].value = ''
   _div_createDiscount.classList.remove(CLASS_SHOW)
 }
-
-
 
 //cuoi cung
 function nextPage() {

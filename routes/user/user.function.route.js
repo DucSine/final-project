@@ -34,7 +34,6 @@ router.post('/updateCart', protect, updateCart)
 // @access  Private
 router.get('/cart', protect, showCart)
 
-
 // @route   GET api/user/func/getRestaurantById
 // @desc    Xem giỏ hàng
 // @access  Private

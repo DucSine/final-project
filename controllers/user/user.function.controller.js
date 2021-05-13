@@ -47,18 +47,17 @@ exports.addCart = async (req, res, next) => {
     foodID,
     amount
   } = req.body
-  console.log('user: ' + req.user)
-  console.log(req.body)
   try {
     let food = await Food.findById(foodID)
     console.log(food)
     if (!food)
       throw new Error('Món không tồn tại!')
-
+    
     await Cart.create({
       user: req.user.id,
       food: food._id,
-      amount
+      amount,
+      restaurant: food.restaurant
     })
 
     return Response.success(res, { message: 'Thêm thành công.' })

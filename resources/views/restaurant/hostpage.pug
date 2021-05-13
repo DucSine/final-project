@@ -320,7 +320,7 @@ block content
         div(style)
           ul#listProduct(style='list-style:none; padding:30px')
             each row in loyal_user 
-              li(onclick='alert(this.querySelector("p.usId").textContent)')
+              li(onclick='show_loyal_cus_detail(this.querySelector("p.usId").textContent)')
                 p.usId(style='display:none') #{row.user._id}
                 .media.border.p-1
                   img.mr-3.mt-3.avatar(src=row.user.avatar)
@@ -411,31 +411,69 @@ block content
             button.btn.btn-primary(type='submit') Xác nhận 
           span(style='float: right')
             button.btn.btn-danger(type='button' onclick='fBillCancle()') Hủy đơn
+      .container(style='background-color:#f1f1f1')  
 
   #createDiscount.modal.createDiscount-modal 
     form.modal-content.createDiscount-modal-content.animate( method='post' onsubmit='return fCreateDiscount()')
+      div(style='background-color:#f1f1f1; text-align: center;')
+        label.text-primary
+          b#headerFormAddProduct(style='font-size: xx-large;') Tạo mã giảm giá
       .container
         .form-group
-          label(for='li_email')
+          label(for='li_code')
             b Code
-          input#li_email.form-control(type='email' name='email' placeholder='Nhập mã code' required='')
+          input#li_code.form-control(type='text' name='code' placeholder='Nhập mã code' required='')
         .form-group
-          label(for='li_email')
+          label(for='li_discount')
             b Sale
-          input#li_email.form-control(type='email' name='email' placeholder='Nhập phần trăm giảm' required='')
+          input#li_discount.form-control(type='number' name='discount' min='1' placeholder='Nhập phần trăm giảm' required='')
         .form-group
-          label(for='li_email')
+          label(for='li_amount')
             b Số lượng mã
-          input#li_email.form-control(type='email' name='email' placeholder='Nhập phần trăm giảm' required='')
+          input#li_amount.form-control(type='number' name='amount' min='1' placeholder='Nhập số lượng mã' required='')
         .form-group
-          label(for='li_email')
+          label(for='li_dateExprite')
             b Ngày hết hạn
-          input#li_email.form-control(type='datetime-local' name='email' placeholder='Nhập phần trăm giảm' required='')
+          input#li_dateExprite.form-control(type='datetime-local' name='email' placeholder='Hạn sử dụng' required='')
         .form-group(style='padding-left: 48px; padding-right: 48px;')
           span
             button.btn.btn-primary(type='submit') Tạo
           span(style='float: right')
             button.btn.btn-danger(type='button' onclick='cancelCreateDiscount()') Hủy bỏ
+      .container(style='background-color:#f1f1f1')
   
+  #loyal_customer_detail.modal.loyal_customer_detail-modal
+    form.modal-content.loyal_customer_detail-modal-content.animate( method='post' onsubmit='return formLoyal_customer()')
+      div(style='background-color:#f1f1f1; text-align: center;')
+        label.text-primary
+          b(style='font-size: xx-large;') Thông tin khách hàng
+      .container
+        .row(style='padding:16px')
+          .col-sm-3
+            p
+            img(src=restaurant.banner style='width:180px; height:180px')
+          .col-sm-9
+            label Đức sine  
+            i(style='float:right') point
+            p duchoangvo97@gmail.com 
+            hr
+            p fullname: duc 
+            p phone: 09090
+            p address: ưqedw
+      .container 
+        hr
+        h4 Lịch sửa giao dịch
+        p đơn 1
+        p đơn 2
+        p đơn 3
+        p đơn 4
+        p đơn 5
+      .form-group(style='padding-left: 48px; padding-right: 48px;')
+          span
+            button.btn.btn-primary(type='submit') Tạo
+          span(style='float: right')
+            button.btn.btn-danger(type='button' onclick='cancelCreateDiscount()') Hủy bỏ
+      .container(style='background-color:#f1f1f1')
+
   script(src='../../js/controller/res.hostpage.js')
   script(src='../../js/functions/res.hostpage.js')

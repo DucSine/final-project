@@ -92,3 +92,10 @@
 .createDiscount-modal-content{
     width: 50%;
 }
+
+.loyal_customer_detail-modal{
+    padding-top: 30px;
+}
+.loyal_customer_detail-modal-content{
+    width: 70%;
+}
