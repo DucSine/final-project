@@ -16,9 +16,8 @@ const BillSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
-  discount:{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Discount',
+  code:{
+    type: String,
     required: false,
     default: null
   },
@@ -29,14 +28,6 @@ const BillSchema = new mongoose.Schema({
   total:{
     type: Number,
     default: 0    
-  },
-  pay: {
-    type: Number,
-    default: 0
-  },
-  resPay: {
-    type: Number,
-    default: 0
   },
   message: {
     type: String,

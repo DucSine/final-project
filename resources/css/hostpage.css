@@ -94,7 +94,8 @@
 }
 
 .loyal_customer_detail-modal{
-    padding-top: 30px;
+    padding-top: 20px;
+    overflow:scroll;
 }
 .loyal_customer_detail-modal-content{
     width: 70%;

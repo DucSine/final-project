@@ -13,6 +13,7 @@ const RestaurantType = require('../../models/RestaurantType')
 const Food = require('../../models/Food')
 const Bill = require('../../models/Bill')
 const Bill_Detail = require('../../models/Bill_Detail')
+const Discount_code = require('../../models/Discount_code')
 
 const Response = require('../../helpers/response.helper')
 const Loyal_user = require('../../models/Loyal_user')
@@ -45,25 +46,25 @@ exports.resHostpage = async (req, res, next) => {
         .skip((page - 1) * f_limit)
         .limit(f_limit)
 
-    var confrimTransasionTotal = await Bill.find({restaurant: restaurant._id, status: 'đã xác nhận' }).count()
+    var confrimTransasionTotal = await Bill.find({ restaurant: restaurant._id, status: 'đã xác nhận' }).count()
     var confrimTransasionPage = Math.ceil(confrimTransasionTotal / f_limit)
-    var confrimTransasion = await Bill.find({restaurant: restaurant._id, status: 'đã xác nhận' })
+    var confrimTransasion = await Bill.find({ restaurant: restaurant._id, status: 'đã xác nhận' })
         .sort({ dateCreate: -1 })
         .populate('user')
         .skip((page - 1) * f_limit)
         .limit(f_limit)
 
-    var doneTransasionTotal = await Bill.find({restaurant: restaurant._id, status: 'đã thanh toán' }).count()
+    var doneTransasionTotal = await Bill.find({ restaurant: restaurant._id, status: 'đã thanh toán' }).count()
     var doneTransasionPage = Math.ceil(doneTransasionTotal / f_limit)
-    var doneTransasion = await Bill.find({restaurant: restaurant._id, status: 'đã thanh toán' })
+    var doneTransasion = await Bill.find({ restaurant: restaurant._id, status: 'đã thanh toán' })
         .sort({ dateCreate: -1 })
         .populate('user')
         .skip((page - 1) * f_limit)
         .limit(f_limit)
 
-    var cancelTransasionTotal = await Bill.find({restaurant: restaurant._id, status: 'đã hủy' }).count()
+    var cancelTransasionTotal = await Bill.find({ restaurant: restaurant._id, status: 'đã hủy' }).count()
     var cancelTransasionPage = Math.ceil(cancelTransasionTotal / f_limit)
-    var cancelTransasion = await Bill.find({restaurant: restaurant._id, status: 'đã hủy' })
+    var cancelTransasion = await Bill.find({ restaurant: restaurant._id, status: 'đã hủy' })
         .sort({ dateCreate: -1 })
         .populate('user')
         .skip((page - 1) * b_limit)
@@ -71,8 +72,8 @@ exports.resHostpage = async (req, res, next) => {
 
     //
     var loyal_user = await Loyal_user.find({ restaurant: restaurant._id })
-    .sort({ point: -1 })
-    .populate('user')
+        .sort({ point: -1 })
+        .populate('user')
     //final
     if (keySearch) {
         switch (load) {
@@ -113,7 +114,7 @@ exports.resHostpage = async (req, res, next) => {
         './restaurant/hostpage',
         {
             restaurant,             //res
-            name,   
+            name,
             resType,
             foodTotal,              //food
             fPageTotal,
@@ -131,7 +132,7 @@ exports.resHostpage = async (req, res, next) => {
             cancelTransasionPage,
             cancelTransasion,
             loyal_user,            //discountcode
-            
+
 
         })
 }
@@ -314,6 +315,14 @@ exports.confirmBill = async (req, res, next) => {
         if (!rs)
             throw new Error('Có lỗi xảy ra.')
 
+        var bill_detail = await Bill_Detail.find({ bill: rs._id })
+        for (var item of bill_detail) {
+            var food = await Food.findById(item.food)
+            rs = await Food.findByIdAndUpdate(food._id, { $set: { buys: food.buys + item.amount } })
+            if (!rs)
+                throw new Error('Có lỗi xảy ra.')
+        }
+
         //Điểm tich lũy
         const loyal_user = await Loyal_user.findOne({ restaurant, user: bill.user })
         if (loyal_user) {
@@ -359,4 +368,63 @@ exports.cancelBill = async (req, res, next) => {
     }
 
 
+}
+
+exports.createDiscount = async (req, res, next) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty())
+        return res.status(400).json({ errors: errors.array() })
+
+    const restaurant = req.restaurant.id
+    const {
+        discount,
+        code,
+        amount,
+        dateExprite, //number
+        user
+    } = req.body
+
+    try {
+        const currentDiscount = await Discount_code.findOne({ code })
+        if (currentDiscount)
+            if (Number(currentDiscount.dateExprite) >= Date.now())
+                throw new Error('Mã đã tồn tại hoặc đang còn hiệu lực.')
+
+        if (amount.indexOf('.') != -1 || amount.indexOf(',') != -1 || amount.indexOf('e') != -1)
+            throw new Error('Số lượng mã không hợp lệ')
+
+        if (Number(amount) <= 0)
+            throw new Error('Số lượng mã không hợp lệ')
+
+        if (Number(dateExprite) <= Date.now())
+            throw new Error('Thời gian hết hạn không hợp lệ.')
+
+        var rs
+        if (!user)
+            rs = await Discount_code.create({
+                discount,
+                code,
+                amount,
+                dateExprite: new Date(Number(dateExprite)),
+                restaurant
+            })
+        else
+            rs = await Discount_code.create({
+                discount,
+                code,
+                amount,
+                dateExprite: new Date(Number(dateExprite)),
+                user, 
+                restaurant
+            })
+
+        if (!rs)
+            throw new Error('Có lỗi xảy ra.')
+
+        return Response.success(res, { message: 'Tạo mã thành công' })
+
+    } catch (error) {
+        console.log(error)
+        return next(error)
+    }
 }

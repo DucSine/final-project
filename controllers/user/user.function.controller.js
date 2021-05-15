@@ -325,7 +325,7 @@ exports.order = async (req, res, next) => {
   const {
     food,
     amount,
-    discount
+    code
   } = req.body
   console.log(req.body)
   try {
@@ -334,15 +334,12 @@ exports.order = async (req, res, next) => {
       throw new Error('Không hợp lệ')
 
     const restaurant = foodRes.restaurant
-    
+
     const bill = await Bill.create({
       restaurant,
       user: req.user._id
     })
-    var sale = 0
     var total = 0
-    var pay = 0
-    var resPay = 0
 
     for (var index in food) {
       await BillDetail.create({
@@ -354,37 +351,37 @@ exports.order = async (req, res, next) => {
       total += (amount[index] * _food.price)
     }
 
-    if (discount != 'null') {
-      var discountCode = await Discount_code.findById(discount)
+    var rs
+    if (code != 'null') {
+      var discountCode = await Discount_code.find({ code })
+        .sort({ dateExprite: -1 })
 
-      if (discountCode.restaurant != null || discountCode.restaurant != restaurant)
-        throw new Error('Mã giảm giá không hợp lệ.')
+      if (!discountCode)
+        throw new Error('Mã giảm giá không tồn tại.')
 
-      if (Number(discountCode.dateExprite) < Date.now())
+      if (discountCode.restaurant != null)
+        if (discountCode.restaurant != restaurant)
+          throw new Error('Mã giảm giá không hợp lệ')
+
+      if (discountCode.amount <= 0)
+        throw new Error('Mã giảm giá đã hết.')
+
+      if (Number(new Date(discountCode.dateExprite)) <= Date.now())
         throw new Error('Mã giảm giá đã hết hạn.')
 
-      if (Number(discountCode.amount) == 0)
-        throw new Error('Mã giảm giá đã lượt sử dụng.')
+      var discountAmount = discountCode.amount - 1
+      rs = await Discount_code.findByIdAndUpdate(discountCode._id, { $set: { amount: discountAmount } })
+      if (!rs)
+        throw new Error('Có lỗi xảy ra.')
 
-      sale = Number(discountCode.discount)
-      pay = total - (total * sale / 100)
+      rs = await Bill.findByIdAndUpdate(bill._id, { $set: { total, code } })
+    } else
+      rs = await Bill.findByIdAndUpdate(bill._id, { $set: { total } })
 
-      if (discount != 'null')
-        resPay = pay - (pay * 10 / 100)
-      else
-        resPay = total - (total * 10 / 100)
-    } else {
-      pay = total
-      resPay = pay - (pay * 10 / 100)
-    }
+    if (!rs)
+      throw new Error('Có lỗi xảy ra.')
 
-    var billUpdate = await Bill.findByIdAndUpdate(
-      { _id: bill._id },
-      { $set: { total, pay, resPay } },
-      { new: true, useFindAndModify: false }
-    )
-
-    return Response.success(res, { billUpdate })
+    return Response.success(res, { rs })
   } catch (error) {
     console.log(error)
     return next(error)

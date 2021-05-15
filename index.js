@@ -137,4 +137,10 @@ app.post('/dev/addFood',upload.single('image'),async(req, res, next)=>{
 }, (req, res)=>res.send(`<script>alert('Thành công')</script>`))
 ///
 
+app.get('/testdate', async(req,res)=>{
+  const {date} = req.body
+  console.log(Date(date))
+  res.send({date})
+})
+///
 app.listen(port, ()=>console.log(`run with http://localhost:${port}`))

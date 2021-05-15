@@ -28,34 +28,22 @@ const LIST_PATTERM = {
 const POST_RES_LOGIN = '/api/res/auth/login'
 const POST_RES_REGISTER = '/api/res/auth/register'
 const POST_RES_FORGOT_PASSWORD = '/api/res/auth/fogotPassword'
-
-const POST_ADMIN_LOGIN = '/api/admin/auth/login'
-const POST_ADMIN_FORGOT_PASSWORD = '/api/admin/auth/fogotPassword'
-
-const GET_ADMIN_HOST_PAGE = '/admin/index'
 const GET_RES_HOST_PAGE = '/res_hostpage'
+const POST_RES_CHANGE_PASS = '/api/res/auth/changePassword'
 
-const GET_PODUCT_PAGE = '/res_hostpage?load=product'
-const GET_BILL_PAGE = '/res_hostpage?load=bill'
-const GET_DISCOUNT_PAGE = '/res_hostpage?load=discount'
+const GET_RES_PODUCT_PAGE = '/res_hostpage?load=product'
+const GET_RES_PODUCT_DETAIL = '/api/res/func/getFood?food_id='
+const POST_RES_ADD_PRODUCT = '/api/res/func/addFood'
+const POST_RES_EDIT_PRODUCT = '/api/res/func/editFood'
+const POST_RES_DEL_PRODUCT = '/api/res/func/delFood?foodId='
 
-const POST_CHANGE_PASS = '/api/res/auth/changePassword'
-
-const GET_PODUCT = '/api/res/func/getFood?food_id='
-const POST_ADD_PRODUCT = '/api/res/func/addFood'
-const POST_EDIT_PRODUCT = '/api/res/func/editFood'
-const POST_DEL_PRODUCT = '/api/res/func/delFood?foodId='
-
+const GET_RES_BILL_PAGE = '/res_hostpage?load=bill'
 const POST_RES_CONFIRM_BILL = '/api/res/func/confirmBill?billId='
 const POST_RES_CANCEL_BILL = '/api/res/func/cancelBill'
 
-const GET_LOYAL_USERS = ''
-const GET_MY_DISCOUNT_CODE=''
-const GET_FIND_MY_DISCOUNT_CODE = ''
-const POST_CREATE_DISCOUNT_CODE = ''
-const POST_EDIT_DISCOUNT_CODE = ''
-const POST_SEND_DISCOUNT_CODE_TO_LOYAL_USER = ''
+const GET_RES_DISCOUNT_PAGE = '/res_hostpage?load=discount'
+const POST_RES_CREATE_DISCOUNT_CODE = '/api/res/func/createDiscount'
 
-const GET_REPORT_DATE = ''
-const GET_REPORT_MONTH = ''
-const GET_REPORT_yEAR = ''
+const POST_ADMIN_LOGIN = '/api/admin/auth/login'
+const POST_ADMIN_FORGOT_PASSWORD = '/api/admin/auth/fogotPassword'
+const GET_ADMIN_HOST_PAGE = '/admin/index'

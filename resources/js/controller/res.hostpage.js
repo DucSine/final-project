@@ -68,7 +68,6 @@ var _bill_id = ''
 //discount
 const _div_createDiscount = document.querySelector('#createDiscount.modal.createDiscount-modal')
 const _list_input_createDiscount = _div_createDiscount.querySelectorAll('input')
-
 var flag_product = 1
 var _food_id = ''
 

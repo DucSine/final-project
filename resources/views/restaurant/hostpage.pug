@@ -426,7 +426,7 @@ block content
         .form-group
           label(for='li_discount')
             b Sale
-          input#li_discount.form-control(type='number' name='discount' min='1' placeholder='Nhập phần trăm giảm' required='')
+          input#li_discount.form-control(type='number' name='discount' min='1' max='100' placeholder='Nhập phần trăm giảm' required='')
         .form-group
           label(for='li_amount')
             b Số lượng mã
@@ -453,9 +453,11 @@ block content
             p
             img(src=restaurant.banner style='width:180px; height:180px')
           .col-sm-9
-            label Đức sine  
+            label.text-primary
+              b(style='font-size: large;') Đức sine  
             i(style='float:right') point
-            p duchoangvo97@gmail.com 
+            p 
+              i duchoangvo97@gmail.com 
             hr
             p fullname: duc 
             p phone: 09090

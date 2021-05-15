@@ -415,7 +415,7 @@ function fBillCancle() {
 
           })
           .catch(error => alert(error.mesage))
-          break
+        break
       }
     }
 
@@ -425,10 +425,10 @@ function fBillCancle() {
 
 
 //discount
-function show_loyal_cus_detail(value){
+function show_loyal_cus_detail(value) {
   document.querySelector('#loyal_customer_detail').classList.add(CLASS_SHOW)
 }
-function formLoyal_customer(){
+function formLoyal_customer() {
 
 }
 
@@ -436,8 +436,25 @@ function show_div_createDiscount() {
   _div_createDiscount.classList.add(CLASS_SHOW)
 }
 
-function createDiscount() {
-  axios.pos()
+function fCreateDiscount() {
+
+  axios.post(
+    POST_RES_CREATE_DISCOUNT_CODE,
+    {
+      code: _list_input_createDiscount[0].value,
+      discount: _list_input_createDiscount[1].value,
+      amount:  _list_input_createDiscount[2].value,
+      dateExprite: Number(new Date( _list_input_createDiscount[3].value)).toString(), //number
+    }
+  )
+  .then(res => {
+    if(res.data.status == 'success'){
+        alert(res.data.data.message)
+        location.reload()
+    }
+    else alert(res.data.error.message)
+})
+.catch(error => alert(console.error()))
   return false
 }
 

@@ -12,7 +12,8 @@ const {
     delFood,
     getBillDetail,
     confirmBill,
-    cancelBill
+    cancelBill,
+    createDiscount
 } = require('../../controllers/restaurant/res.function.controller')
 const { protect } = require('../../middlewares/restaurant/auth')
 
@@ -66,5 +67,10 @@ router.post('/confirmBill', protect, confirmBill)
 // @desc    Hủy bill
 // @access  Private
 router.post('/cancelBill', protect, cancelBill)
+
+// @route   POST api/res/func/createDiscount
+// @desc    Tạo mã giảm giá
+// @access  Private
+router.post('/createDiscount', protect, createDiscount)
 
 module.exports = router
