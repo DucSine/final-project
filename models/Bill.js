@@ -16,9 +16,9 @@ const BillSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
-  code:{
-    type: String,
-    required: false,
+  discount_code:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Discount_code',
     default: null
   },
   dateCreate: {

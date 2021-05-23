@@ -15,7 +15,9 @@ const {
     privateDiscountCode,
     publicDiscountCode,
     getHistoryTransaction,
-    order
+    order,
+    createBill,
+    updateBill,
 } = require('../../controllers/user/user.function.controller')
 const { protect } = require('../../middlewares/user/auth')
 
@@ -39,10 +41,15 @@ router.get('/cart', protect, showCart)
 // @access  Private
 router.get('/getRestaurantById', protect, getRestaurantById)
 
-// @route   POST api/user/func/order
+// @route   POST api/user/func/createBill
 // @desc    Đặt hàng
 // @access  Private
-router.post('/order', protect, order)
+router.post('/createBill', protect, createBill)
+
+// @route   POST api/user/func/updateBill
+// @desc    Đặt hàng
+// @access  Private
+router.post('/updateBill', protect, updateBill)
 
 // @route   GET api/user/func/billDetail?bill_id='????'
 // @desc    Xem chi tiết đơn hàng

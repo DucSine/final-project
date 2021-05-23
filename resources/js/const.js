@@ -6,7 +6,7 @@ const BLOCK = 'block'
 //init key class
 const CLASS_ACTIVE = 'active'
 const CLASS_SHOW = 'show'
-CLASS_SHOW_FLEX = 'show-flex'
+const CLASS_SHOW_FLEX = 'show-flex'
 // key localStorage
   //login
 const CB_SAVE = 'cb_save'
@@ -40,9 +40,12 @@ const POST_RES_DEL_PRODUCT = '/api/res/func/delFood?foodId='
 const GET_RES_BILL_PAGE = '/res_hostpage?load=bill'
 const POST_RES_CONFIRM_BILL = '/api/res/func/confirmBill?billId='
 const POST_RES_CANCEL_BILL = '/api/res/func/cancelBill'
+const GET_RES_GET_BILL_DETAIL = 'api/res/func/getBillDetail?bill_id='
 
 const GET_RES_DISCOUNT_PAGE = '/res_hostpage?load=discount'
 const POST_RES_CREATE_DISCOUNT_CODE = '/api/res/func/createDiscount'
+const GET_RES_GET_DISCOUNT_CODE_BY_ID = '/api/res/func//getDiscountById?discount_id='
+const GET_RES_GET_LOYAL_USER_DETAIL = '/api/res/func/getLoyalUser?user_id='
 
 const POST_ADMIN_LOGIN = '/api/admin/auth/login'
 const POST_ADMIN_FORGOT_PASSWORD = '/api/admin/auth/fogotPassword'

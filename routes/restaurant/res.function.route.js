@@ -5,15 +5,17 @@ const router = express.Router()
 const upload = multer({ dest: './resources/uploads' })
 const { check } = require('express-validator')
 
-const { 
-    getFood, 
-    addFood, 
-    editFood ,
+const {
+    getFood,
+    addFood,
+    editFood,
     delFood,
     getBillDetail,
     confirmBill,
     cancelBill,
-    createDiscount
+    createDiscount,
+    getDiscountById,
+    getLoyalUserDetail
 } = require('../../controllers/restaurant/res.function.controller')
 const { protect } = require('../../middlewares/restaurant/auth')
 
@@ -32,7 +34,7 @@ router.post(
     [
         check('foodName', 'Bạn phải nhập tên món').not().isEmpty(),
         check('price', 'Bạn phải nhập giá sản phẩm.').isFloat(),
-    ], 
+    ],
     addFood)
 
 // @route   POST api/res/func/editFood
@@ -72,5 +74,15 @@ router.post('/cancelBill', protect, cancelBill)
 // @desc    Tạo mã giảm giá
 // @access  Private
 router.post('/createDiscount', protect, createDiscount)
+
+// @route   GET api/res/func/getLoyalUser
+// @desc    Xem chi tiết khách hàng thân thiết
+// @access  Public
+router.get('/getLoyalUser', protect, getLoyalUserDetail)
+
+// @route   GET api/res/func/getDiscountById
+// @desc    Xem chi tiết mã giảm giá
+// @access  Private
+router.get('/getDiscountById', protect, getDiscountById)
 
 module.exports = router

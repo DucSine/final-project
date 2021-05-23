@@ -241,12 +241,13 @@ _list_btn_productDetail[2].onclick = function () {
 //bill
 function getWaitBillDetail(value) {
   var id = value.split(':')[1].trim()
-  axios.get('api/res/func/getBillDetail?bill_id=' + id)
+  axios.get(GET_RES_GET_BILL_DETAIL + id)
     .then(res => {
       if (res.data.status == 'success') {
-        // lấy data
-        var BILL = res.data.data.bill
-        var BILL_DETAIL = res.data.data.bill_detail
+        const BILL = res.data.data.bill
+        const BILL_DETAIL = res.data.data.bill_detail
+        const RES_PAY = res.data.data.resPay
+
         _div_billDetail.classList.add(CLASS_SHOW)
 
         _b_billId.innerText = BILL._id
@@ -255,8 +256,21 @@ function getWaitBillDetail(value) {
         _b_billUser.innerText = BILL.user.username
         _b_billReason.innerText = BILL.message
 
-        if (BILL.discount != 'null' && BILL.discount != null)
-          _b_billDiscount.innerText = BILL.discount.code
+        if (BILL.discount_code != null) {
+          axios.get(GET_RES_GET_DISCOUNT_CODE_BY_ID + BILL.discount_code)
+            .then(res => {
+              const DISCOUNT = res.data.data.discount
+              var code = (DISCOUNT.restaurant != null) ? DISCOUNT.code + '(res)' : DISCOUNT.code + '(admin)'
+              _b_billDiscount.innerText = code
+            })
+            .catch(error => {
+              alert(error.mesage)
+              console.log(error)
+            })
+        }
+
+        //   if (BILL.discount_code != null)
+        //     _b_billDiscount.innerText = 'abc'
 
         _i_iconStatus.classList.remove(
           _i_iconStatus.classList.item(1),
@@ -293,7 +307,6 @@ function getWaitBillDetail(value) {
             break
         }
         for (var product of BILL_DETAIL) {
-          console.log(product)
           var tr = document.createElement('tr')
           var td_fName = document.createElement('td')
           var imgF = document.createElement('img')
@@ -345,7 +358,7 @@ function getWaitBillDetail(value) {
         var td_bill_pay = document.createElement('td')
 
         td_lable_pay.innerText = 'Thực nhận:'
-        td_bill_pay.innerText = BILL.resPay
+        td_bill_pay.innerText = RES_PAY
 
         tr_pay.classList.add('text-primary')
         tr_pay.style.fontWeight = 'bold'
@@ -366,6 +379,8 @@ function getWaitBillDetail(value) {
       alert(error.mesage)
       console.log(error)
     })
+
+
 }
 
 function editBill() {
@@ -427,6 +442,29 @@ function fBillCancle() {
 //discount
 function show_loyal_cus_detail(value) {
   document.querySelector('#loyal_customer_detail').classList.add(CLASS_SHOW)
+  axios.get(
+    GET_RES_GET_LOYAL_USER_DETAIL + value,
+  )
+    .then(res => {
+      if (res.data.status = 'success') {
+        var data = res.data.data.loyal_user
+        var user = res.data.data.loyal_user.user
+        _img_loyal_user.src = user.avatar
+
+        _b_loyal_user_username.innerText = user.username
+        _i_loyal_user_point.innerText = data.point + ' point'
+        _i_loyal_user_email.innerText = user.email
+
+        _p_loyal_user_fullname.innerText = 'Họ tên: ' + user.fullName
+        _p_loyal_user_phone.innerText = 'Điện thoại: ' + user.phone
+        _p_loyal_user_address.innerText = 'Địa chỉ: ' + user.address
+      }
+      else
+        alert(res.error.message)
+    })
+    .catch(error => alert(error.mesage))
+
+
 }
 function formLoyal_customer() {
 
@@ -443,18 +481,18 @@ function fCreateDiscount() {
     {
       code: _list_input_createDiscount[0].value,
       discount: _list_input_createDiscount[1].value,
-      amount:  _list_input_createDiscount[2].value,
-      dateExprite: Number(new Date( _list_input_createDiscount[3].value)).toString(), //number
+      amount: _list_input_createDiscount[2].value,
+      dateExprite: Number(new Date(_list_input_createDiscount[3].value)).toString(), //number
     }
   )
-  .then(res => {
-    if(res.data.status == 'success'){
+    .then(res => {
+      if (res.data.status == 'success') {
         alert(res.data.data.message)
         location.reload()
-    }
-    else alert(res.data.error.message)
-})
-.catch(error => alert(console.error()))
+      }
+      else alert(res.data.error.message)
+    })
+    .catch(error => alert(console.error()))
   return false
 }
 
@@ -466,6 +504,9 @@ function cancelCreateDiscount() {
   _div_createDiscount.classList.remove(CLASS_SHOW)
 }
 
+function hideFormLoyalUser() {
+  _div_loyalUser.classList.remove(CLASS_SHOW)
+}
 //cuoi cung
 function nextPage() {
   set_btn_direct_food()

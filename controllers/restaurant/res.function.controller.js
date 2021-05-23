@@ -289,14 +289,27 @@ exports.getBillDetail = async (req, res, next) => {
     try {
         let bill = await Bill.findById(bill_id)
             .populate('user')
-            .populate('discount_code')
+
+        const discount_id = bill.discount_code
+        var resPay = 0
+        if (discount_id != null) {
+            var discount = await Discount_code.findById(discount_id)
+            if (discount.restaurant == req.restaurant.id) {
+                var afterUseCode = bill.total - (bill.total * discount.discount) / 100
+                resPay = afterUseCode - (afterUseCode * 10) / 100
+            } else
+                resPay = bill.total - (bill.total * 10) / 100
+        }
+        else
+            resPay = bill.total - (bill.total * 10) / 100
+
         if (!bill)
             throw new Error('Bill không tồn tại.')
 
         const bill_detail = await Bill_Detail.find({ bill: bill_id })
             .populate('food')
 
-        return Response.success(res, { bill, bill_detail })
+        return Response.success(res, { bill, bill_detail, resPay })
     } catch (error) {
         console.log(error)
         return next(error)
@@ -414,7 +427,7 @@ exports.createDiscount = async (req, res, next) => {
                 code,
                 amount,
                 dateExprite: new Date(Number(dateExprite)),
-                user, 
+                user,
                 restaurant
             })
 
@@ -423,6 +436,34 @@ exports.createDiscount = async (req, res, next) => {
 
         return Response.success(res, { message: 'Tạo mã thành công' })
 
+    } catch (error) {
+        console.log(error)
+        return next(error)
+    }
+}
+
+exports.getLoyalUserDetail = async (req, res, next) => {
+    const user_ID = req.query.user_id
+    try {
+        let loyal_user = await Loyal_user.findOne({user: user_ID})
+        .populate('user')
+        if(!loyal_user)
+            throw new Error('Có lỗi xảy ra.')
+        
+        return Response.success(res, {loyal_user})
+    } catch (error) {
+        console.log(error)
+        return next(error)
+    }
+}
+
+exports.getDiscountById = async (req, res, next) => {
+    const discount_id = req.query.discount_id
+    try {
+        let discount = await Discount_code.findById(discount_id)
+        if (!discount)
+            throw new Error('Có lỗi xảy ra.')
+        return Response.success(res, {discount})
     } catch (error) {
         console.log(error)
         return next(error)

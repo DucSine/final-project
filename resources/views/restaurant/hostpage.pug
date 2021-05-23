@@ -3,7 +3,7 @@ block header
   link(rel='stylesheet' href='../../css/hostpage.css')
   nav.navbar.navbar-light.bg-primary
     a.navbar-brand(href='/res/hostpage')
-      img(src='https://res.cloudinary.com/ducsine/image/upload/v1619047971/logo.png' width='200px' height='100px')
+      img(src='https://res.cloudinary.com/ducsine/image/upload/v1621242491/logo.png' width='200px' height='100px')
     .div-inline(style='width: 280px')
       a.notification(href='/res_hostpage?load=bill')
         i.fa.fa-bell(style='font-size:30px;')
@@ -195,9 +195,9 @@ block content
                       b Khách hàng: 
                       | #{bill.user.username}
                     p
-                      b Thành tiền 
-                      | #{bill.resPay}
-        
+                      b Tổng cộng: 
+                      | #{bill.total} 
+                       
       #billConfirm.container.tab-pane.fade
         br
         div(style)
@@ -218,7 +218,8 @@ block content
                       b Khách hàng: 
                       |  #{bill.user.username}
                     p
-                      b Thành tiền 
+                      b Tổng cộng: 
+                      | #{bill.total} 
 
       #billDone.container.tab-pane.fade
         br
@@ -253,7 +254,8 @@ block content
                       b Khách hàng: 
                       |  #{bill.user.username}
                     p
-                      b Thành tiền 
+                      b Tổng cộng: 
+                      | #{bill.total} 
       
       #billCancle.container.tab-pane.fade
         br
@@ -451,30 +453,27 @@ block content
         .row(style='padding:16px')
           .col-sm-3
             p
-            img(src=restaurant.banner style='width:180px; height:180px')
+            img#img_loyal_user(src=restaurant.banner style='width:180px; height:180px')
           .col-sm-9
             label.text-primary
-              b(style='font-size: large;') Đức sine  
-            i(style='float:right') point
+              b#b_loyal_user_username(style='font-size: large;') 
+            i#i_loyal_user_point(style='float:right') point
             p 
-              i duchoangvo97@gmail.com 
+              i#i_loyal_user_email 
             hr
-            p fullname: duc 
-            p phone: 09090
-            p address: ưqedw
+            p#p_loyal_user_fullname fullname:
+            p#p_loyal_user_phone phone:
+            p#p_loyal_user_address address:
       .container 
         hr
-        h4 Lịch sửa giao dịch
-        p đơn 1
-        p đơn 2
-        p đơn 3
-        p đơn 4
-        p đơn 5
+        h4.text-primary Lịch sửa giao dịch
+        
+
       .form-group(style='padding-left: 48px; padding-right: 48px;')
           span
-            button.btn.btn-primary(type='submit') Tạo
+            button.btn.btn-primary(type='button' onclick='alert("duc")') Tặng mã giảm giá
           span(style='float: right')
-            button.btn.btn-danger(type='button' onclick='cancelCreateDiscount()') Hủy bỏ
+            button.btn.btn-danger(type='button' onclick='hideFormLoyalUser()') Thoát 
       .container(style='background-color:#f1f1f1')
 
   script(src='../../js/controller/res.hostpage.js')

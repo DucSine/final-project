@@ -71,6 +71,16 @@ const _list_input_createDiscount = _div_createDiscount.querySelectorAll('input')
 var flag_product = 1
 var _food_id = ''
 
+//loyal_customer
+const _div_loyalUser = document.querySelector('#loyal_customer_detail.modal.loyal_customer_detail-modal')
+const _img_loyal_user = _div_loyalUser.querySelector('#img_loyal_user')
+const _b_loyal_user_username = _div_loyalUser.querySelector('#b_loyal_user_username')
+const _i_loyal_user_point = _div_loyalUser.querySelector('#i_loyal_user_point')
+const _i_loyal_user_email = _div_loyalUser.querySelector('#i_loyal_user_email')
+const _p_loyal_user_fullname = _div_loyalUser.querySelector('#p_loyal_user_fullname')
+const _p_loyal_user_phone = _div_loyalUser.querySelector('#p_loyal_user_phone')
+const _p_loyal_user_address = _div_loyalUser.querySelector('#p_loyal_user_address')
+const _list_btn_loyalUser = _div_loyalUser.querySelectorAll('button.btn')
 //
 
 var _pageTotal = document.getElementById('totalPage').textContent // if else thay doi

@@ -321,67 +321,99 @@ exports.comment = async (req, res, next) => {
 
 ///
 
-exports.order = async (req, res, next) => {
-  const {
-    food,
-    amount,
-    code
-  } = req.body
-  console.log(req.body)
+exports.createBill = async (req, res, next) => {
+  const { restaurant, code } = req.body
+
   try {
-    let foodRes = await Food.findById(food[0])
-    if (!foodRes)
-      throw new Error('Không hợp lệ')
-
-    const restaurant = foodRes.restaurant
-
-    const bill = await Bill.create({
-      restaurant,
-      user: req.user._id
-    })
-    var total = 0
-
-    for (var index in food) {
-      await BillDetail.create({
-        food: food[index],
-        amount: amount[index],
-        bill: bill._id
-      })
-      var _food = await Food.findById(food[index])
-      total += (amount[index] * _food.price)
-    }
-
-    var rs
+    var bill
     if (code != 'null') {
-      var discountCode = await Discount_code.find({ code })
+      const discountCode = await Discount_code.find({ code })
         .sort({ dateExprite: -1 })
 
       if (!discountCode)
-        throw new Error('Mã giảm giá không tồn tại.')
+        throw new Error('Mã giảm giá không hợp lệ.')
 
-      if (discountCode.restaurant != null)
-        if (discountCode.restaurant != restaurant)
-          throw new Error('Mã giảm giá không hợp lệ')
+      if (discountCode[0].restaurant != null && discountCode[0].restaurant != restaurant)
+        throw new Error('Mã giảm giá không áp dụng cho đơn hàng này.')
 
-      if (discountCode.amount <= 0)
-        throw new Error('Mã giảm giá đã hết.')
+      if (Number(discountCode[0].dateExprite) <= Date.now())
+        throw new Error('Mã giảm giá đã hết hạn sử dụng.')
 
-      if (Number(new Date(discountCode.dateExprite)) <= Date.now())
-        throw new Error('Mã giảm giá đã hết hạn.')
+      if (discountCode[0].amount <= 0)
+        throw new Error('Mã giảm giá đã hết lượt sử dụng.')
 
-      var discountAmount = discountCode.amount - 1
-      rs = await Discount_code.findByIdAndUpdate(discountCode._id, { $set: { amount: discountAmount } })
-      if (!rs)
-        throw new Error('Có lỗi xảy ra.')
+      bill = await Bill.create({
+        restaurant,
+        user: req.user._id,
+        discount_code: discountCode[0]._id
+      })
+    }
+    else
+      bill = await Bill.create({
+        restaurant,
+        user: req.user._id,
+      })
 
-      rs = await Bill.findByIdAndUpdate(bill._id, { $set: { total, code } })
-    } else
-      rs = await Bill.findByIdAndUpdate(bill._id, { $set: { total } })
+    if (!bill)
+      throw new Error('CÓ lỗi xảy ra.')
 
-    if (!rs)
+    return Response.success(res, { bill })
+
+  } catch (error) {
+    console.log(error)
+    return next(error)
+  }
+}
+
+exports.updateBill = async (req, res, next) => {
+  const {
+    bill,
+    food,
+    amount
+  } = req.body
+
+  try {
+    var total = 0
+    var rs
+    const _bill = await Bill.findById(bill)
+    if (!_bill)
       throw new Error('Có lỗi xảy ra.')
 
-    return Response.success(res, { rs })
+    if (_bill.discount_code != null) {
+      var discount_code = await Discount_code.findById(_bill.discount_code)
+      if (!discount_code)
+        throw new Error('Có lỗi xảy ra.')
+
+      var discount_amount = discount_code.amount - 1
+      rs = await Discount_code.findByIdAndUpdate(discount_code._id, { $set: { amount: discount_amount } }, {useFindAndModify:false})
+      if (!rs)
+        throw new Error('Có lỗi xảy ra.')
+    }
+
+    for (var i in food) {
+      var foodItem = await Food.findById(food[i])
+      if (!foodItem)
+        throw new Error('Có lỗi xảy ra.')
+
+      var bill_detail = await BillDetail.create({
+        food: food[i],
+        amount: amount[i],
+        bill
+      })
+      if (!bill_detail)
+        throw new Error('Có lỗi xảy ra.')
+
+      total += (foodItem.price * amount[i])
+    }
+
+    console.log(total)
+    const billUpdate = await Bill.findByIdAndUpdate(bill, { $set: { total } }, {useFindAndModify:false})
+    if (!billUpdate)
+      throw new Error('Có lỗi xảy ra.')
+
+    console.log(billUpdate)
+    return Response.success(res, { message: 'Đặt hàng thành công, vui lòng chờ nhà hàng xác nhận.' })
+
   } catch (error) {
     console.log(error)
     return next(error)
