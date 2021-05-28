@@ -444,13 +444,14 @@ exports.createDiscount = async (req, res, next) => {
 
 exports.getLoyalUserDetail = async (req, res, next) => {
     const user_ID = req.query.user_id
+
     try {
-        let loyal_user = await Loyal_user.findOne({user: user_ID})
-        .populate('user')
-        if(!loyal_user)
+        let loyal_user = await Loyal_user.findOne({ user: user_ID })
+            .populate('user')
+        if (!loyal_user)
             throw new Error('Có lỗi xảy ra.')
-        
-        return Response.success(res, {loyal_user})
+
+        return Response.success(res, { loyal_user })
     } catch (error) {
         console.log(error)
         return next(error)
@@ -463,7 +464,22 @@ exports.getDiscountById = async (req, res, next) => {
         let discount = await Discount_code.findById(discount_id)
         if (!discount)
             throw new Error('Có lỗi xảy ra.')
-        return Response.success(res, {discount})
+        return Response.success(res, { discount })
+    } catch (error) {
+        console.log(error)
+        return next(error)
+    }
+}
+
+exports.getLoyalUserHisTrans = async (req, res, next) => {
+    const user_ID = req.query.user_id
+    const res_ID = req.restaurant.id
+
+    try {
+        let hisTrans = await Bill.find({ restaurant: res_ID, user: user_ID })
+        if (!hisTrans)
+            throw new Error('Có lỗi xảy ra.')
+        return Response.success(res, { hisTrans })
     } catch (error) {
         console.log(error)
         return next(error)

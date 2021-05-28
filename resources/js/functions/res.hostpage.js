@@ -142,7 +142,7 @@ let massPopChart = new Chart(myChart, {
 //food
 function showProductDetail(value) {
   _food_id = value
-  axios.get(GET_PODUCT + value)
+  axios.get(GET_RES_PODUCT_DETAIL + value)
     .then(res => {
       if (res.data.status == 'failed')
         alert(res.data.error.message)
@@ -180,7 +180,7 @@ function editProduct() {
   if (flag_product == 0) {
     //add product
     axios.post(
-      POST_ADD_PRODUCT,
+      POST_RES_ADD_PRODUCT,
       formData,
       {
         headers: { 'Content-Type': 'multipart/form-data' }
@@ -189,7 +189,7 @@ function editProduct() {
       .then(res => {
         if (res.data.status == 'success') {
           alert('Thêm sản phẩm thành công.')
-          window.location = GET_PODUCT_PAGE
+          window.location = GET_RES_PODUCT_PAGE
         }
         alert(res.data.error.message)
 
@@ -200,7 +200,7 @@ function editProduct() {
     //Edit product
     formData.append('food_id', _food_id)
     axios.post(
-      POST_EDIT_PRODUCT,
+      POST_RES_EDIT_PRODUCT,
       formData,
       {
         headers: { 'Content-Type': 'multipart/form-data' }
@@ -209,7 +209,7 @@ function editProduct() {
       .then(res => {
         if (res.data.status == 'success') {
           alert('Cập nhật thành công.')
-          window.location = GET_PODUCT_PAGE
+          window.location = GET_RES_PODUCT_PAGE
         }
         else
           alert(res.data.error.message)
@@ -224,11 +224,11 @@ function editProduct() {
 _list_btn_productDetail[2].onclick = function () {
   var confirm_del = confirm('Xác nhận xóa sản phẩm?')
   if (confirm_del)
-    axios.post(POST_DEL_PRODUCT + _food_id)
+    axios.post(POST_RES_DEL_PRODUCT + _food_id)
       .then(res => {
         if (res.data.status == 'success') {
           alert('Cập nhật thành công.')
-          window.location = GET_PODUCT_PAGE
+          window.location = GET_RES_PODUCT_PAGE
         }
         else
           alert(res.data.error.message)
@@ -443,7 +443,7 @@ function fBillCancle() {
 function show_loyal_cus_detail(value) {
   document.querySelector('#loyal_customer_detail').classList.add(CLASS_SHOW)
   axios.get(
-    GET_RES_GET_LOYAL_USER_DETAIL + value,
+    GET_RES_GET_LOYAL_USER_DETAIL + value,      // loyal user info
   )
     .then(res => {
       if (res.data.status = 'success') {
@@ -464,8 +464,23 @@ function show_loyal_cus_detail(value) {
     })
     .catch(error => alert(error.mesage))
 
+    axios.get(
+      GET_RES_GET_LOYAL_USER_HIS_TRANSACSIONS + value,      // loyal user his trans
+    )
+      .then(res => {
+        if (res.data.status = 'success') {
+          var hisTrans = res.data.data.hisTrans 
+          var inner = hisTrans.map((item)=>`<ul>date: ${new Date(item.dateCreate) } &nbsp;&nbsp;&nbsp;&nbsp; total: ${item.total} </ul>`)
+          _ul_loyal_user_listHisTrans.innerHTML = inner
+        
+        }
+        else
+          alert(res.error.message)
+      })
+      .catch(error => alert(error.mesage))
 
 }
+
 function formLoyal_customer() {
 
 }

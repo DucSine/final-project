@@ -80,6 +80,7 @@ const _i_loyal_user_email = _div_loyalUser.querySelector('#i_loyal_user_email')
 const _p_loyal_user_fullname = _div_loyalUser.querySelector('#p_loyal_user_fullname')
 const _p_loyal_user_phone = _div_loyalUser.querySelector('#p_loyal_user_phone')
 const _p_loyal_user_address = _div_loyalUser.querySelector('#p_loyal_user_address')
+const _ul_loyal_user_listHisTrans = _div_loyalUser.querySelector('#listHisTrans')
 const _list_btn_loyalUser = _div_loyalUser.querySelectorAll('button.btn')
 //
 

@@ -15,7 +15,8 @@ const {
     cancelBill,
     createDiscount,
     getDiscountById,
-    getLoyalUserDetail
+    getLoyalUserDetail,
+    getLoyalUserHisTrans
 } = require('../../controllers/restaurant/res.function.controller')
 const { protect } = require('../../middlewares/restaurant/auth')
 
@@ -80,9 +81,16 @@ router.post('/createDiscount', protect, createDiscount)
 // @access  Public
 router.get('/getLoyalUser', protect, getLoyalUserDetail)
 
+// @route   GET api/res/func/getLoyalUserHisTrans
+// @desc    Xem lịch sử giao dịch
+// @access  Private
+router.get('/getLoyalUserHisTrans', protect, getLoyalUserHisTrans)
+
 // @route   GET api/res/func/getDiscountById
 // @desc    Xem chi tiết mã giảm giá
 // @access  Private
 router.get('/getDiscountById', protect, getDiscountById)
+
+
 
 module.exports = router
