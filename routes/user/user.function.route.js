@@ -18,6 +18,7 @@ const {
     order,
     createBill,
     updateBill,
+    delBillById,
 } = require('../../controllers/user/user.function.controller')
 const { protect } = require('../../middlewares/user/auth')
 
@@ -50,6 +51,12 @@ router.post('/createBill', protect, createBill)
 // @desc    Đặt hàng
 // @access  Private
 router.post('/updateBill', protect, updateBill)
+
+// @route   POST api/user/func/delBillById
+// @desc    Xóa đơn hàng
+// @access  Private
+router.post('/delBillById', protect, delBillById)
+
 
 // @route   GET api/user/func/billDetail?bill_id='????'
 // @desc    Xem chi tiết đơn hàng

@@ -385,7 +385,7 @@ exports.updateBill = async (req, res, next) => {
         throw new Error('Có lỗi xảy ra.')
 
       var discount_amount = discount_code.amount - 1
-      rs = await Discount_code.findByIdAndUpdate(discount_code._id, { $set: { amount: discount_amount } }, {useFindAndModify:false})
+      rs = await Discount_code.findByIdAndUpdate(discount_code._id, { $set: { amount: discount_amount } }, { useFindAndModify: false })
       if (!rs)
         throw new Error('Có lỗi xảy ra.')
     }
@@ -407,13 +407,28 @@ exports.updateBill = async (req, res, next) => {
     }
 
     console.log(total)
-    const billUpdate = await Bill.findByIdAndUpdate(bill, { $set: { total } }, {useFindAndModify:false})
+    const billUpdate = await Bill.findByIdAndUpdate(bill, { $set: { total } }, { useFindAndModify: false })
     if (!billUpdate)
       throw new Error('Có lỗi xảy ra.')
 
     console.log(billUpdate)
     return Response.success(res, { message: 'Đặt hàng thành công, vui lòng chờ nhà hàng xác nhận.' })
 
+  } catch (error) {
+    console.log(error)
+    return next(error)
+  }
+}
+
+exports.delBillById = async (req, res, next) => {
+  const bill_id = req.query.bill_id
+  
+  try {
+    let rs = await Bill.findOneAndDelete({_id: bill_id, status: 'đang xử lý', total: 0})
+    if(!rs)
+      throw new Error('Có lỗi xảy ra.')
+
+    return Response.success(res,{message: 'Xóa thành công'})
   } catch (error) {
     console.log(error)
     return next(error)
