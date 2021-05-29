@@ -368,13 +368,12 @@ exports.createBill = async (req, res, next) => {
 exports.updateBill = async (req, res, next) => {
   const {
     bill,
+    food,
+    amount
   } = req.body
 
-  const food = [...req.query.food]
-  const amount= [...req.query.amount]
-
-  console.log(food)
-  console.log(amount)
+  console.log('f: '+food)
+  console.log('am: '+amount)
   try {
     var total = 0
     var rs
