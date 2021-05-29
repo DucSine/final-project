@@ -1,12 +1,13 @@
-const express = require('express');
-const socketIo = require('socket.io');
+const express = require('express')
+const socketIo = require('socket.io')
 
-const app = express();
-const http = require('http');
+const app = express()
+const http = require('http')
 
 const server = http.createServer(app);
 
-const Restaurant = require('../models/Restaurant');
+const Restaurant = require('../models/Restaurant')
+const User = require('../models/User')
 
 const io = socketIo(server, {
   cors: {
@@ -42,4 +43,4 @@ io.on('connection', (socket) => {
   });
 });
 
-module.exports = { app, server, io };
+module.exports = { app, server, io }

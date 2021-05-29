@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser')
 const cors = require('cors')
 const path = require('path')
 
-const app = express()
+const { app, server } = require('./helpers/handleSocketIo.helper');
 const port = process.env.PORT
 const connectDB = require('./config/db')
 const apiRoute = require('./routes/api.route')
@@ -143,4 +143,4 @@ app.get('/testdate', async(req,res)=>{
   res.send({date})
 })
 ///
-app.listen(port, ()=>console.log(`run with http://localhost:${port}`))
+server.listen(port, ()=>console.log(`run with http://localhost:${port}`))
