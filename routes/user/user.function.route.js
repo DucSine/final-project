@@ -38,7 +38,7 @@ router.post('/updateCart', protect, updateCart)
 // @access  Private
 router.get('/cart', protect, showCart)
 
-// @route   GET api/user/func/removeFoodsInCart
+// @route   POST api/user/func/removeFoodsInCart
 // @desc    Xóa sp khỏi giỏ hàng sau khi tạo bill
 // @access  Private
 router.post('/removeFoodsInCart', protect, removeFoodsInCart)

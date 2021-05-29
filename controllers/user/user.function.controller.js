@@ -372,6 +372,7 @@ exports.updateBill = async (req, res, next) => {
     amount
   } = req.body
 
+  console.log(req.body)
   try {
     var total = 0
     var rs
@@ -452,21 +453,3 @@ exports.removeFoodsInCart = async (req, res, next) => {
   }
 }
 
-exports.getNameProducts = async (req, res, next) => {
-  try {
-    const foods = await Food.find()
-    const am = await Food.find().count()
-    if (!foods)
-      throw new Error('Có lỗi xảy ra.')
-
-    var foodName = []
-    for (var food of foods)
-      foodName.push(food.foodName)
-
-    var foodNameList = [...new Set(foodName)]
-    return Response.success(res, {foodNameList})
-  } catch (error) {
-    console.log(error)
-    return next(error)
-  }
-}
