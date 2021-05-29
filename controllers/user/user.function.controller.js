@@ -370,8 +370,8 @@ exports.updateBill = async (req, res, next) => {
     bill,
   } = req.body
 
-  const food = req.query.food
-  const amount= req.query.amount
+  const food = [...req.query.food]
+  const amount= [...req.query.amount]
 
   console.log(food)
   console.log(amount)
