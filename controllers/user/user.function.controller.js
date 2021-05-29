@@ -414,7 +414,7 @@ exports.updateBill = async (req, res, next) => {
         amount: amount,
         bill
       })
-      
+
       if (!bill_detail)
         throw new Error('Có lỗi xảy ra.')
       
@@ -456,11 +456,18 @@ exports.removeFoodsInCart = async (req, res, next) => {
   const cart_id = req.body.cart_id
 
   try {
-    for (var i in cart_id) {
+    if(typeof cart_id != 'string'){
+      for (var i in cart_id) {
+        var rs = await Cart.findByIdAndDelete(cart_id[i])
+        if (!rs)
+          throw new Error('Có lỗi xảy ra.')
+      }
+    }else{
       var rs = await Cart.findByIdAndDelete(cart_id)
-      if (!rs)
-        throw new Error('Có lỗi xảy ra.')
+        if (!rs)
+          throw new Error('Có lỗi xảy ra.')
     }
+
 
     return Response.success(res, { message: 'Cập nhật thành công.' })
   } catch (error) {

@@ -41,7 +41,7 @@ exports.resHostpage = async (req, res, next) => {
     var curentTransasionTotal = await Bill.find({ restaurant: restaurant._id, status: 'đang xử lý' }).count()
     var curentTransasionPage = Math.ceil(curentTransasionTotal / f_limit)
     var curentTransasion = await Bill.find({ restaurant: restaurant._id, status: 'đang xử lý' })
-        .sort({ dateCreate: -1 })
+        .sort({ _id: -1 })
         .populate('user')
         .skip((page - 1) * f_limit)
         .limit(f_limit)
