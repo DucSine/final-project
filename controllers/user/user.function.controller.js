@@ -416,7 +416,8 @@ exports.updateBill = async (req, res, next) => {
       })
       if (!bill_detail)
         throw new Error('Có lỗi xảy ra.')
-
+      
+      var foodItem = await Food.findById(food)
       total += (foodItem.price * amount)
     }
     
