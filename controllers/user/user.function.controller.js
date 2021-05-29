@@ -374,10 +374,12 @@ exports.updateBill = async (req, res, next) => {
 
   console.log('f: '+ typeof food)
   console.log(amount)
+  console.log(bill)
   try {
     var total = 0
     var rs
     const _bill = await Bill.findById(bill)
+    console.log(_bill)
     if (!_bill)
       throw new Error('Có lỗi xảy ra.')
 
