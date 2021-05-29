@@ -373,7 +373,7 @@ exports.updateBill = async (req, res, next) => {
   } = req.body
 
   console.log('f: '+ typeof food)
-  console.log('am: '+amount)
+  console.log(amount)
   try {
     var total = 0
     var rs
@@ -476,3 +476,4 @@ exports.removeFoodsInCart = async (req, res, next) => {
   }
 }
 
+   
