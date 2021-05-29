@@ -372,7 +372,7 @@ exports.updateBill = async (req, res, next) => {
     amount
   } = req.body
 
-  console.log('f: '+food)
+  console.log('f: '+ typeof food)
   console.log('am: '+amount)
   try {
     var total = 0
