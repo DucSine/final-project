@@ -8,8 +8,14 @@ const {
     findProducts,
     showRate,
     showComment,
-    getRestaurantInfo
+    getRestaurantInfo,
+    getNameProducts,
 } = require('../../controllers/customer/cus.function.controller')
+
+// @route   GET api/cus/getNameProducts
+// @desc    Lấy toàn bộ tên món ăn
+// @access  Public
+router.get('/getNameProducts', getNameProducts)
 
 // @route   GET api/cus/getNewFood
 // @desc    Lấy 5 món mới

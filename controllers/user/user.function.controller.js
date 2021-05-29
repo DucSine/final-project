@@ -445,10 +445,28 @@ exports.removeFoodsInCart = async (req, res, next) => {
         throw new Error('Có lỗi xảy ra.')
     }
 
-    return Response.success(res,{message: 'Cập nhật thành công.'})
+    return Response.success(res, { message: 'Cập nhật thành công.' })
   } catch (error) {
     console.log(error)
     return next(error)
   }
+}
 
+exports.getNameProducts = async (req, res, next) => {
+  try {
+    const foods = await Food.find()
+    const am = await Food.find().count()
+    if (!foods)
+      throw new Error('Có lỗi xảy ra.')
+
+    var foodName = []
+    for (var food of foods)
+      foodName.push(food.foodName)
+
+    var foodNameList = [...new Set(foodName)]
+    return Response.success(res, {foodNameList})
+  } catch (error) {
+    console.log(error)
+    return next(error)
+  }
 }

@@ -5,6 +5,26 @@ const Comment = require('../../models/Comment')
 const Restaurant = require('../../models/Restaurant')
 const limit = 20
 
+//tìm kiếm -lấy tên món
+exports.getNameProducts = async (req, res, next) => {
+  try {
+    const foods = await Food.find()
+    const am = await Food.find().count()
+    if (!foods)
+      throw new Error('Có lỗi xảy ra.')
+
+    var foodName = []
+    for (var food of foods)
+      foodName.push(food.foodName)
+
+    var foodNameList = [...new Set(foodName)]
+    return Response.success(res, {foodNameList})
+  } catch (error) {
+    console.log(error)
+    return next(error)
+  }
+}
+
 //trang chủ -5 món mới nhất
 exports.getNewFood = async(req, res, next)=>{
   try{

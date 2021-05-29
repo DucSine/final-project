@@ -19,6 +19,7 @@ const {
     createBill,
     updateBill,
     delBillById,
+    removeFoodsInCart,
 } = require('../../controllers/user/user.function.controller')
 const { protect } = require('../../middlewares/user/auth')
 
@@ -40,8 +41,7 @@ router.get('/cart', protect, showCart)
 // @route   GET api/user/func/removeFoodsInCart
 // @desc    Xóa sp khỏi giỏ hàng sau khi tạo bill
 // @access  Private
-router.post('/removeFoodsInCart', protect, removeFoodsinCart)
-
+router.post('/removeFoodsInCart', protect, removeFoodsInCart)
 
 // @route   GET api/user/func/getRestaurantById
 // @desc    Xem giỏ hàng
@@ -103,9 +103,5 @@ router.post('/publicDiscount', protect, publicDiscountCode)
 // @desc    Mã giảm giá riêng
 // @access  Private
 router.post('/privateDiscount', protect, privateDiscountCode)
-
-
-//text
-
 
 module.exports = router;
