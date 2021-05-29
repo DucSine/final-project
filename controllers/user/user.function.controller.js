@@ -422,15 +422,33 @@ exports.updateBill = async (req, res, next) => {
 
 exports.delBillById = async (req, res, next) => {
   const bill_id = req.query.bill_id
-  
+
   try {
-    let rs = await Bill.findOneAndDelete({_id: bill_id, status: 'đang xử lý', total: 0})
-    if(!rs)
+    let rs = await Bill.findOneAndDelete({ _id: bill_id, status: 'đang xử lý', total: 0 })
+    if (!rs)
       throw new Error('Có lỗi xảy ra.')
 
-    return Response.success(res,{message: 'Xóa thành công'})
+    return Response.success(res, { message: 'Xóa thành công' })
   } catch (error) {
     console.log(error)
     return next(error)
   }
+}
+
+exports.removeFoodsInCart = async (req, res, next) => {
+  const cart_id = req.body.cart_id
+
+  try {
+    for (var i in cart_id) {
+      var rs = await Cart.findByIdAndDelete(cart_id)
+      if (!rs)
+        throw new Error('Có lỗi xảy ra.')
+    }
+
+    return Response.success(res,{message: 'Cập nhật thành công.'})
+  } catch (error) {
+    console.log(error)
+    return next(error)
+  }
+
 }

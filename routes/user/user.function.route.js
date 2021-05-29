@@ -37,6 +37,12 @@ router.post('/updateCart', protect, updateCart)
 // @access  Private
 router.get('/cart', protect, showCart)
 
+// @route   GET api/user/func/removeFoodsInCart
+// @desc    Xóa sp khỏi giỏ hàng sau khi tạo bill
+// @access  Private
+router.post('/removeFoodsInCart', protect, removeFoodsinCart)
+
+
 // @route   GET api/user/func/getRestaurantById
 // @desc    Xem giỏ hàng
 // @access  Private
