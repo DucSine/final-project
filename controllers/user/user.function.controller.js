@@ -414,6 +414,7 @@ exports.updateBill = async (req, res, next) => {
         amount: amount,
         bill
       })
+      
       if (!bill_detail)
         throw new Error('Có lỗi xảy ra.')
       
