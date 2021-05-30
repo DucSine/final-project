@@ -65,6 +65,9 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  OTP: {
+    type: String,
+  }
 });
 
 module.exports = mongoose.model('User', UserSchema, 'users');
