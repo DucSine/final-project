@@ -29,7 +29,7 @@ const UserSchema = new mongoose.Schema({
 
   avatar: {
     type: String,
-    default: 'none',
+    default: 'https://res.cloudinary.com/ducsine/image/upload/v1620808216/iv2rjt6cm5b2mueqkmfq.jpg',
   },
 
   ID: {

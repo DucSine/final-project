@@ -355,7 +355,7 @@ exports.createBill = async (req, res, next) => {
       })
 
     if (!bill)
-      throw new Error('CÓ lỗi xảy ra.')
+      throw new Error('Có lỗi xảy ra.')
 
     return Response.success(res, { bill })
 
