@@ -67,6 +67,9 @@ const UserSchema = new mongoose.Schema({
   },
   OTP: {
     type: String,
+  },
+  otpExpire: {
+    type: Date
   }
 });
 

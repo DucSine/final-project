@@ -221,7 +221,7 @@ exports.rate = async (req, res, next) => {
     if (_rate)  // Đã đánh giá sp
       throw new Error('Có lỗi xảy ra!')
 
-    const star = Math.ceil(Number(rate))
+    var star = Math.ceil(Number(rate))
     if (star > 5 && star < 0)
       throw new Error('Có lỗi xảy ra!')
 
@@ -233,7 +233,7 @@ exports.rate = async (req, res, next) => {
 
     /// tính rate trung bình, cập nhật rate tring food
     const rate_amount = await Star.find({ food: foodID }).count()
-    const rate_sum = 0
+    var rate_sum = 0
     _rate = await Star.find({ food: foodID })
     for (var i = 0; i < rate_amount; i++)
       rate_sum += Number(_rate[i].rate)

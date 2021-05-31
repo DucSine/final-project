@@ -407,32 +407,56 @@ function fBillCancle() {
   }
   else {
     var reason = prompt('Lý do hủy đơn')
-
-    while (true) {
-      if (reason == '' || reason == null) {
-        alert('Vui lòng nêu lý do hủy đơn')
-        reason = prompt('Lý do hủy đơn')
-      } else {
-        axios.post(POST_RES_CANCEL_BILL,
-          {
-            bill_id: _b_billId.innerText.trim(),
-            message: reason
+    console.log(reason =='')
+    console.log(reason == null)
+    if (reason == '' || reason == null)
+      alert('Vui lòng nêu lý do hủy đơn')
+    else {
+      console.log(reason)
+      axios.post(POST_RES_CANCEL_BILL,
+        {
+          bill_id: _b_billId.innerText.trim(),
+          message: reason
+        }
+      ) // lỗi
+        .then(res => {
+          if (res.data.status == 'success') {
+            alert('Cập nhật thành công.')
+            _div_billDetail.classList.remove(CLASS_SHOW)
+            location.reload()
           }
-        ) // lỗi
-          .then(res => {
-            if (res.data.status == 'success') {
-              alert('Cập nhật thành công.')
-              _div_billDetail.classList.remove(CLASS_SHOW)
-              location.reload()
-            }
-            else
-              alert(res.data.error.message)
+          else
+            alert(res.data.error.message)
 
-          })
-          .catch(error => alert(error.mesage))
-        break
-      }
+        })
+        .catch(error => alert(error.mesage))
     }
+    /*
+        while (true) {
+          if (reason == '' || reason == null) {
+            alert('Vui lòng nêu lý do hủy đơn')
+            reason = prompt('Lý do hủy đơn')
+          } else {
+            axios.post(POST_RES_CANCEL_BILL,
+              {
+                bill_id: _b_billId.innerText.trim(),
+                message: reason
+              }
+            ) // lỗi
+              .then(res => {
+                if (res.data.status == 'success') {
+                  alert('Cập nhật thành công.')
+                  _div_billDetail.classList.remove(CLASS_SHOW)
+                  location.reload()
+                }
+                else
+                  alert(res.data.error.message)
+    
+              })
+              .catch(error => alert(error.mesage))
+            break
+          }
+        }*/
 
   }
 
@@ -464,20 +488,20 @@ function show_loyal_cus_detail(value) {
     })
     .catch(error => alert(error.mesage))
 
-    axios.get(
-      GET_RES_GET_LOYAL_USER_HIS_TRANSACSIONS + value,      // loyal user his trans
-    )
-      .then(res => {
-        if (res.data.status = 'success') {
-          var hisTrans = res.data.data.hisTrans 
-          var inner = hisTrans.map((item)=>`<ul>date: ${new Date(item.dateCreate) } &nbsp;&nbsp;&nbsp;&nbsp; total: ${item.total} </ul>`)
-          _ul_loyal_user_listHisTrans.innerHTML = inner
-        
-        }
-        else
-          alert(res.error.message)
-      })
-      .catch(error => alert(error.mesage))
+  axios.get(
+    GET_RES_GET_LOYAL_USER_HIS_TRANSACSIONS + value,      // loyal user his trans
+  )
+    .then(res => {
+      if (res.data.status = 'success') {
+        var hisTrans = res.data.data.hisTrans
+        var inner = hisTrans.map((item) => `<ul>date: ${new Date(item.dateCreate)} &nbsp;&nbsp;&nbsp;&nbsp; total: ${item.total} </ul>`)
+        _ul_loyal_user_listHisTrans.innerHTML = inner
+
+      }
+      else
+        alert(res.error.message)
+    })
+    .catch(error => alert(error.mesage))
 
 }
 
@@ -553,3 +577,8 @@ function set_btn_direct_food() {
   else
     _btn_pre.disabled = false
 }
+
+
+
+var socket = io('http://localhost:3000')
+console.log(socket)
