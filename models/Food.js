@@ -27,7 +27,7 @@ const FoodSchema = new mongoose.Schema({
     default: 0
   },
   rate: {
-    type: Float64Array,
+    type: Number,
     default: 0
   },
   dateCreate: {

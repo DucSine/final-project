@@ -245,7 +245,7 @@ exports.rate = async (req, res, next) => {
 
     const rate_avg = (rate_sum / rate_amount).toFixed(1)
     console.log('avg: ' + rate_avg)
-    await Food.findByIdAndUpdate(food._id, { $set: { rate: rate_avg } })
+    await Food.findByIdAndUpdate(foodID, { $set: { rate: rate_avg } })
 
     return Response.success(res, { message: 'Đánh giá thành công' })
   } catch (error) {
