@@ -143,11 +143,11 @@ exports.showRate = async(req, res, next)=>{
     const rate = {
       avg: food.rate,
       total,
-      percent_vote_1: (vote_1/total).toFixed(1),
+      percent_vote_1: Number((vote_1/total).toFixed(1)),
       percent_vote_2: (vote_2/total).toFixed(1),
       percent_vote_3: (vote_3/total).toFixed(1),
       percent_vote_4: (vote_4/total).toFixed(1),
-      percent_vote_5: (vote_5/total).toFixed(1)
+      percent_vote_5: Number((vote_5/total).toFixed(1))
     }
   
   return Response.success(res, {rate})
