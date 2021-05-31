@@ -139,8 +139,10 @@ exports.showRate = async(req, res, next)=>{
     const vote_3 = await Star.find({ food: food._id, rate: 3 }).count()      
     const vote_4 = await Star.find({ food: food._id, rate: 4 }).count()
     const vote_5 = await Star.find({ food: food._id, rate: 5 }).count()
+    const total = await Star.find({ food: food._id }).count()
     const rate = {
       avg: food.rate,
+      total,
       vote_1,
       vote_2,
       vote_3,
