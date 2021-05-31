@@ -235,10 +235,16 @@ exports.rate = async (req, res, next) => {
     const rate_amount = await Star.find({ food: foodID }).count()
     var rate_sum = 0
     _rate = await Star.find({ food: foodID })
-    for (var i = 0; i < rate_amount; i++)
+
+
+    for (var i = 0; i < rate_amount; i++){
       rate_sum += Number(_rate[i].rate)
+      console.log('item: ' + _rate[i])
+    }
+    console.log('sum: ' + rate_sum)
 
     const rate_avg = (rate_sum / rate_amount).toFixed(1)
+    console.log('avg: ' + rate_avg)
     await Food.findByIdAndUpdate(food._id, { $set: { rate: rate_avg } })
 
     return Response.success(res, { message: 'Đánh giá thành công' })
