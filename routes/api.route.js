@@ -4,7 +4,8 @@ const router = express.Router()
 const handleError = require('../helpers/handleError.helper')
 const{
     checkEmail,
-    resAuthToken 
+    resAuthToken, 
+    billComplete
 } = require('../controllers/general.controller')
 
 
@@ -13,6 +14,8 @@ router.use(handleError)
 
 router.use('/cus', require('./cus.route'))
 router.use(handleError)
+
+router.post('/shipper/billComplete', billComplete)
 
 router.use('/res', require('./restaurant.route'))
 router.use(handleError)
