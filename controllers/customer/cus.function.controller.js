@@ -133,7 +133,8 @@ exports.showRate = async(req, res, next)=>{
     let food = await Food.findById(foodID)
     if(!food)
       throw new Error('Có lỗi xảy ra!')
-      
+    
+    const sumRate = await Star.find({ food: food._id }).count()
     const vote_1 = await Star.find({ food: food._id, rate: 1 }).count()
     const vote_2 = await Star.find({ food: food._id, rate: 2 }).count()
     const vote_3 = await Star.find({ food: food._id, rate: 3 }).count()      
@@ -141,6 +142,7 @@ exports.showRate = async(req, res, next)=>{
     const vote_5 = await Star.find({ food: food._id, rate: 5 }).count()
     const rate = {
       avg: food.rate,
+      tottal: sumRate,
       vote_1,
       vote_2,
       vote_3,
