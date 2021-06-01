@@ -431,37 +431,9 @@ function fBillCancle() {
         })
         .catch(error => alert(error.mesage))
     }
-    /*
-        while (true) {
-          if (reason == '' || reason == null) {
-            alert('Vui lòng nêu lý do hủy đơn')
-            reason = prompt('Lý do hủy đơn')
-          } else {
-            axios.post(POST_RES_CANCEL_BILL,
-              {
-                bill_id: _b_billId.innerText.trim(),
-                message: reason
-              }
-            ) // lỗi
-              .then(res => {
-                if (res.data.status == 'success') {
-                  alert('Cập nhật thành công.')
-                  _div_billDetail.classList.remove(CLASS_SHOW)
-                  location.reload()
-                }
-                else
-                  alert(res.data.error.message)
-    
-              })
-              .catch(error => alert(error.mesage))
-            break
-          }
-        }*/
-
   }
 
 }
-
 
 //discount
 function show_loyal_cus_detail(value) {
@@ -494,9 +466,8 @@ function show_loyal_cus_detail(value) {
     .then(res => {
       if (res.data.status = 'success') {
         var hisTrans = res.data.data.hisTrans
-        var inner = hisTrans.map((item) => `<ul>date: ${new Date(item.dateCreate)} &nbsp;&nbsp;&nbsp;&nbsp; total: ${item.total} </ul>`)
-        _ul_loyal_user_listHisTrans.innerHTML = inner
-
+        var inner = hisTrans.map((item) => `<ul><label>date: ${new Date(item.dateCreate)}</label> <label style="padding-left:50px">total: ${item.total}</label> </ul>`)
+        _ul_loyal_user_listHisTrans.innerHTML = inner.join(' ')
       }
       else
         alert(res.error.message)
@@ -514,7 +485,6 @@ function show_div_createDiscount() {
 }
 
 function fCreateDiscount() {
-
   axios.post(
     POST_RES_CREATE_DISCOUNT_CODE,
     {
@@ -578,7 +548,3 @@ function set_btn_direct_food() {
     _btn_pre.disabled = false
 }
 
-
-
-var socket = io('http://localhost:3000')
-console.log(socket)

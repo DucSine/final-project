@@ -8,6 +8,7 @@ const server = http.createServer(app);
 
 const Restaurant = require('../models/Restaurant')
 const User = require('../models/User')
+const {decodeAuthToken} = require('../config/general')
 
 const io = socketIo(server, {
   cors: {
@@ -18,7 +19,15 @@ const io = socketIo(server, {
 
 io.on('connection', (socket) => {
   console.log('Has connection');
+  var restaurant_id 
+  socket.on('restaurantToken',(data)=>{
+    console.log(data)
+    var decode = decodeAuthToken(data)
+    restaurant_id = decode.restaurant.id
+    console.log(restaurant_id)
+  })
 
+  
   socket.on(
     'restaurantManagerJoin',
     async ({ restaurantManagerId }, callback) => {
@@ -26,6 +35,7 @@ io.on('connection', (socket) => {
         const restaurant = await Restaurant.findById(restaurantManagerId);
         if (!restaurant) throw new Error('Có lỗi xảy ra');
         console.log(`RestaurantManager joined ${restaurantManagerId}`);
+        console.log(socket)
         return socket.join(restaurantManagerId);
       } catch (error) {
         console.log(error);

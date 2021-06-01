@@ -467,7 +467,8 @@ block content
       .container 
         hr
         h4.text-primary Lịch sửa giao dịch
-        ul#listHisTrans.text-primary
+        div(style="overflow:scroll; height:200px")
+          ul#listHisTrans.text-primary
         
       .form-group(style='padding-left: 48px; padding-right: 48px;')
           span
@@ -475,6 +476,5 @@ block content
           span(style='float: right')
             button.btn.btn-danger(type='button' onclick='hideFormLoyalUser()') Thoát 
       .container(style='background-color:#f1f1f1')
-  script(src='socket.io/socket.io.js')
   script(src='../../js/controller/res.hostpage.js')
   script(src='../../js/functions/res.hostpage.js')
