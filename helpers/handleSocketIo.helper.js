@@ -12,7 +12,7 @@ const {decodeAuthToken} = require('../config/general')
 
 const io = socketIo(server, {
   cors: {
-    origin: `http://kltn-foodoffer.herokuapp.com`,
+    origin: `http://localhost:${process.env.PORT}`,
     methods: ['GET', 'POST'],
   },
 });
