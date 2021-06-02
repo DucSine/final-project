@@ -392,8 +392,8 @@ exports.updateBill = async (req, res, next) => {
       throw new Error('Có lỗi xảy ra.')
 
     const _bill_detail = await BillDetail.find({ bill })
-    console.log(_bill_detail == [])
-    if (_bill_detail)
+    
+    if (_bill_detail.length != 0)
       throw new Error('Bill không thể chỉnh sửa.')
 
     if (_bill.discount_code != null) {
