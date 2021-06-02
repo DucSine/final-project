@@ -1,4 +1,4 @@
-const socket = io('http://localhost:3000')
+const socket = io(`http://localhost:${process.env.PORT}`)
 //form iconlogin
 const _img_Avatar = document.querySelector('img.avatar')
 const _div_userContainer = document.querySelector('div.user-container')
