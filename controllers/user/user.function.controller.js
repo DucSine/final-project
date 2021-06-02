@@ -237,11 +237,11 @@ exports.rate = async (req, res, next) => {
     var rate_sum = 0
     _rate = await Star.find({ food: foodID })
 
-    for (var i = 0; i < rate_amount; i++){
+    for (var i = 0; i < rate_amount; i++) {
       rate_sum += Number(_rate[i].rate)
       console.log('item: ' + _rate[i])
     }
-    
+
     const rate_avg = (rate_sum / rate_amount).toFixed(1)
 
     await Food.findByIdAndUpdate(foodID, { $set: { rate: rate_avg } })
@@ -333,7 +333,7 @@ exports.createBill = async (req, res, next) => {
   try {
     const _res = await Restaurant.findById(restaurant)
     if (!_res)
-    throw new Error('Có lỗi xảy ra.')
+      throw new Error('Có lỗi xảy ra.')
     console.log(_res)
 
     var bill
@@ -383,7 +383,7 @@ exports.updateBill = async (req, res, next) => {
     amount
   } = req.body
 
-  console.log('f: '+ typeof food)
+  console.log('f: ' + typeof food)
   console.log(amount)
   console.log(bill)
   try {
@@ -393,6 +393,10 @@ exports.updateBill = async (req, res, next) => {
     console.log(_bill)
     if (!_bill)
       throw new Error('Có lỗi xảy ra.')
+
+    const _bill_detail = await BillDetail.find({ bill })
+    if (_bill_detail)
+      throw new Error('Bill không thể chỉnh sửa.')
 
     if (_bill.discount_code != null) {
       var discount_code = await Discount_code.findById(_bill.discount_code)
@@ -405,12 +409,12 @@ exports.updateBill = async (req, res, next) => {
         throw new Error('Có lỗi xảy ra.')
     }
 
-    if( typeof food != 'string'){
+    if (typeof food != 'string') {
       for (var i in food) {
         var foodItem = await Food.findById(food[i])
         if (!foodItem)
           throw new Error('Có lỗi xảy ra.')
-  
+
         var bill_detail = await BillDetail.create({
           food: food[i],
           amount: amount[i],
@@ -418,10 +422,10 @@ exports.updateBill = async (req, res, next) => {
         })
         if (!bill_detail)
           throw new Error('Có lỗi xảy ra.')
-  
+
         total += (foodItem.price * amount[i])
       }
-    }else{
+    } else {
       var bill_detail = await BillDetail.create({
         food: food,
         amount: amount,
@@ -430,11 +434,11 @@ exports.updateBill = async (req, res, next) => {
 
       if (!bill_detail)
         throw new Error('Có lỗi xảy ra.')
-      
+
       var foodItem = await Food.findById(food)
       total += (foodItem.price * amount)
     }
-    
+
 
     console.log(total)
     const billUpdate = await Bill.findByIdAndUpdate(bill, { $set: { total } }, { useFindAndModify: false })
@@ -472,16 +476,16 @@ exports.removeFoodsInCart = async (req, res, next) => {
   const cart_id = req.body.cart_id
 
   try {
-    if(typeof cart_id != 'string'){
+    if (typeof cart_id != 'string') {
       for (var i in cart_id) {
         var rs = await Cart.findByIdAndDelete(cart_id[i])
         if (!rs)
           throw new Error('Có lỗi xảy ra.')
       }
-    }else{
+    } else {
       var rs = await Cart.findByIdAndDelete(cart_id)
-        if (!rs)
-          throw new Error('Có lỗi xảy ra.')
+      if (!rs)
+        throw new Error('Có lỗi xảy ra.')
     }
 
 
@@ -492,4 +496,3 @@ exports.removeFoodsInCart = async (req, res, next) => {
   }
 }
 
-   
