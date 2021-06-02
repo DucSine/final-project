@@ -272,7 +272,7 @@ function getCookie(cname) {
     return "";
 }
 
-socket.emit('restaurantManagerJoin', {restaurantManagerId:'607c36edbd7802173cd7deb4'})
+socket.emit('ResManagementJoin', {token: getCookie('token')})
 socket.on('billMessage', (data)=> alert(data))
 console.log(socket)
 

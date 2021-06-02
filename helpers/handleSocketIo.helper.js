@@ -19,13 +19,25 @@ const io = socketIo(server, {
 
 io.on('connection', (socket) => {
   console.log('Has connection');
-  var restaurant_id 
-  socket.on('restaurantToken',(data)=>{
-    console.log(data)
-    var decode = decodeAuthToken(data)
-    restaurant_id = decode.restaurant.id
-    console.log(restaurant_id)
-  })
+
+  socket.on(
+    'ResManagementJoin',
+    async ({ token }, callback) => {
+      try {
+        var decode = decodeAuthToken(token)
+        var restaurantManagerId = decode.restaurant.id
+
+        const restaurant = await Restaurant.findById(restaurantManagerId)
+        if (!restaurant) throw new Error('Có lỗi xảy ra')
+        console.log(`RestaurantManager joined ${restaurantManagerId}`)
+
+        return socket.join(restaurantManagerId)
+      } catch (error) {
+        console.log(error)
+        return callback(error.message)
+      }
+    },
+  );
 
   socket.on(
     'restaurantManagerJoin',
@@ -34,7 +46,6 @@ io.on('connection', (socket) => {
         const restaurant = await Restaurant.findById(restaurantManagerId);
         if (!restaurant) throw new Error('Có lỗi xảy ra');
         console.log(`RestaurantManager joined ${restaurantManagerId}`);
-        console.log(socket)
         return socket.join(restaurantManagerId);
       } catch (error) {
         console.log(error);
