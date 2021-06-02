@@ -44,7 +44,7 @@ io.on('connection', (socket) => {
     async ({ token }, callback) => {
       try {
         var decode = decodeAuthToken(token)
-        console.log(decode)
+        console.log('decode:'+ decode)
         var userId = decode.user.id
 
         const user = await User.findById(userId)
