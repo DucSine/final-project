@@ -354,6 +354,10 @@ exports.confirmBill = async (req, res, next) => {
         if (!rs)
             throw new Error('Có lỗi xảy ra.')
 
+        io.to(bill.user.toString()).emit(
+            'billMessage',
+            `Đơn hàng: ${bill._id} Đã được xác nhận.`,
+        )
         return Response.success(res, { mesage: 'Cập nhật thành công.' })
     } catch (error) {
         console.log(error)

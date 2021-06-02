@@ -40,16 +40,20 @@ io.on('connection', (socket) => {
   );
 
   socket.on(
-    'restaurantManagerJoin',
-    async ({ restaurantManagerId }, callback) => {
+    'UserJoin',
+    async ({ token }, callback) => {
       try {
-        const restaurant = await Restaurant.findById(restaurantManagerId);
-        if (!restaurant) throw new Error('Có lỗi xảy ra');
-        console.log(`RestaurantManager joined ${restaurantManagerId}`);
-        return socket.join(restaurantManagerId);
+        var decode = decodeAuthToken(token)
+        var userId = decode.user.id
+
+        const user = await User.findById(userId)
+        if (!user) throw new Error('Có lỗi xảy ra')
+        console.log(`User joined ${userId}`)
+
+        return socket.join(userId)
       } catch (error) {
-        console.log(error);
-        return callback(error.message);
+        console.log(error)
+        return callback(error.message)
       }
     },
   );
