@@ -443,7 +443,7 @@ exports.updateBill = async (req, res, next) => {
     if (!billUpdate)
       throw new Error('Có lỗi xảy ra.')
 
-    const totalMail = await Bill.find({restaurant:req.restaurant.id, status:'đang xử lý'}).count()
+    const totalMail = await Bill.find({restaurant: _bill.restaurant, status:'đang xử lý'}).count()
     console.log(totalMail)
     io.to(_bill.restaurant.toString()).emit(
       'billMessage',
