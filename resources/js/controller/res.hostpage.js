@@ -273,7 +273,11 @@ function getCookie(cname) {
 }
 
 socket.emit('ResManagementJoin', {token: getCookie('token')})
-socket.on('billMessage', (data)=> alert(data))
+socket.on('billMessage', (data)=> {
+    //document.querySelector('span.badge').innerText = data.total
+    //alert(data.message)
+    console.log(data)
+})
 console.log(socket)
 
 
