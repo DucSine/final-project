@@ -383,9 +383,6 @@ exports.updateBill = async (req, res, next) => {
     amount
   } = req.body
 
-  console.log('f: ' + typeof food)
-  console.log(amount)
-  console.log(bill)
   try {
     var total = 0
     var rs
@@ -395,7 +392,7 @@ exports.updateBill = async (req, res, next) => {
       throw new Error('Có lỗi xảy ra.')
 
     const _bill_detail = await BillDetail.find({ bill })
-    console.log(_bill_detail)
+    console.log(_bill_detail == [])
     if (_bill_detail)
       throw new Error('Bill không thể chỉnh sửa.')
 
