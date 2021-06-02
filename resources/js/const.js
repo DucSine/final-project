@@ -1,5 +1,3 @@
-const socket = io('http://localhost:3000')
-
 // init key style
 const NONE = 'none'
 const INLINE = 'inline'

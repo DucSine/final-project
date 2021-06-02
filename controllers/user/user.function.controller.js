@@ -3,6 +3,7 @@ const fs = require('fs-promise')
 const cloudinary = require('../../config/cloudinaryConfig')
 const Food = require('../../models/Food')
 
+const { io } = require('../../helpers/handleSocketIo.helper')
 const Response = require('../../helpers/response.helper')
 const { Error } = require('mongoose')
 
@@ -327,10 +328,16 @@ exports.comment = async (req, res, next) => {
 
 exports.createBill = async (req, res, next) => {
   const { restaurant, code } = req.body
+  console.log(req.body)
 
   try {
+    const _res = await Restaurant.findById(restaurant)
+    if (!_res)
+    throw new Error('Có lỗi xảy ra.')
+    console.log(_res)
+
     var bill
-    if (code != 'null') {
+    if (code != null) {
       const discountCode = await Discount_code.find({ code })
         .sort({ dateExprite: -1 })
 
@@ -347,14 +354,14 @@ exports.createBill = async (req, res, next) => {
         throw new Error('Mã giảm giá đã hết lượt sử dụng.')
 
       bill = await Bill.create({
-        restaurant,
+        restaurant: _res._id,
         user: req.user._id,
         discount_code: discountCode[0]._id
       })
     }
     else
       bill = await Bill.create({
-        restaurant,
+        restaurant: _res._id,
         user: req.user._id,
       })
 
@@ -434,7 +441,10 @@ exports.updateBill = async (req, res, next) => {
     if (!billUpdate)
       throw new Error('Có lỗi xảy ra.')
 
-    console.log(billUpdate)
+    io.to(_bill.restaurant.toString()).emit(
+      'billMessage',
+      'Có yêu cầu từ khách hàng, check hóa đơn!',
+    )
     return Response.success(res, { message: 'Đặt hàng thành công, vui lòng chờ nhà hàng xác nhận.' })
 
   } catch (error) {

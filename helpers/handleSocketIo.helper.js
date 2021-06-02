@@ -12,7 +12,7 @@ const {decodeAuthToken} = require('../config/general')
 
 const io = socketIo(server, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: `http://localhost:${process.env.PORT}`,
     methods: ['GET', 'POST'],
   },
 });
@@ -27,7 +27,6 @@ io.on('connection', (socket) => {
     console.log(restaurant_id)
   })
 
-  
   socket.on(
     'restaurantManagerJoin',
     async ({ restaurantManagerId }, callback) => {

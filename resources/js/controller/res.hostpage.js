@@ -1,3 +1,4 @@
+const socket = io('http://localhost:3000')
 //form iconlogin
 const _img_Avatar = document.querySelector('img.avatar')
 const _div_userContainer = document.querySelector('div.user-container')
@@ -255,7 +256,24 @@ function initPageFunctions(tagA, tagDiv, status) {
 
 
 
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length,c.length);
+        }
+    }
+    return "";
+}
 
+socket.emit('restaurantManagerJoin', {restaurantManagerId:'607c36edbd7802173cd7deb4'})
+socket.on('billMessage', (data)=> alert(data))
+console.log(socket)
 
 
 

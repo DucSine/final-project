@@ -17,11 +17,8 @@ function login() {
         }
     )
         .then(res => {
-            if(res.data.status == 'success'){
-                socket.emit('restaurantToken', getCookie('token'))
+            if(res.data.status == 'success')
                 window.location = GET_RES_HOST_PAGE
-            }
-                
             else alert(res.data.error.message)
         })
         .catch(error => alert(console.error()))
@@ -79,19 +76,3 @@ function fogotPassword() {
     return false
 }
 
-function getCookie(cname) {
-    var name = cname + "=";
-    var ca = document.cookie.split(';');
-    for(var i = 0; i <ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length,c.length);
-        }
-    }
-    return "";
-}
-
-console.log(socket)
