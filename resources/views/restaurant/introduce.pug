@@ -6,7 +6,7 @@ block header
     a.navbar-brand(href='/res/hostpage')
       img(src='https://res.cloudinary.com/ducsine/image/upload/v1619047971/logo.png' width='200px' height='100px')
     .div-inline(style='padding-right: 32px')
-      button#btn_login.btn.btn-primary(type='button' onclick="document.getElementById('login_dialog').style.display='block'" style='width:auto;') Login
+      button#btn_login.btn.btn-login(type='button' onclick="document.getElementById('login_dialog').style.display='block'" style='width:auto;') Login
 
   #login_dialog.modal.login-modal
     form.modal-content.login-modal-content.animate( onsubmit='return login()' method='post')
@@ -112,6 +112,9 @@ block header
   script(src='../../js/functions/res.introduce.js')
 
 block body
-  sdafsaddsagv
+  div.bg-primary(style="width:100vw; height:70vh; background-color: color-primary")
+  .row
+    .col-sm-6(style="background-color:yellow;") 50%
+    .col-sm-6(style="background-color:orange;") 50%
 
     

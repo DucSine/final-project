@@ -8,6 +8,11 @@
   width: 40%; /* Could be more or less, depending on screen size */
 }
   
+.btn-login{
+  background-color: blue;
+  color: white;
+}
+
 .register-modal{
   position: fixed  ; /* Stay in place */
   overflow: scroll;
