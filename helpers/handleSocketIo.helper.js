@@ -41,15 +41,16 @@ io.on('connection', (socket) => {
 
   socket.on(
     'UserJoin',
-    async ({ token }, callback) => {
+    async ( token , callback) => {
       try {
-        var decode = decodeAuthToken(token)
-        console.log('decode:'+ decode)
-        var userId = decode.user.id
+        console.log(token)
+        //var decode = decodeAuthToken(token)
+        //console.log('decode:'+ decode)
+        //var userId = decode.user.id
 
-        const user = await User.findById(userId)
-        if (!user) throw new Error('Có lỗi xảy ra')
-        console.log(`User joined ${userId}`)
+        //const user = await User.findById(userId)
+        //if (!user) throw new Error('Có lỗi xảy ra')
+        //console.log(`User joined ${userId}`)
 
         return socket.join(userId)
       } catch (error) {
