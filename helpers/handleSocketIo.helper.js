@@ -41,7 +41,7 @@ io.on('connection', (socket) => {
 
   socket.on(
     'UserJoin',
-    async ( token , callback) => {
+    async ( {token} , callback) => {
       try {
         console.log(token)
         //var decode = decodeAuthToken(token)
