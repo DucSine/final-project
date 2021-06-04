@@ -30,7 +30,7 @@ io.on('connection', (socket) => {
         const restaurant = await Restaurant.findById(restaurantManagerId)
         if (!restaurant) throw new Error('Có lỗi xảy ra')
         console.log(`RestaurantManager joined ${restaurantManagerId}`)
-
+        console.log('log id:' + socket.id)
         return socket.join(restaurantManagerId)
       } catch (error) {
         console.log(error)
