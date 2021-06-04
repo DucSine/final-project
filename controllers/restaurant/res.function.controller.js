@@ -4,7 +4,7 @@ const fs = require('fs-promise')
 
 //upload file
 const cloudinary = require('../../config/cloudinaryConfig')
-
+const {io} = require('../../helpers/handleSocketIo.helper')
 //validate
 const { validationResult } = require('express-validator')
 // Models
