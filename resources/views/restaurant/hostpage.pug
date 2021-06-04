@@ -336,7 +336,21 @@ block content
                         b #{row.point}  
         
       #discount.container.tab-pane.fade
-        |SDF 
+        div(style)
+          ul#listProduct(style='list-style:none; padding:30px')
+            each row in loyal_user 
+              li(onclick='show_loyal_cus_detail(this.querySelector("p.usId").textContent)')
+                p.usId(style='display:none') #{row.user._id}
+                .media.border.p-1
+                  img.mr-3.mt-3.avatar(src=row.user.avatar)
+                  .media-body
+                    div(style='padding-top:20px')
+                      label(style="font-size: x-large;")
+                        b #{row.user.username}
+                    div
+                      label
+                        b Điểm tích lũy: 
+                        b #{row.point}  
 
       #hisDiscount.container.tab-pane.fade
 

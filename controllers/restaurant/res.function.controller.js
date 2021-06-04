@@ -74,6 +74,13 @@ exports.resHostpage = async (req, res, next) => {
     var loyal_user = await Loyal_user.find({ restaurant: restaurant._id })
         .sort({ point: -1 })
         .populate('user')
+
+    var discount_code = await Discount_code.find({restaurant: restaurant._id})
+    var code = []
+    var expired_code = []
+    // for (let item of discount_code){
+    //     if((item.dateExprite))
+    // }
     //final
     if (keySearch) {
         switch (load) {
