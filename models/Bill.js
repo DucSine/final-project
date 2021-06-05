@@ -22,8 +22,8 @@ const BillSchema = new mongoose.Schema({
     default: null
   },
   dateCreate: {
-    type: Number,
-    default: Number(Date.now()),
+    type: Date,
+    default: Date.now(),
   },
   total:{
     type: Number,
