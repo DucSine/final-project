@@ -337,7 +337,7 @@ exports.createBill = async (req, res, next) => {
     console.log(_res)
 
     var bill
-    if (code != null) {
+    if (code != null && code != '') {
       const discountCode = await Discount_code.find({ code })
         .sort({ dateExprite: -1 })
 
@@ -392,7 +392,7 @@ exports.updateBill = async (req, res, next) => {
       throw new Error('Có lỗi xảy ra.')
 
     const _bill_detail = await BillDetail.find({ bill })
-    
+
     if (_bill_detail.length != 0)
       throw new Error('Bill không thể chỉnh sửa.')
 
@@ -443,7 +443,7 @@ exports.updateBill = async (req, res, next) => {
     if (!billUpdate)
       throw new Error('Có lỗi xảy ra.')
 
-    const totalMail = await Bill.find({restaurant: _bill.restaurant, status:'đang xử lý'}).count()
+    const totalMail = await Bill.find({ restaurant: _bill.restaurant, status: 'đang xử lý' }).count()
     console.log(totalMail)
     io.to(_bill.restaurant.toString()).emit(
       'billMessage',
@@ -499,3 +499,6 @@ exports.removeFoodsInCart = async (req, res, next) => {
   }
 }
 
+exports.orders = async (req, res, next) => {
+  
+}
