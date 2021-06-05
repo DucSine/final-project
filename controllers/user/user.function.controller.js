@@ -520,7 +520,11 @@ exports.notifications = async (req, res, next) => {
     if (!notifications_list)
       throw new Error('Có lỗi xảy ra.')
     const total = await Messages.find({ object: req.user.id }).count()
+    if (!total)
+      throw new Error('Có lỗi xảy ra.')
     const not_watched = await Messages.find({ object: req.user.id, isWatched: false }).count()
+    if (!not_watched)
+      throw new Error('Có lỗi xảy ra.')
 
     return Response.success(res, { notifications_list, total, not_watched })
   } catch (error) {
