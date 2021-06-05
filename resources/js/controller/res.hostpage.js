@@ -112,8 +112,6 @@ if (query != '') {
 var _charsSearch = ''
 _ip_search.oninput = function () {
     _charsSearch = this.value
-    socket.emit('foodSearch', _charsSearch)
-    location.reload()
 }
 
 // init page

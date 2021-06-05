@@ -82,48 +82,40 @@ exports.resHostpage = async (req, res, next) => {
     //     if((item.dateExprite))
     // }
     //final
-    // if (keySearch) {
-    //     switch (load) {
-    //         case 'product':
-    //             foodTotal = await Food.find({ restaurant: restaurant._id, foodName: new RegExp(keySearch, 'i') }).count()
-    //             fPageTotal = Math.ceil(foodTotal / f_limit)
-    //             foods = await Food.find({ restaurant: restaurant._id, foodName: new RegExp(keySearch, 'i') })
-    //                 .sort({ rate: -1, price: 1, dateCreate: -1 })
-    //                 .skip((page - 1) * f_limit)
-    //                 .limit(f_limit);
-    //             break
-    //         case 'bill':
-    //             doneTransasionTotal = await Bill.find({ status: 'đã thanh toán' }).count()
-    //             doneTransasionPage = Math.ceil(doneTransasionTotal / f_limit)
-    //             doneTransasion = await Bill.find({ status: 'đã thanh toán' })
-    //                 .sort({ dateCreate: -1 })
-    //                 .populate('user')
-    //                 .skip((page - 1) * f_limit)
-    //                 .limit(f_limit)
+    if (keySearch) {
+        switch (load) {
+            case 'product':
+                foodTotal = await Food.find({ restaurant: restaurant._id, foodName: new RegExp(keySearch, 'i') }).count()
+                fPageTotal = Math.ceil(foodTotal / f_limit)
+                foods = await Food.find({ restaurant: restaurant._id, foodName: new RegExp(keySearch, 'i') })
+                    .sort({ rate: -1, price: 1, dateCreate: -1 })
+                    .skip((page - 1) * f_limit)
+                    .limit(f_limit);
+                break
+            case 'bill':
+                doneTransasionTotal = await Bill.find({ status: 'đã thanh toán' }).count()
+                doneTransasionPage = Math.ceil(doneTransasionTotal / f_limit)
+                doneTransasion = await Bill.find({ status: 'đã thanh toán' })
+                    .sort({ dateCreate: -1 })
+                    .populate('user')
+                    .skip((page - 1) * f_limit)
+                    .limit(f_limit)
 
-    //             cancelTransasionTotal = await Bill.find({ _id: new RegExp(keySearch, 'i'), status: 'đã hủy' }).count()
-    //             cancelTransasionPage = Math.ceil(cancelTransasionTotal / f_limit)
-    //             cancelTransasion = await Bill.find({ _id: new RegExp(keySearch, 'i'), status: 'đã hủy' })
-    //                 .sort({ dateCreate: -1 })
-    //                 .populate('user')
-    //                 .skip((page - 1) * f_limit)
-    //                 .limit(f_limit)
-    //             break
-    //         case 'discount':
-    //             break
-    //         default:
-    //             break
-    //     }
-    // }
-    io.on('foodSearch', async (data) => {
-        console.log(data)
-        foodTotal = await Food.find({ restaurant: restaurant._id, foodName: new RegExp(data, 'i') }).count()
-        fPageTotal = Math.ceil(foodTotal / f_limit)
-        foods = await Food.find({ restaurant: restaurant._id, foodName: new RegExp(data, 'i') })
-            .sort({ rate: -1, price: 1, dateCreate: -1 })
-            .skip((page - 1) * f_limit)
-            .limit(f_limit);
-    })
+                cancelTransasionTotal = await Bill.find({ _id: new RegExp(keySearch, 'i'), status: 'đã hủy' }).count()
+                cancelTransasionPage = Math.ceil(cancelTransasionTotal / f_limit)
+                cancelTransasion = await Bill.find({ _id: new RegExp(keySearch, 'i'), status: 'đã hủy' })
+                    .sort({ dateCreate: -1 })
+                    .populate('user')
+                    .skip((page - 1) * f_limit)
+                    .limit(f_limit)
+                break
+            case 'discount':
+                break
+            default:
+                break
+        }
+    }
+
 
     res.render(
         './restaurant/hostpage',

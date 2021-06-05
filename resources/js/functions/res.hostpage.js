@@ -72,8 +72,7 @@ function assignValueToController() {
 set_btn_direct_food()
 
 function search() {
-  //location.replace(`?load=${_load}&p=${_page}&keySearch=${_charsSearch}`)
-  socket.emit('foodSearch', _charsSearch)
+  location.replace(`?load=${_load}&p=${_page}&keySearch=${_charsSearch}`)
 }
 
 //hostpage
