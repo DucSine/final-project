@@ -455,13 +455,18 @@ exports.updateBill = async (req, res, next) => {
       message: 'Có đơn hàng mới, vui lòng kiểm tra.',
       total: totalMail
     }
+    const sortMessages = await Messages.find().count() 
+    console.log('total mess: '+ sortMessages)
+    console.log('type '+ typeof sortMessages)
     rs = await Messages.create({
       object: _bill.restaurant,
       title: 'billMessage',
-      message: message_io.message
+      message: message_io.message,
+      sort: sortMessages - 1
     })
     if (!rs)
       throw new Error('Có lỗi xảy ra.')
+
     io.to(_bill.restaurant.toString()).emit('billMessage', message_io)
 
     return Response.success(res, { message: 'Đặt hàng thành công, vui lòng chờ nhà hàng xác nhận.' })
