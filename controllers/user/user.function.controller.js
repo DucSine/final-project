@@ -456,8 +456,6 @@ exports.updateBill = async (req, res, next) => {
       total: totalMail
     }
     const sortMessages = await Messages.find().count() 
-    console.log('total mess: '+ sortMessages)
-    console.log('type '+ typeof sortMessages)
     rs = await Messages.create({
       object: _bill.restaurant,
       title: 'billMessage',

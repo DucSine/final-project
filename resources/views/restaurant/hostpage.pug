@@ -115,9 +115,9 @@ block content
       label(for="")
         b.text-primary Lọc theo: &nbsp; &nbsp;   
       select.text-primary
-        option(value="1") Tuần này  
-        option(value="2") Tháng này  
-        option(value="1") Năm nay
+        option(value="1") Tuần 
+        option(value="2") Tháng  
+        option(value="3") Năm
     .chart
       canvas#reschart
 
@@ -490,5 +490,6 @@ block content
           span(style='float: right')
             button.btn.btn-danger(type='button' onclick='hideFormLoyalUser()') Thoát 
       .container(style='background-color:#f1f1f1')
+  
   script(src='../../js/controller/res.hostpage.js')
   script(src='../../js/functions/res.hostpage.js')
