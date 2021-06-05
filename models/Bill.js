@@ -32,7 +32,11 @@ const BillSchema = new mongoose.Schema({
   message: {
     type: String,
     default: null
-  }
+  },
+  sort:{
+    type: Number,
+    default: 0
+  } 
 });
 
 const Bill = mongoose.model('Bill', BillSchema, 'bills');

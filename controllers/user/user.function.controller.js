@@ -15,6 +15,7 @@ const Comment = require('../../models/Comment')
 const Bill = require('../../models/Bill')
 const BillDetail = require('../../models/Bill_Detail')
 const Discount_code = require('../../models/Discount_code')
+const Messages = require('../../models/Messages')
 const limit = 20
 
 //Danh sách mã giảm giá 
@@ -327,14 +328,15 @@ exports.comment = async (req, res, next) => {
 ///
 
 exports.createBill = async (req, res, next) => {
-  const { restaurant, code } = req.body
-  console.log(req.body)
+  const {
+    restaurant,
+    code
+  } = req.body
 
   try {
     const _res = await Restaurant.findById(restaurant)
     if (!_res)
       throw new Error('Có lỗi xảy ra.')
-    console.log(_res)
 
     var bill
     if (code != null && code != '') {
@@ -387,7 +389,7 @@ exports.updateBill = async (req, res, next) => {
     var total = 0
     var rs
     const _bill = await Bill.findById(bill)
-    console.log(_bill)
+
     if (!_bill)
       throw new Error('Có lỗi xảy ra.')
 
@@ -444,14 +446,24 @@ exports.updateBill = async (req, res, next) => {
       throw new Error('Có lỗi xảy ra.')
 
     const totalMail = await Bill.find({ restaurant: _bill.restaurant, status: 'đang xử lý' }).count()
-    console.log(totalMail)
-    io.to(_bill.restaurant.toString()).emit(
-      'billMessage',
-      {
-        message: 'Có đơn hàng mới, vui lòng kiểm tra.',
-        total: totalMail
-      }
-    )
+
+    rs = await Bill.findByIdAndUpdate(_bill._id, { $set: { sort: totalMail - 1 } })
+    if (!rs)
+      throw new Error('Có lỗi xảy ra.')
+
+    let message_io = {
+      message: 'Có đơn hàng mới, vui lòng kiểm tra.',
+      total: totalMail
+    }
+    rs = await Messages.create({
+      object: _bill.restaurant,
+      title: 'billMessage',
+      message: message_io.message
+    })
+    if (!rs)
+      throw new Error('Có lỗi xảy ra.')
+    io.to(_bill.restaurant.toString()).emit('billMessage', message_io)
+
     return Response.success(res, { message: 'Đặt hàng thành công, vui lòng chờ nhà hàng xác nhận.' })
 
   } catch (error) {
@@ -500,5 +512,5 @@ exports.removeFoodsInCart = async (req, res, next) => {
 }
 
 exports.orders = async (req, res, next) => {
-  
+
 }
