@@ -20,6 +20,7 @@ const {
     updateBill,
     delBillById,
     removeFoodsInCart,
+    notifications,
 } = require('../../controllers/user/user.function.controller')
 const { protect } = require('../../middlewares/user/auth')
 
@@ -103,5 +104,10 @@ router.post('/publicDiscount', protect, publicDiscountCode)
 // @desc    Mã giảm giá riêng
 // @access  Private
 router.post('/privateDiscount', protect, privateDiscountCode)
+
+// @route   GET api/user/func/notifications
+// @desc    Mã giảm giá riêng
+// @access  Private
+router.get('/notifications', protect, notifications)
 
 module.exports = router;

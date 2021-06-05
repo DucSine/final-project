@@ -514,6 +514,18 @@ exports.removeFoodsInCart = async (req, res, next) => {
   }
 }
 
+exports.notifications = async (req, res, next) => {
+  try {
+    const notifications_list = await Messages.find({object: req.user.id}) 
+    const total = await Messages.find({object: req.user.id}).count()
+    const not_watched = await Messages.find({object: req.user.id, isWatched: false}).count()
+
+    return Response.success(res,{notifications_list, total, not_watched})
+  } catch (error) {
+    console.log(error)
+    return next(error)
+  }
+}
 exports.orders = async (req, res, next) => {
 
 }

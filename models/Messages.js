@@ -20,6 +20,10 @@ const MessagesSchema = new mongoose.Schema({
   sort: {
     type: Number,
     default: 0
+  },
+  isWatched: {
+    type: Boolean,
+    default: false
   }
 });
 
