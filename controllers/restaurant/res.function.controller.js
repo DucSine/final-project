@@ -25,7 +25,7 @@ exports.resIntroduce = async (req, res) => res.render('./restaurant/introduce')
 exports.resHostpage = async (req, res, next) => {
     const restaurant = req.restaurant
     const p = req.query.p
-    //const keySearch = req.query.keySearch
+    const keySearch = req.query.keySearch
     const load = req.query.load
     const name = req.restaurant.restaurantName.slice(0, 14)
     const resType = await RestaurantType.findById(restaurant.type)
