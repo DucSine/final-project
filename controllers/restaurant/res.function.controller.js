@@ -4,7 +4,7 @@ const fs = require('fs-promise')
 
 //upload file
 const cloudinary = require('../../config/cloudinaryConfig')
-const {io} = require('../../helpers/handleSocketIo.helper')
+const { io } = require('../../helpers/handleSocketIo.helper')
 //validate
 const { validationResult } = require('express-validator')
 // Models
@@ -75,7 +75,7 @@ exports.resHostpage = async (req, res, next) => {
         .sort({ point: -1 })
         .populate('user')
 
-    var discount_code = await Discount_code.find({restaurant: restaurant._id})
+    var discount_code = await Discount_code.find({ restaurant: restaurant._id })
     var code = []
     var expired_code = []
     // for (let item of discount_code){
@@ -361,10 +361,21 @@ exports.confirmBill = async (req, res, next) => {
         if (!rs)
             throw new Error('Có lỗi xảy ra.')
 
-        io.to(bill.user.toString()).emit(
-            'billMessage',
-            `Đơn hàng: ${bill._id} Đã được xác nhận.`,
-        )
+        const message_io = `Đơn hàng: ${bill._id} Đã được xác nhận.`
+
+        const sortMessages = await Messages.find().count()
+        rs = await Messages.create({
+            object: restaurant,
+            title: 'billMessage',
+            message: message_io,
+            sort: sortMessages - 1
+        })
+        if (!rs)
+            throw new Error('Có lỗi xảy ra.')
+        if (!rs)
+            throw new Error('Có lỗi xảy ra.')
+        io.to(bill.user.toString()).emit('billMessage', message_io)
+
         return Response.success(res, { mesage: 'Cập nhật thành công.' })
     } catch (error) {
         console.log(error)
