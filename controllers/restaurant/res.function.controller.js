@@ -116,6 +116,7 @@ exports.resHostpage = async (req, res, next) => {
     //     }
     // }
     io.on('foodSearch', async (data) => {
+        console.log(data)
         foodTotal = await Food.find({ restaurant: restaurant._id, foodName: new RegExp(data, 'i') }).count()
         fPageTotal = Math.ceil(foodTotal / f_limit)
         foods = await Food.find({ restaurant: restaurant._id, foodName: new RegExp(data, 'i') })
