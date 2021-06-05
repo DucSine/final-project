@@ -385,6 +385,7 @@ exports.editAccount = async (req, res, next) => {
       ID,
     }
   } = req
+  console.log(req.body)
   try {
     if (file) {   // nếu đổi ảnh đại diện 
       let orgName = file.originalname || '';
@@ -395,7 +396,7 @@ exports.editAccount = async (req, res, next) => {
 
       const result = await cloudinary.uploader.upload(newFullPath);
       fs.unlinkSync(newFullPath);
-      console.log(req.body)
+      
       await User.findByIdAndUpdate(req.user._id, {
         $set: {
           ...req.body,
