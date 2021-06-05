@@ -395,10 +395,14 @@ exports.editAccount = async (req, res, next) => {
 
       const result = await cloudinary.uploader.upload(newFullPath);
       fs.unlinkSync(newFullPath);
+      if(bDate)
+        console('cos')
+      else
+      console('kos')
       await User.findByIdAndUpdate(req.user._id, {
         $set: {
           ...req.body,
-          bDate: new Date(bDate),
+          //bDate: new Date(bDate),
           avatar: result.url
         },
       })
@@ -406,7 +410,7 @@ exports.editAccount = async (req, res, next) => {
       await User.findByIdAndUpdate(req.user._id, {
         $set: {
           ...req.body,
-          bDate: new Date(bDate),
+          //bDate: new Date(bDate),
         },
       })
     }
