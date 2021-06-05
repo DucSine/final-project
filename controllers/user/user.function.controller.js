@@ -455,7 +455,7 @@ exports.updateBill = async (req, res, next) => {
       message: 'Có đơn hàng mới, vui lòng kiểm tra.',
       total: totalMail
     }
-    const sortMessages = await Messages.find().count() 
+    const sortMessages = await Messages.find().count()
     rs = await Messages.create({
       object: _bill.restaurant,
       title: 'billMessage',
@@ -516,11 +516,25 @@ exports.removeFoodsInCart = async (req, res, next) => {
 
 exports.notifications = async (req, res, next) => {
   try {
-    const notifications_list = await Messages.find({object: req.user.id}) 
-    const total = await Messages.find({object: req.user.id}).count()
-    const not_watched = await Messages.find({object: req.user.id, isWatched: false}).count()
+    const notifications_list = await Messages.find({ object: req.user.id })
+    const total = await Messages.find({ object: req.user.id }).count()
+    const not_watched = await Messages.find({ object: req.user.id, isWatched: false }).count()
 
-    return Response.success(res,{notifications_list, total, not_watched})
+    return Response.success(res, { notifications_list, total, not_watched })
+  } catch (error) {
+    console.log(error)
+    return next(error)
+  }
+}
+
+exports.setWatchedNotifications = async (req, res, next) => {
+  const notice_id = req.param.notice_id
+  try {
+    let notice = await Messages.findOne({ _id: notice_id, isWatched: false })
+    if (!notice)
+      throw new Error('Có lỗi xảy ra.')
+
+    let rs = await Messages.findByIdAndUpdate(notice_id, { $set: { isWatched: true } })
   } catch (error) {
     console.log(error)
     return next(error)

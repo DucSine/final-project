@@ -21,6 +21,7 @@ const {
     delBillById,
     removeFoodsInCart,
     notifications,
+    setWatchedNotifications,
 } = require('../../controllers/user/user.function.controller')
 const { protect } = require('../../middlewares/user/auth')
 
@@ -106,8 +107,13 @@ router.post('/publicDiscount', protect, publicDiscountCode)
 router.post('/privateDiscount', protect, privateDiscountCode)
 
 // @route   GET api/user/func/notifications
-// @desc    Mã giảm giá riêng
+// @desc    Thông báo
 // @access  Private
 router.get('/notifications', protect, notifications)
+
+// @route   POST api/user/func/setWatchedNotifications
+// @desc    Thông báo
+// @access  Private
+router.post('/setWatchedNotifications', protect, setWatchedNotifications)
 
 module.exports = router;
