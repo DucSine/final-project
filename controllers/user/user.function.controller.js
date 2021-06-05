@@ -517,6 +517,8 @@ exports.removeFoodsInCart = async (req, res, next) => {
 exports.notifications = async (req, res, next) => {
   try {
     const notifications_list = await Messages.find({ object: req.user.id })
+    if (!notifications_list)
+      throw new Error('Có lỗi xảy ra.')
     const total = await Messages.find({ object: req.user.id }).count()
     const not_watched = await Messages.find({ object: req.user.id, isWatched: false }).count()
 
@@ -535,6 +537,10 @@ exports.setWatchedNotifications = async (req, res, next) => {
       throw new Error('Có lỗi xảy ra.')
 
     let rs = await Messages.findByIdAndUpdate(notice_id, { $set: { isWatched: true } })
+    if(!rs)
+    throw new Error('Có lỗi xảy ra.')
+
+    return Response.success(res,{message:'Cập nhật thành công.'})
   } catch (error) {
     console.log(error)
     return next(error)
