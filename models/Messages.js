@@ -5,18 +5,22 @@ const MessagesSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  dateCreate:{
+  dateCreate: {
     type: Date,
     default: Date.now(),
   },
-  title:{
+  title: {
     type: String,
     required: true
   },
-  message:{
+  message: {
     type: String,
     required: true
   },
+  sort: {
+    type: Number,
+    default: 0
+  }
 });
 
 const Messages = mongoose.model('Messages', MessagesSchema, 'messages');
