@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs')
 
 const Response = require('../helpers/response.helper')
+const { io } = require('../helpers/handleSocketIo.helper')
 
 const {
     emailIsExists,
@@ -8,6 +9,7 @@ const {
 } = require('../config/general')
 const Restaurant = require('../models/Restaurant')
 const Bill = require('../models/Bill')
+const Messages = require('../models/Messages')
 
 exports.checkEmail = async (req, res, next) => {
     const email = req.query.email
@@ -99,7 +101,34 @@ exports.billComplete = async (req, res, next) => {
         if (!rs)
             throw new Error('Có lỗi xảy ra.')
 
-        return Response.success(res,{message: 'Cập nhật thành công.'})
+        const message_io = {
+            restaurant: `Đơn hàng ${bill._id} đã được giao đến khách hàng.`,
+            user: `Đơn hàng ${bill._id} đã được giao đến bạn, vui lòng dành chút thời gian đánh giá chất lượng sản phẩm.`
+        }
+
+        const totalMessage = Messages.find().count()
+        let rs_message = await Messages.create({
+            object: bill.restaurant,
+            title: 'billMessage',
+            message: message_io.restaurant,
+            sort: totalMessage - 1
+        })
+        if (!rs_message)
+            throw new Error('Có lỗi xảy ra.')
+
+        rs_message = await Messages.create({
+            object: bill.user,
+            title: 'billMessage',
+            message: message_io.user,
+            sort: totalMessage
+        })
+        if (!rs_message)
+            throw new Error('Có lỗi xảy ra.')
+
+        io.to(bill.restaurant.toString()).emit('billMessage', message_io.restaurant)
+        io.to(bill.user.toString()).emit('billMessage', message_io.user)
+        
+        return Response.success(res, { message: 'Cập nhật thành công.' })
     } catch (error) {
         console.log(error.message)
         return next(error)

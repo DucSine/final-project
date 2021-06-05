@@ -550,6 +550,3 @@ exports.setWatchedNotifications = async (req, res, next) => {
     return next(error)
   }
 }
-exports.orders = async (req, res, next) => {
-
-}

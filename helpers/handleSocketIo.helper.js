@@ -8,7 +8,8 @@ const server = http.createServer(app);
 
 const Restaurant = require('../models/Restaurant')
 const User = require('../models/User')
-const {decodeAuthToken} = require('../config/general')
+const {decodeAuthToken} = require('../config/general');
+const Food = require('../models/Food');
 
 const io = socketIo(server, {
   cors: {

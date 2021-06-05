@@ -24,7 +24,22 @@
     width: 80px;
     height: 80px;
 }
-  
+
+.notifications_class{
+    display: none;
+    background-color: rgb(255, 255, 255);
+    width: 350px;
+    position: absolute;
+    z-index: 10;
+    right: -5px;
+    top: 126px;
+    box-shadow: rgb(0 0 0 / 5%) 0px 1px 3px;
+    font-family: sans-serif;
+    border: 1px solid rgb(234, 236, 238);
+    padding: 16px;
+    flex-direction: column;
+}
+
 .user-container{
     display: none;
     background-color: rgb(255, 255, 255);

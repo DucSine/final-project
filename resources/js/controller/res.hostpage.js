@@ -6,6 +6,10 @@ const _div_userContainer = document.querySelector('div.user-container')
 const _a_usContainer = document.querySelectorAll('.user-container a')
 const _btn_logout = document.getElementById('btn_logout')
 
+// form icon notifications
+const _notification = document.querySelector('i.fa.fa-bell')
+const _div_notification = document.querySelector('.notifications_class')
+
 // from res info
 const _div_accInfo = document.getElementById('accountInfo')
 const _list_ic_editor = _div_accInfo.querySelectorAll('i.fas.fa-edit')
@@ -138,6 +142,9 @@ window.onclick = function (e) {
         // image login
         case _img_Avatar:
             _div_userContainer.classList.toggle(CLASS_SHOW_FLEX)
+            break
+        case _notification:
+            _div_notification.classList.toggle(CLASS_SHOW_FLEX)
             break
         case _a_usContainer[0]:
             _div_userContainer.classList.toggle(CLASS_SHOW_FLEX)

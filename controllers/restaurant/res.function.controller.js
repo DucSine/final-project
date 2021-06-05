@@ -14,6 +14,7 @@ const Food = require('../../models/Food')
 const Bill = require('../../models/Bill')
 const Bill_Detail = require('../../models/Bill_Detail')
 const Discount_code = require('../../models/Discount_code')
+const Messages = require('../../models/Messages')
 
 const Response = require('../../helpers/response.helper')
 const Loyal_user = require('../../models/Loyal_user')
@@ -114,9 +115,8 @@ exports.resHostpage = async (req, res, next) => {
             default:
                 break
         }
-    }
-
-
+    }   
+    let notifications = await Messages.find({ object: restaurant._id, isWatched: false })
     res.render(
         './restaurant/hostpage',
         {
@@ -139,7 +139,7 @@ exports.resHostpage = async (req, res, next) => {
             cancelTransasionPage,
             cancelTransasion,
             loyal_user,            //discountcode
-
+            notifications
 
         })
 }

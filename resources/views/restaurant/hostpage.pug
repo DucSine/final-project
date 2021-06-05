@@ -5,11 +5,15 @@ block header
     a.navbar-brand(href='/res/hostpage')
       img(src='https://res.cloudinary.com/ducsine/image/upload/v1621242491/logo.png' width='200px' height='100px')
     .div-inline(style='width: 280px')
-      a.notification(href='/res_hostpage?load=bill')
+      a.notification
         i.fa.fa-bell(style='font-size:30px;')
         span.badge #{curentTransasionTotal}
       img.avatar(src=restaurant.banner)
       b  #{name} 
+  .notifications_class
+    ul 
+      each item in notifications
+        li #{item.message}
   .user-container
     a#a_usInfo.text-primary Thông tin cửa hàng
     a#a_usChangePass.text-primary Đổi mật khẩu
