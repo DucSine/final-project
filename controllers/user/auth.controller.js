@@ -386,38 +386,38 @@ exports.editAccount = async (req, res, next) => {
     }
   } = req
   console.log(req.body)
-  try {
-    if (file) {   // nếu đổi ảnh đại diện 
-      let orgName = file.originalname || '';
-      orgName = orgName.trim().replace(/ /g, '-');
-      const fullPathInServ = file.path;
-      const newFullPath = `${fullPathInServ}-${orgName}`;
-      fs.rename(fullPathInServ, newFullPath);
+  // try {
+  //   if (file) {   // nếu đổi ảnh đại diện 
+  //     let orgName = file.originalname || '';
+  //     orgName = orgName.trim().replace(/ /g, '-');
+  //     const fullPathInServ = file.path;
+  //     const newFullPath = `${fullPathInServ}-${orgName}`;
+  //     fs.rename(fullPathInServ, newFullPath);
 
-      const result = await cloudinary.uploader.upload(newFullPath);
-      fs.unlinkSync(newFullPath);
+  //     const result = await cloudinary.uploader.upload(newFullPath);
+  //     fs.unlinkSync(newFullPath);
       
-      await User.findByIdAndUpdate(req.user._id, {
-        $set: {
-          ...req.body,
-          //bDate: new Date(bDate),
-          avatar: result.url
-        },
-      })
-    }else{
-      await User.findByIdAndUpdate(req.user._id, {
-        $set: {
-          ...req.body,
-          //bDate: new Date(bDate),
-        },
-      })
-    }
+  //     await User.findByIdAndUpdate(req.user._id, {
+  //       $set: {
+  //         ...req.body,
+  //         //bDate: new Date(bDate),
+  //         avatar: result.url
+  //       },
+  //     })
+  //   }else{
+  //     await User.findByIdAndUpdate(req.user._id, {
+  //       $set: {
+  //         ...req.body,
+  //         //bDate: new Date(bDate),
+  //       },
+  //     })
+  //   }
     
-    return Response.success(res, { message: 'Cập nhật thành công' })
-  } catch (error) {
-    console.log(error)
-    return next(error)
-  }
+  //   return Response.success(res, { message: 'Cập nhật thành công' })
+  // } catch (error) {
+  //   console.log(error)
+  //   return next(error)
+  // }
 }
 
 //Lấy thông tin tài khoản
