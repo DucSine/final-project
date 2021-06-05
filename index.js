@@ -139,8 +139,8 @@ app.post('/dev/addFood',upload.single('image'),async(req, res, next)=>{
 
 app.get('/testdate', async(req,res)=>{
   const {date} = req.body
-  console.log(Date(date))
-  res.send({date})
+  console.log(Number(Date.now()))
+  res.send({date: new Date(1620234000000)})
 })
 ///
 
