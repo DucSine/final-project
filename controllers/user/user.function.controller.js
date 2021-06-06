@@ -520,16 +520,15 @@ exports.removeFoodsInCart = async (req, res, next) => {
 exports.notifications = async (req, res, next) => {
   try {
     const notifications_list = await Messages.find({ object: req.user.id })
-    console.log('no: ' + notifications_list)
-    let total
-    let not_watched
+    let total = 0
+    let not_watched = 0
+
     if (!notifications_list)
       throw new Error('Không có thông báo mới.')
     else {
       total = await Messages.find({ object: req.user.id }).count()
       not_watched = await Messages.find({ object: req.user.id, isWatched: false }).count()
     }
-
 
     return Response.success(res, { notifications_list, total, not_watched })
   } catch (error) {
