@@ -19,7 +19,7 @@ const Messages = require('../../models/Messages')
 const limit = 20
 
 //Danh sách mã giảm giá 
-exports.publicDiscountCode = async (req, res, next) => { 
+exports.publicDiscountCode = async (req, res, next) => {
   try {
     let public = await Discount_code.find({ user: null, dateExprite: { $gte: new Date() } })
     if (!public)
@@ -520,14 +520,16 @@ exports.removeFoodsInCart = async (req, res, next) => {
 exports.notifications = async (req, res, next) => {
   try {
     const notifications_list = await Messages.find({ object: req.user.id })
+    console.log('no: ' + notifications_list)
+    let total
+    let not_watched
     if (!notifications_list)
       throw new Error('Không có thông báo mới.')
-    const total = await Messages.find({ object: req.user.id }).count()
-    if (!total)
-      throw new Error('Có lỗi xảy ra.')
-    const not_watched = await Messages.find({ object: req.user.id, isWatched: false }).count()
-    if (!not_watched)
-      throw new Error('Có lỗi xảy ra.')
+    else {
+      total = await Messages.find({ object: req.user.id }).count()
+      not_watched = await Messages.find({ object: req.user.id, isWatched: false }).count()
+    }
+
 
     return Response.success(res, { notifications_list, total, not_watched })
   } catch (error) {
