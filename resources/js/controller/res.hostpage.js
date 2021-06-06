@@ -194,6 +194,8 @@ window.onclick = function (e) {
             break
         default:
             _div_userContainer.classList.remove(CLASS_SHOW_FLEX)
+            _div_billDetail.classList.remove(CLASS_SHOW)
+            _tbody.innerHTML = ''
             break
     }
 }

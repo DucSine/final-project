@@ -79,9 +79,12 @@ exports.resHostpage = async (req, res, next) => {
     var discount_code = await Discount_code.find({ restaurant: restaurant._id })
     var code = []
     var expired_code = []
-    // for (let item of discount_code){
-    //     if((item.dateExprite))
-    // }
+    for (let item of discount_code) {
+        if ((Number(item.dateExprite) <= Date.now()) || item.amount == 0)
+            expired_code.push(item)
+        else
+            code.push(item)
+    }
     //final
     if (keySearch) {
         switch (load) {
@@ -115,7 +118,7 @@ exports.resHostpage = async (req, res, next) => {
             default:
                 break
         }
-    }   
+    }
     let notifications = await Messages.find({ object: restaurant._id, isWatched: false })
     res.render(
         './restaurant/hostpage',
@@ -139,8 +142,9 @@ exports.resHostpage = async (req, res, next) => {
             cancelTransasionPage,
             cancelTransasion,
             loyal_user,            //discountcode
-            notifications
-
+            notifications,
+            code,
+            expired_code
         })
 }
 
@@ -506,4 +510,19 @@ exports.getLoyalUserHisTrans = async (req, res, next) => {
         console.log(error)
         return next(error)
     }
+}
+
+exports.getDataReport = async (req, res, next) => {
+    try {
+        let report_bill_wait = await Bill.find({ restaurant: req.restaurant.id, status: 'đang xử lý' }).count()
+        let report_bill_confirm = await Bill.find({ restaurant: req.restaurant.id, status: 'đã xác nhận' }).count()
+        let report_bill_cancel = await Bill.find({ restaurant: req.restaurant.id, status: 'đã hủy' }).count()
+        let report_bill_done = await Bill.find({ restaurant: req.restaurant.id, status: 'đã thanh toán' }).count()
+        let bill = [report_bill_wait,report_bill_confirm, report_bill_cancel, report_bill_done]
+        return Response.success(res, {bill})
+    } catch (error) {
+        console.log(error)
+        return next(error)
+    }
+
 }

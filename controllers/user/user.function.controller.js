@@ -21,10 +21,11 @@ const limit = 20
 //Danh sách mã giảm giá 
 exports.publicDiscountCode = async (req, res, next) => {
   try {
-    let public = await Discount_code.find({ user: null })
+    let public = await Discount_code.find({ user: null, dateExprite: { $gte: new Date() } })
     if (!public)
       throw new Error('Không có mã giảm giá.')
-    Response.success(res, { public })
+      
+    return Response.success(res, { public })
   } catch (error) {
     console.log(error)
     return next(error)
@@ -33,10 +34,12 @@ exports.publicDiscountCode = async (req, res, next) => {
 
 exports.privateDiscountCode = async (req, res, next) => {
   try {
-    let private = await Discount_code.find({ user: req.user._id })
+    let private = await Discount_code.find({ user: req.user._id, dateExprite: { $gte: new Date() } })
+
     if (!private)
       throw new Error('Không có mã giảm giá.')
-    Response.success(res, { private })
+
+    return Response.success(res, { private })
   } catch (error) {
     console.log(error)
     return next(error)
@@ -541,10 +544,10 @@ exports.setWatchedNotifications = async (req, res, next) => {
       throw new Error('Có lỗi xảy ra.')
 
     let rs = await Messages.findByIdAndUpdate(notice_id, { $set: { isWatched: true } })
-    if(!rs)
-    throw new Error('Có lỗi xảy ra.')
+    if (!rs)
+      throw new Error('Có lỗi xảy ra.')
 
-    return Response.success(res,{message:'Cập nhật thành công.'})
+    return Response.success(res, { message: 'Cập nhật thành công.' })
   } catch (error) {
     console.log(error)
     return next(error)

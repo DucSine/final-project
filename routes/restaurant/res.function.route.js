@@ -16,7 +16,8 @@ const {
     createDiscount,
     getDiscountById,
     getLoyalUserDetail,
-    getLoyalUserHisTrans
+    getLoyalUserHisTrans,
+    getDataReport
 } = require('../../controllers/restaurant/res.function.controller')
 const { protect } = require('../../middlewares/restaurant/auth')
 
@@ -91,6 +92,10 @@ router.get('/getLoyalUserHisTrans', protect, getLoyalUserHisTrans)
 // @access  Private
 router.get('/getDiscountById', protect, getDiscountById)
 
+// @route   GET api/res/func/getDataReport
+// @desc    Data report
+// @access  Private
+router.get('/getDataReport', protect, getDataReport)
 
 
 module.exports = router

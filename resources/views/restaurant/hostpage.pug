@@ -119,11 +119,42 @@ block content
       label(for="")
         b.text-primary Lọc theo: &nbsp; &nbsp;   
       select.text-primary
-        option(value="1") Tuần 
-        option(value="2") Tháng  
-        option(value="3") Năm
+        option(value="1") Hôm nay 
+        option(value="2") Tuần này
+        option(value="3") Tháng này
+        option(value="4") Năm nay
     .chart
       canvas#reschart
+
+    hr
+    h4.text-primary Doanh thu
+    p
+      b.text-primary Tổng doanh thu: 
+      i 500
+    p
+      b.text-primary Giá trị trung bình mỗi đơn hàng: 
+      i 500
+
+    hr
+    h4.text-primary Khách hàng
+    p
+      b.text-primary Tổng khách hàng: 
+      i 500
+    p
+      b.text-primary Khách hàng mới: 
+      i 500
+
+    hr
+    h4.text-primary Tỷ lệ đánh giá sản phẩm
+    p
+      b.text-primary Sản phẩm được đánh giá trên [4-5] sao: 
+      i 500
+    p
+      b.text-primary Sản phẩm được đánh giá [3-4] sao: 
+      i 500
+    p
+      b.text-primary Sản phẩm được đánh giá [0-3] sao: 
+      i 500
 
   #divProduct.div-content(style='display:none;padding-top:30px')
     .search-container(style="float:right; padding-right:30px;")
@@ -324,7 +355,7 @@ block content
               i.fa.fa-search
         p
         div(style)
-          ul#listProduct(style='list-style:none; padding:30px')
+          ul(style='list-style:none; padding:30px')
             each row in loyal_user 
               li(onclick='show_loyal_cus_detail(this.querySelector("p.usId").textContent)')
                 p.usId(style='display:none') #{row.user._id}
@@ -341,22 +372,29 @@ block content
         
       #discount.container.tab-pane.fade
         div(style)
-          ul#listProduct(style='list-style:none; padding:30px')
-            each row in loyal_user 
+          ul(style='list-style:none; padding:30px')
+            each row in code 
               li(onclick='show_loyal_cus_detail(this.querySelector("p.usId").textContent)')
-                p.usId(style='display:none') #{row.user._id}
-                .media.border.p-1
-                  img.mr-3.mt-3.avatar(src=row.user.avatar)
-                  .media-body
-                    div(style='padding-top:20px')
-                      label(style="font-size: x-large;")
-                        b #{row.user.username}
-                    div
-                      label
-                        b Điểm tích lũy: 
-                        b #{row.point}  
+                p.usId(style='display:none') #{row._id}
+                p.discount 
+                  b Mã giảm: 
+                  | #{row.code}
+                p.discount 
+                  b Thời hạn: 
+                  | #{row.dateExprite}
 
       #hisDiscount.container.tab-pane.fade
+        div(style)
+          ul(style='list-style:none; padding:30px')
+            each row in expired_code 
+              li(onclick='show_loyal_cus_detail(this.querySelector("p.usId").textContent)')
+                p.usId(style='display:none') #{row._id}
+                p.discount 
+                  b Mã giảm: 
+                  | #{row.code}
+                p.discount 
+                  b Thời hạn: 
+                  | #{row.dateExprite}
 
   #addProduct.modal.addProduct-modal
     form.modal-content.addProduct-modal-content.animate( method='post' enctype='multipart/form-data' onsubmit='return editProduct()' )

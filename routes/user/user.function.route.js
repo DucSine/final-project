@@ -99,12 +99,12 @@ router.post('/comment', protect, comment)
 // @route   GET api/user/func/publicDiscount
 // @desc    Mã giảm giá chung
 // @access  Private
-router.post('/publicDiscount', protect, publicDiscountCode)
+router.get('/publicDiscount', protect, publicDiscountCode)
 
 // @route   GET api/user/func/privateDiscount
 // @desc    Mã giảm giá riêng
 // @access  Private
-router.post('/privateDiscount', protect, privateDiscountCode)
+router.get('/privateDiscount', protect, privateDiscountCode)
 
 // @route   GET api/user/func/notifications
 // @desc    Thông báo

@@ -77,67 +77,58 @@ function search() {
 
 //hostpage
 
-let myChart = document.getElementById('reschart').getContext('2d');
+let myChart = document.getElementById('reschart').getContext('2d')
 // Global Options
-Chart.defaults.global.defaultFontFamily = 'Lato';
-Chart.defaults.global.defaultFontSize = 18;
-Chart.defaults.global.defaultFontColor = '#777';
+Chart.defaults.global.defaultFontFamily = 'Lato'
+Chart.defaults.global.defaultFontSize = 18
+Chart.defaults.global.defaultFontColor = '#777'
+// let massPopChart = new Chart(myChart, {
+//   type: 'bar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+//   data: {
+//     labels: ['Đã hoàn tất', 'Chưa xác nhận', 'Đã xác nhận', 'Đã hủy'],
+//     datasets: [{
+//       label: 'Đơn hàng',
+//       data: getDataReport(),
+//       //backgroundColor:'green',
+//       backgroundColor: [
+//         'rgba(54, 162, 235, 0.6)',
+//         'rgba(54, 162, 235, 0.6)',
+//         'rgba(54, 162, 235, 0.6)',
+//         'rgba(54, 162, 235, 0.6)',
 
-let massPopChart = new Chart(myChart, {
-  type: 'bar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
-  data: {
-    labels: ['Tuần 1', 'Tuần 2', 'Tuần 3', 'Tuần 4'],
-    datasets: [{
-      label: 'Đơn hàng',
-      data: [
-        90,
-        56,
-        95,
-        30,
-        20,
-      ],
-      //backgroundColor:'green',
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.6)',
-        'rgba(54, 162, 235, 0.6)',
-        'rgba(255, 206, 86, 0.6)',
-        'rgba(75, 192, 192, 0.6)',
-        'rgba(153, 102, 255, 0.6)',
-        'rgba(255, 159, 64, 0.6)',
-        'rgba(255, 99, 132, 0.6)'
-      ],
-      borderWidth: 1,
-      borderColor: '#777',
-      hoverBorderWidth: 3,
-      hoverBorderColor: '#000'
-    }]
-  },
-  options: {
-    title: {
-      display: true,
-      text: 'Tổng đơn hàng',
-      fontSize: 25
-    },
-    legend: {
-      display: true,
-      position: 'right',
-      labels: {
-        fontColor: '#000'
-      }
-    },
-    layout: {
-      padding: {
-        left: 50,
-        right: 0,
-        bottom: 0,
-        top: 0
-      }
-    },
-    tooltips: {
-      enabled: true
-    }
-  }
-});
+//       ],
+//       borderWidth: 1,
+//       borderColor: '#777',
+//       hoverBorderWidth: 3,
+//       hoverBorderColor: '#000'
+//     }]
+//   },
+//   options: {
+//     title: {
+//       display: true,
+//       text: 'Tổng đơn hàng',
+//       fontSize: 25
+//     },
+//     legend: {
+//       display: true,
+//       position: 'right',
+//       labels: {
+//         fontColor: '#000'
+//       }
+//     },
+//     layout: {
+//       padding: {
+//         left: 50,
+//         right: 0,
+//         bottom: 0,
+//         top: 0
+//       }
+//     },
+//     tooltips: {
+//       enabled: true
+//     }
+//   }
+// });
 
 //food
 function showProductDetail(value) {
@@ -268,9 +259,6 @@ function getWaitBillDetail(value) {
               console.log(error)
             })
         }
-
-        //   if (BILL.discount_code != null)
-        //     _b_billDiscount.innerText = 'abc'
 
         _i_iconStatus.classList.remove(
           _i_iconStatus.classList.item(1),
@@ -407,7 +395,7 @@ function fBillCancle() {
   }
   else {
     var reason = prompt('Lý do hủy đơn')
-    console.log(reason =='')
+    console.log(reason == '')
     console.log(reason == null)
     if (reason == '' || reason == null)
       alert('Vui lòng nêu lý do hủy đơn')
@@ -548,3 +536,58 @@ function set_btn_direct_food() {
     _btn_pre.disabled = false
 }
 
+async function getDataReport() {
+  let res = await axios.get('/api/res/func/getDataReport')
+  //
+  let massPopChart = new Chart(myChart, {
+    type: 'bar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+    data: {
+      labels: ['Đã hoàn tất', 'Chưa xác nhận', 'Đã xác nhận', 'Đã hủy'],
+      datasets: [{
+        label: 'Đơn hàng',
+        data: res.data.data.bill || [],
+        //backgroundColor:'green',
+        backgroundColor: [
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+  
+        ],
+        borderWidth: 1,
+        borderColor: '#777',
+        hoverBorderWidth: 3,
+        hoverBorderColor: '#000'
+      }]
+    },
+    options: {
+      title: {
+        display: true,
+        text: 'Tổng đơn hàng',
+        fontSize: 25
+      },
+      legend: {
+        display: true,
+        position: 'right',
+        labels: {
+          fontColor: '#000'
+        }
+      },
+      layout: {
+        padding: {
+          left: 50,
+          right: 0,
+          bottom: 0,
+          top: 0
+        }
+      },
+      tooltips: {
+        enabled: true
+      }
+    }
+  });
+  //
+  console.log(res.data.data)
+}
+
+getDataReport()
