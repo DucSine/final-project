@@ -369,7 +369,7 @@ exports.confirmBill = async (req, res, next) => {
 
         const sortMessages = await Messages.find().count()
         rs = await Messages.create({
-            object: restaurant,
+            object: bill.user,
             title: 'billMessage',
             message: message_io,
             sort: sortMessages - 1
@@ -378,6 +378,7 @@ exports.confirmBill = async (req, res, next) => {
             throw new Error('Có lỗi xảy ra.')
         if (!rs)
             throw new Error('Có lỗi xảy ra.')
+
         io.to(bill.user.toString()).emit('billMessage', message_io)
 
         return Response.success(res, { mesage: 'Cập nhật thành công.' })
