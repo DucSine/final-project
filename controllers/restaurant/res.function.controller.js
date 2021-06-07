@@ -148,7 +148,7 @@ exports.resHostpage = async (req, res, next) => {
             loyal_user,            //discountcode
             notifications,
             code,
-            expired_code
+            expired_code,
         })
 }
 
