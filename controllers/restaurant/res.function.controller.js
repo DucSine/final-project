@@ -119,7 +119,11 @@ exports.resHostpage = async (req, res, next) => {
                 break
         }
     }
-    let notifications = await Messages.find({ object: restaurant._id, isWatched: false })
+    let notifications = await Bill.find({ restaurant: restaurant._id })
+        .sort({ sort: -1 })
+        .skip((page - 1) * f_limit)
+        .limit(f_limit)
+
     res.render(
         './restaurant/hostpage',
         {
@@ -410,7 +414,7 @@ exports.cancelBill = async (req, res, next) => {
 
 }
 
-exports.createDiscount = async (req, res, next) => {
+exports.createPublicDiscount = async (req, res, next) => {
     const errors = validationResult(req)
     if (!errors.isEmpty())
         return res.status(400).json({ errors: errors.array() })
@@ -439,30 +443,59 @@ exports.createDiscount = async (req, res, next) => {
         if (Number(dateExprite) <= Date.now())
             throw new Error('Thời gian hết hạn không hợp lệ.')
 
-        var rs
-        if (!user)
-            rs = await Discount_code.create({
-                discount,
-                code,
-                amount,
-                dateExprite: new Date(Number(dateExprite)),
-                restaurant
-            })
-        else
-            rs = await Discount_code.create({
-                discount,
-                code,
-                amount,
-                dateExprite: new Date(Number(dateExprite)),
-                user,
-                restaurant
-            })
+        let rs = await Discount_code.create({
+            discount,
+            code,
+            amount,
+            dateExprite: new Date(Number(dateExprite)),
+            user,
+            restaurant
+        })
 
         if (!rs)
             throw new Error('Có lỗi xảy ra.')
 
         return Response.success(res, { message: 'Tạo mã thành công' })
 
+    } catch (error) {
+        console.log(error)
+        return next(error)
+    }
+}
+
+
+exports.createPrivateDiscount = async (req, res, next) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty())
+        return res.status(400).json({ errors: errors.array() })
+
+    const restaurant = req.restaurant.id
+    const {
+        discount,
+        code,
+        dateExprite, //number
+        user
+    } = req.body
+    try {
+        const currentDiscount = await Discount_code.findOne({ code })
+        if (currentDiscount)
+            if (Number(currentDiscount.dateExprite) >= Date.now())
+                throw new Error('Mã đã tồn tại hoặc đang còn hiệu lực.')
+        if (Number(dateExprite) <= Date.now())
+            throw new Error('Thời gian hết hạn không hợp lệ.')
+
+        let rs = await Discount_code.create({
+            discount,
+            code,
+            user,
+            dateExprite: new Date(Number(dateExprite)),
+            restaurant
+        })
+
+        if (!rs)
+            throw new Error('Có lỗi xảy ra.')
+
+        return Response.success(res, { message: 'Đã gửi mã đến khách hàng.' })
     } catch (error) {
         console.log(error)
         return next(error)
@@ -519,8 +552,8 @@ exports.getDataReport = async (req, res, next) => {
         let report_bill_confirm = await Bill.find({ restaurant: req.restaurant.id, status: 'đã xác nhận' }).count()
         let report_bill_cancel = await Bill.find({ restaurant: req.restaurant.id, status: 'đã hủy' }).count()
         let report_bill_done = await Bill.find({ restaurant: req.restaurant.id, status: 'đã thanh toán' }).count()
-        let bill = [report_bill_wait,report_bill_confirm, report_bill_cancel, report_bill_done]
-        return Response.success(res, {bill})
+        let bill = [report_bill_wait, report_bill_confirm, report_bill_cancel, report_bill_done]
+        return Response.success(res, { bill })
     } catch (error) {
         console.log(error)
         return next(error)

@@ -13,11 +13,12 @@ const {
     getBillDetail,
     confirmBill,
     cancelBill,
-    createDiscount,
     getDiscountById,
     getLoyalUserDetail,
     getLoyalUserHisTrans,
-    getDataReport
+    getDataReport,
+    createPublicDiscount,
+    createPrivateDiscount
 } = require('../../controllers/restaurant/res.function.controller')
 const { protect } = require('../../middlewares/restaurant/auth')
 
@@ -72,10 +73,15 @@ router.post('/confirmBill', protect, confirmBill)
 // @access  Private
 router.post('/cancelBill', protect, cancelBill)
 
-// @route   POST api/res/func/createDiscount
+// @route   POST api/res/func/createPublicDiscount
 // @desc    Tạo mã giảm giá
 // @access  Private
-router.post('/createDiscount', protect, createDiscount)
+router.post('/createPublicDiscount', protect, createPublicDiscount)
+
+// @route   POST api/res/func/createPrivateDiscount
+// @desc    Tạo mã giảm giá
+// @access  Private
+router.post('/createPrivateDiscount', protect, createPrivateDiscount)
 
 // @route   GET api/res/func/getLoyalUser
 // @desc    Xem chi tiết khách hàng thân thiết

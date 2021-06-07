@@ -424,8 +424,10 @@ function fBillCancle() {
 }
 
 //discount
+let loyal_user_id
 function show_loyal_cus_detail(value) {
-  document.querySelector('#loyal_customer_detail').classList.add(CLASS_SHOW)
+  loyal_user_id = value
+  _div_loyalUser.classList.add(CLASS_SHOW)
   axios.get(
     GET_RES_GET_LOYAL_USER_DETAIL + value,      // loyal user info
   )
@@ -465,7 +467,16 @@ function show_loyal_cus_detail(value) {
 }
 
 function formLoyal_customer() {
+}
 
+function sendDiscount() {
+  flag_sendDiscount = 1
+
+  _div_loyalUser.classList.remove(CLASS_SHOW)
+  _div_createDiscount.classList.add(CLASS_SHOW)
+  _list_input_createDiscount[2].style.display = NONE
+  _list_input_createDiscount[2].disabled = true
+  _lb_createDiscount_amount.style.display = NONE
 }
 
 function show_div_createDiscount() {
@@ -473,23 +484,47 @@ function show_div_createDiscount() {
 }
 
 function fCreateDiscount() {
-  axios.post(
-    POST_RES_CREATE_DISCOUNT_CODE,
-    {
-      code: _list_input_createDiscount[0].value,
-      discount: _list_input_createDiscount[1].value,
-      amount: _list_input_createDiscount[2].value,
-      dateExprite: Number(new Date(_list_input_createDiscount[3].value)).toString(), //number
-    }
-  )
-    .then(res => {
-      if (res.data.status == 'success') {
-        alert(res.data.data.message)
-        location.reload()
+  if (flag_sendDiscount == 0) {
+    _list_input_createDiscount[2].style.display = INLINE
+    axios.post(
+      POST_RES_CREATE_PUBLIC_DISCOUNT_CODE,
+      {
+        code: _list_input_createDiscount[0].value,
+        discount: _list_input_createDiscount[1].value,
+        amount: _list_input_createDiscount[2].value,
+        dateExprite: Number(new Date(_list_input_createDiscount[3].value)).toString(), //number
       }
-      else alert(res.data.error.message)
-    })
-    .catch(error => alert(console.error()))
+    )
+      .then(res => {
+        if (res.data.status == 'success') {
+          alert(res.data.data.message)
+          location.reload()
+        }
+        else alert(res.data.error.message)
+      })
+      .catch(error => alert(console.error()))
+  }
+  else{
+    axios.post(
+      POST_RES_CREATE_PRIVATE_DISCOUNT_CODE,
+      {
+        code: _list_input_createDiscount[0].value,
+        discount: _list_input_createDiscount[1].value,
+        user: loyal_user_id,
+        dateExprite: Number(new Date(_list_input_createDiscount[3].value)).toString(), //number
+      }
+    )
+      .then(res => {
+        if (res.data.status == 'success') {
+          alert(res.data.data.message)
+          location.reload()
+        }
+        else alert(res.data.error.message)
+      })
+      .catch(error => alert(console.error()))
+  }
+
+  flag_sendDiscount = 0 // set flag default
   return false
 }
 
@@ -499,6 +534,9 @@ function cancelCreateDiscount() {
   _list_input_createDiscount[2].value = ''
   _list_input_createDiscount[3].value = ''
   _div_createDiscount.classList.remove(CLASS_SHOW)
+  _list_input_createDiscount[2].style.display = INLINE
+  _list_input_createDiscount[2].disabled = false
+  _lb_createDiscount_amount.style.display = INLINE
 }
 
 function hideFormLoyalUser() {
@@ -552,7 +590,7 @@ async function getDataReport() {
           'rgba(54, 162, 235, 0.6)',
           'rgba(54, 162, 235, 0.6)',
           'rgba(54, 162, 235, 0.6)',
-  
+
         ],
         borderWidth: 1,
         borderColor: '#777',

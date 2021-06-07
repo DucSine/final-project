@@ -523,7 +523,7 @@ exports.notifications = async (req, res, next) => {
     let total = 0
     let not_watched = 0
 
-    if (!notifications_list)
+    if (!notifications_listy)
       throw new Error('Không có thông báo mới.')
     else {
       total = await Messages.find({ object: req.user.id }).count()

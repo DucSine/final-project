@@ -74,6 +74,7 @@ var _bill_id = ''
 //discount
 const _div_createDiscount = document.querySelector('#createDiscount.modal.createDiscount-modal')
 const _list_input_createDiscount = _div_createDiscount.querySelectorAll('input')
+const _lb_createDiscount_amount =  _div_createDiscount.querySelector('#cr_lb_discount_amount')
 var flag_product = 1
 var _food_id = ''
 
@@ -88,6 +89,7 @@ const _p_loyal_user_phone = _div_loyalUser.querySelector('#p_loyal_user_phone')
 const _p_loyal_user_address = _div_loyalUser.querySelector('#p_loyal_user_address')
 const _ul_loyal_user_listHisTrans = _div_loyalUser.querySelector('#listHisTrans')
 const _list_btn_loyalUser = _div_loyalUser.querySelectorAll('button.btn')
+let flag_sendDiscount = 0 // 0 is puplic, 1 is private
 //
 
 var _pageTotal = document.getElementById('totalPage').textContent // if else thay doi

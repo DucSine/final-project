@@ -11,9 +11,9 @@ block header
       img.avatar(src=restaurant.banner)
       b  #{name} 
   .notifications_class
-    ul 
+    ul.text-primary
       each item in notifications
-        li #{item.message}
+        li Đơn hàng #{item._id} #{item.status}
   .user-container
     a#a_usInfo.text-primary Thông tin cửa hàng
     a#a_usChangePass.text-primary Đổi mật khẩu
@@ -486,7 +486,7 @@ block content
             b Sale
           input#li_discount.form-control(type='number' name='discount' min='1' max='100' placeholder='Nhập phần trăm giảm' required='')
         .form-group
-          label(for='li_amount')
+          label#cr_lb_discount_amount(for='li_amount')
             b Số lượng mã
           input#li_amount.form-control(type='number' name='amount' min='1' placeholder='Nhập số lượng mã' required='')
         .form-group
@@ -528,7 +528,7 @@ block content
         
       .form-group(style='padding-left: 48px; padding-right: 48px;')
           span
-            button.btn.btn-primary(type='button' onclick='alert("duc")') Tặng mã giảm giá
+            button.btn.btn-primary(type='button' onclick='sendDiscount()') Tặng mã giảm giá
           span(style='float: right')
             button.btn.btn-danger(type='button' onclick='hideFormLoyalUser()') Thoát 
       .container(style='background-color:#f1f1f1')
