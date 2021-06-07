@@ -520,9 +520,11 @@ exports.removeFoodsInCart = async (req, res, next) => {
 exports.notifications = async (req, res, next) => {
   try {
     const notifications_list = await Messages.find({ object: req.user.id })
+    .sort({sort: -1})
     let total = 0
     let not_watched = 0
 
+    console.log( notifications_list)
     if (!notifications_list)
       throw new Error('Không có thông báo mới.')
     else {
