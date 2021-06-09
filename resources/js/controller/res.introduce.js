@@ -82,3 +82,33 @@ window.onclick = function (e) {
 
     }
 }
+
+// load banner
+function readBannerURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        
+        reader.onload = function (e) {
+            $('#regis_show_image').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+$("#regis_image").change(function(){
+    readBannerURL(this);
+});
+
+// load image Product
+function readImageURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        
+        reader.onload = function (e) {
+            $('#ap_show_image').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+$("#regis_image").change(function(){
+    readImageURL(this);
+});
