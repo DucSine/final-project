@@ -551,8 +551,9 @@ exports.getDataReport = async (req, res, next) => {
         let report_bill_wait = await Bill.find({ restaurant: req.restaurant.id, status: 'đang xử lý' }).count()
         let report_bill_confirm = await Bill.find({ restaurant: req.restaurant.id, status: 'đã xác nhận' }).count()
         let report_bill_cancel = await Bill.find({ restaurant: req.restaurant.id, status: 'đã hủy' }).count()
-        let report_bill_done = await Bill.find({ restaurant: req.restaurant.id, status: 'đã thanh toán' }).count()
-        let bill = [report_bill_wait, report_bill_confirm, report_bill_cancel, report_bill_done]
+        let report_bill_pay = await Bill.find({ restaurant: req.restaurant.id, status: 'đã thanh toán' }).count()
+        let report_bill_done = await Bill.find({ restaurant: req.restaurant.id, status: 'đã hoàn tất' }).count()
+        let bill = [report_bill_done, report_bill_confirm, report_bill_pay,report_bill_wait, report_bill_cancel]
         return Response.success(res, { bill })
     } catch (error) {
         console.log(error)

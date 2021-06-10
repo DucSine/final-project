@@ -106,7 +106,8 @@ exports.billComplete = async (req, res, next) => {
             user: `Đơn hàng ${bill._id} đã được giao đến bạn, vui lòng dành chút thời gian đánh giá chất lượng sản phẩm.`
         }
 
-        const totalMessage = Messages.find().count()
+        const totalMessage = await Messages.find().count()
+
         let rs_message = await Messages.create({
             object: bill.restaurant,
             title: 'billMessage',

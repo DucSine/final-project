@@ -580,12 +580,13 @@ async function getDataReport() {
   let massPopChart = new Chart(myChart, {
     type: 'bar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
     data: {
-      labels: ['Đã hoàn tất', 'Chưa xác nhận', 'Đã xác nhận', 'Đã hủy'],
+      labels: ['Đã hoàn tất', 'Đã xác nhận', 'Đã thanh toán', 'Chưa xác nhận', 'Đã hủy'],
       datasets: [{
         label: 'Đơn hàng',
         data: res.data.data.bill || [],
         //backgroundColor:'green',
         backgroundColor: [
+          'rgba(54, 162, 235, 0.6)',
           'rgba(54, 162, 235, 0.6)',
           'rgba(54, 162, 235, 0.6)',
           'rgba(54, 162, 235, 0.6)',

@@ -98,7 +98,7 @@ $("#regis_image").change(function(){
     readBannerURL(this);
 });
 
-// // load image Product
+// // load image 
 // function readImageURL(input) {
 //     if (input.files && input.files[0]) {
 //         var reader = new FileReader();
