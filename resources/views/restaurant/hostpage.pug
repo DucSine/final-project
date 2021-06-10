@@ -374,7 +374,7 @@ block content
         div(style)
           ul(style='list-style:none; padding:30px')
             each row in code 
-              li(onclick='show_loyal_cus_detail(this.querySelector("p.usId").textContent)')
+              li(style="border-style: ridge;" onclick='show_loyal_cus_detail(this.querySelector("p.usId").textContent)')
                 p.usId(style='display:none') #{row._id}
                 p.discount 
                   b Mã giảm: 
@@ -387,7 +387,7 @@ block content
         div(style)
           ul(style='list-style:none; padding:30px')
             each row in expired_code 
-              li(onclick='show_loyal_cus_detail(this.querySelector("p.usId").textContent)')
+              li(style="border-style: ridge;" onclick='show_loyal_cus_detail(this.querySelector("p.usId").textContent)')
                 p.usId(style='display:none') #{row._id}
                 p.discount 
                   b Mã giảm: 

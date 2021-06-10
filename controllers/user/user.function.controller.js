@@ -54,16 +54,21 @@ exports.addCart = async (req, res, next) => {
   } = req.body
   try {
     let food = await Food.findById(foodID)
-    console.log(food)
     if (!food)
       throw new Error('Món không tồn tại!')
 
-    await Cart.create({
+    let cartExists = await Cart.findOne({ food: food._id })
+    if (cartExists)
+      throw new Error('Món đã tồn tại trong giỏ hàng, bạn muốn cập nhật số lượng sản phẩm?')
+
+    let rs = await Cart.create({
       user: req.user.id,
       food: food._id,
       amount,
       restaurant: food.restaurant
     })
+    if (!rs)
+      throw new Error('Có lỗi xảy ra.')
 
     return Response.success(res, { message: 'Thêm thành công.' })
   } catch (error) {
@@ -84,7 +89,7 @@ exports.updateCart = async (req, res, next) => {
     if (!food)
       throw new Error('Món không tồn tại!')
 
-    if (Number(amount) == 0)
+    if (amount == 0)
       await Cart.findOneAndDelete({ food: food._id })
     else
       await Cart.findOneAndUpdate({ food: food._id }, { $set: { amount } })
@@ -520,11 +525,11 @@ exports.removeFoodsInCart = async (req, res, next) => {
 exports.notifications = async (req, res, next) => {
   try {
     const notifications_list = await Messages.find({ object: req.user.id })
-    .sort({sort: -1})
+      .sort({ sort: -1 })
     let total = 0
     let not_watched = 0
 
-    console.log( notifications_list)
+    console.log(notifications_list)
     if (!notifications_list)
       throw new Error('Không có thông báo mới.')
     else {
