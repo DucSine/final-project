@@ -289,6 +289,12 @@ socket.on('billMessage', (data)=> {
     alert(data.message)
     console.log(data)
 })
+
+socket.on('billMessage-done', (data)=> {
+    document.querySelector('span.badge').innerText = data.total
+    alert(data.message)
+    console.log(data)
+})
 console.log(socket)
 
 

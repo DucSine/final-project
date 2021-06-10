@@ -126,9 +126,9 @@ exports.billComplete = async (req, res, next) => {
         if (!rs_message)
             throw new Error('Có lỗi xảy ra.')
 
-        io.to(bill.restaurant.toString()).emit('billMessage', message_io.restaurant)
-        io.to(bill.user.toString()).emit('billMessage', message_io.user)
-        
+        io.to(bill.restaurant.toString()).emit('billMessage-done', { message: message_io.restaurant })
+        io.to(bill.user.toString()).emit('billMessage-done', { message: message_io.user })
+
         return Response.success(res, { message: 'Cập nhật thành công.' })
     } catch (error) {
         console.log(error.message)
