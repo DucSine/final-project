@@ -548,13 +548,30 @@ exports.getLoyalUserHisTrans = async (req, res, next) => {
 
 exports.getDataReport = async (req, res, next) => {
     try {
+        //chart
         let report_bill_wait = await Bill.find({ restaurant: req.restaurant.id, status: 'đang xử lý' }).count()
         let report_bill_confirm = await Bill.find({ restaurant: req.restaurant.id, status: 'đã xác nhận' }).count()
         let report_bill_cancel = await Bill.find({ restaurant: req.restaurant.id, status: 'đã hủy' }).count()
         let report_bill_pay = await Bill.find({ restaurant: req.restaurant.id, status: 'đã thanh toán' }).count()
         let report_bill_done = await Bill.find({ restaurant: req.restaurant.id, status: 'đã hoàn tất' }).count()
         let bill = [report_bill_done, report_bill_confirm, report_bill_pay,report_bill_wait, report_bill_cancel]
-        return Response.success(res, { bill })
+
+        // revenue total
+        let revenue = 0
+        let bills_amount = await Bill.find({restaurant: req.restaurant.id}).count()
+
+        let bills = await Bill.find({restaurant: req.restaurant.id})
+        for(let item of bills)
+            revenue += item.total
+        
+        // customer
+        let customer_total = await Loyal_user.find({restaurant: req.restaurant.id}).count()
+        let new_customer_total = await Loyal_user.find({restaurant: req.restaurant.id}).count()
+
+        //rate: product
+        
+
+        return Response.success(res, { bill, bills_amount, revenue, customer_total})
     } catch (error) {
         console.log(error)
         return next(error)

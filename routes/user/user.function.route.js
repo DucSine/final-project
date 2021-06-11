@@ -22,6 +22,7 @@ const {
     removeFoodsInCart,
     notifications,
     setWatchedNotifications,
+    addDisCountCodeToBill,
 } = require('../../controllers/user/user.function.controller')
 const { protect } = require('../../middlewares/user/auth')
 
@@ -50,15 +51,16 @@ router.post('/removeFoodsInCart', protect, removeFoodsInCart)
 // @access  Private
 router.get('/getRestaurantById', protect, getRestaurantById)
 
-// @route   POST api/user/func/createBill
+// @route   POST api/user/func/order
 // @desc    Đặt hàng
 // @access  Private
-router.post('/createBill', protect, createBill)
+
+router.post('/order', protect, order)
 
 // @route   POST api/user/func/updateBill
 // @desc    Đặt hàng
 // @access  Private
-router.post('/updateBill', protect, updateBill)
+//router.post('/updateBill', protect, updateBill)
 
 // @route   POST api/user/func/delBillById
 // @desc    Xóa đơn hàng

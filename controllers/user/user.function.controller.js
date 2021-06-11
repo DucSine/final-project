@@ -154,26 +154,6 @@ exports.showBillDetail = async (req, res, next) => {
   }
 }
 
-//Hủy Đơn hàng
-exports.cancelOrder = async (req, res, next) => {
-  const bill_id = req.query.bill_id
-  try {
-    let bill = await Bill.findById(bill_id)
-    if (!bill)
-      throw new Error('Đơn hàng không tồn tại.')
-
-    if (bill.status != 'đang xử lý')
-      throw new Error('Đơn hàng không thể hủy vì đang được giao hoặc đã hoàn tất.')
-
-    await Bill.findByIdAndUpdate(bill_id, { $set: { status: 'Đã hủy' } })
-
-    Response.success(res, { message: 'Đã hoàn tất.' })
-  } catch (error) {
-    console.log(error)
-    return next(error)
-  }
-}
-
 //Lịch sử giao dịch
 exports.getHistoryTransaction = async (req, res, next) => {
   try {
@@ -334,7 +314,127 @@ exports.comment = async (req, res, next) => {
 }
 
 ///
+exports.order = async (req, res, next) => {
+  const {
+    restaurant,
+    code,
+    bill,
+    food,
+    amount
+  } = req.body
 
+  try {
+    //tạo bill
+    let resExist = await Restaurant.findById(restaurant)
+    if (!resExist)
+      throw new Error('Nhà hàng không tồn tại.')
+
+    let create_bill
+
+    if (code != null && code != '') {
+      const discountCode = await Discount_code.find({ code })
+        .sort({ dateExprite: -1 })
+
+      if (!discountCode)
+        throw new Error('Mã giảm giá không hợp lệ.')
+
+      if (discountCode[0].restaurant != null && discountCode[0].restaurant != restaurant)
+        throw new Error('Mã giảm giá không áp dụng cho đơn hàng này.')
+
+      if (Number(discountCode[0].dateExprite) <= Date.now())
+        throw new Error('Mã giảm giá đã hết hạn sử dụng.')
+
+      if (discountCode[0].amount <= 0)
+        throw new Error('Mã giảm giá đã hết lượt sử dụng.')
+
+      create_bill = await Bill.create({
+        restaurant,
+        user: req.user._id,
+        discount_code: discountCode[0]._id
+      })
+    }
+    else {
+      create_bill = await Bill.create({
+        restaurant,
+        user: req.user._id
+      })
+    }
+    if (!create_bill)
+      throw new Error('Có lỗi xảy ra khi tạo bill.')
+
+    //add product to bill
+    let total_money = 0
+    var rs
+
+    if (typeof food != 'string') {
+      for (var i in food) {
+        var foodItem = await Food.findById(food[i])
+        if (!foodItem)
+          throw new Error('Có lỗi xảy ra.')
+
+        var bill_detail = await BillDetail.create({
+          food: food[i],
+          amount: amount[i],
+          bill: create_bill._id
+        })
+        if (!bill_detail)
+          throw new Error('Có lỗi xảy ra.')
+
+        total_money += (foodItem.price * amount[i])
+      }
+    } else {
+      var bill_detail = await BillDetail.create({
+        food: food,
+        amount: amount,
+        bill: create_bill._id
+      })
+
+      if (!bill_detail)
+        throw new Error('Có lỗi xảy ra.')
+
+      var foodItem = await Food.findById(food)
+      total_money += (foodItem.price * amount)
+    }
+
+
+    console.log(total_money)
+    const billUpdate = await Bill.findByIdAndUpdate(create_bill._id, { $set: { total: total_money } }, { useFindAndModify: false })
+    if (!billUpdate)
+      throw new Error('Có lỗi xảy ra.')
+
+    const totalMail = await Bill.find({ restaurant, status: 'đang xử lý' }).count()
+
+    rs = await Bill.findByIdAndUpdate(create_bill._id, { $set: { sort: totalMail - 1 } })
+    if (!rs)
+      throw new Error('Có lỗi xảy ra.')
+
+    let message_io = {
+      message: 'Có đơn hàng mới, vui lòng kiểm tra.',
+      total: totalMail
+    }
+    const sortMessages = await Messages.find().count()
+    rs = await Messages.create({
+      object: restaurant,
+      title: 'billMessage',
+      message: message_io.message,
+      sort: sortMessages - 1
+    })
+    if (!rs)
+      throw new Error('Có lỗi xảy ra.')
+
+    io.to(restaurant.toString()).emit('billMessage', message_io)
+
+    return Response.success(res, { message :'Đặt hàng thành công.'})
+
+  } catch (error) {
+    console.log(error)
+    return next(error)
+  }
+}
+
+
+//
+/*
 exports.createBill = async (req, res, next) => {
   const {
     restaurant,
@@ -482,7 +582,7 @@ exports.updateBill = async (req, res, next) => {
     return next(error)
   }
 }
-
+*/
 exports.delBillById = async (req, res, next) => {
   const bill_id = req.query.bill_id
 
@@ -492,6 +592,26 @@ exports.delBillById = async (req, res, next) => {
       throw new Error('Có lỗi xảy ra.')
 
     return Response.success(res, { message: 'Xóa thành công' })
+  } catch (error) {
+    console.log(error)
+    return next(error)
+  }
+}
+
+//Hủy Đơn hàng
+exports.cancelOrder = async (req, res, next) => {
+  const bill_id = req.query.bill_id
+  try {
+    let bill = await Bill.findById(bill_id)
+    if (!bill)
+      throw new Error('Đơn hàng không tồn tại.')
+
+    if (bill.status != 'đang xử lý')
+      throw new Error('Đơn hàng không thể hủy vì đang được giao hoặc đã hoàn tất.')
+
+    await Bill.findByIdAndUpdate(bill_id, { $set: { status: 'Đã hủy' } })
+
+    Response.success(res, { message: 'Đã hoàn tất.' })
   } catch (error) {
     console.log(error)
     return next(error)
