@@ -57,11 +57,6 @@ router.get('/getRestaurantById', protect, getRestaurantById)
 
 router.post('/order', protect, order)
 
-// @route   POST api/user/func/updateBill
-// @desc    Đặt hàng
-// @access  Private
-//router.post('/updateBill', protect, updateBill)
-
 // @route   POST api/user/func/delBillById
 // @desc    Xóa đơn hàng
 // @access  Private
