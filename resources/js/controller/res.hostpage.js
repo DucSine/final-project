@@ -295,7 +295,6 @@ socket.on('billMessage-done', (data)=> {
     alert(data.message)
     console.log(data)
 })
-console.log(socket)
 
 
 

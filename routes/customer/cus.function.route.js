@@ -10,8 +10,13 @@ const {
     showComment,
     getRestaurantInfo,
     getNameProducts,
+    getAllFood,
 } = require('../../controllers/customer/cus.function.controller')
 
+// @route   GET api/cus/getAllProduct
+// @desc    Lấy toàn bộ tên món ăn, param: p= 1,2,...
+// @access  Public
+router.get('/getAllProduct', getAllFood)
 // @route   GET api/cus/getNameProducts
 // @desc    Lấy toàn bộ tên món ăn
 // @access  Public
