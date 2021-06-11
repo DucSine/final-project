@@ -545,15 +545,17 @@ exports.notifications = async (req, res, next) => {
 }
 
 exports.setWatchedNotifications = async (req, res, next) => {
-  const notice_id = req.param.notice_id
+  const notice_id = req.query.notice_id
   try {
-    let notice = await Messages.findOne({ _id: notice_id, isWatched: false })
+    let notice = await Messages.findById(notice_id)
     if (!notice)
       throw new Error('Có lỗi xảy ra.')
 
-    let rs = await Messages.findByIdAndUpdate(notice_id, { $set: { isWatched: true } })
-    if (!rs)
-      throw new Error('Có lỗi xảy ra.')
+    if (notice.isWatched == false) {
+      let rs = await Messages.findByIdAndUpdate(notice_id, { $set: { isWatched: true } })
+      if (!rs)
+        throw new Error('Có lỗi xảy ra.')
+    }
 
     return Response.success(res, { message: 'Cập nhật thành công.' })
   } catch (error) {
