@@ -20,7 +20,7 @@ exports.getAllFood = async (req, res, next) => {
     if (!foods)
       throw new Error('Có lỗi xảy ra.')
 
-    return Response.success(res, { food, foods_amount, pageTotal })
+    return Response.success(res, { foods, foods_amount, pageTotal })
   } catch (error) {
     console.log(error)
     return next(error)

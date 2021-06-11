@@ -569,7 +569,7 @@ exports.getDataReport = async (req, res, next) => {
         let new_customer_total = await Loyal_user.find({restaurant: req.restaurant.id}).count()
 
         //rate: product
-        
+        let foods = await Food.find()
 
         return Response.success(res, { bill, bills_amount, revenue, customer_total})
     } catch (error) {
