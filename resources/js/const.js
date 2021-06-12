@@ -51,6 +51,6 @@ const GET_RES_GET_DISCOUNT_CODE_BY_ID = '/api/res/func/getDiscountById?discount_
 const GET_RES_GET_LOYAL_USER_DETAIL = '/api/res/func/getLoyalUser?user_id='
 const GET_RES_GET_LOYAL_USER_HIS_TRANSACSIONS = '/api/res/func/getLoyalUserHisTrans?user_id='
 
-const POST_ADMIN_LOGIN = http + '/api/admin/auth/login'
-const POST_ADMIN_FORGOT_PASSWORD =http + '/api/admin/auth/fogotPassword'
-const GET_ADMIN_HOST_PAGE = http + '/admin_hostPage'
+const POST_ADMIN_LOGIN = '/api/admin/auth/login'
+const POST_ADMIN_FORGOT_PASSWORD ='/api/admin/auth/fogotPassword'
+const GET_ADMIN_HOST_PAGE = '/admin_hostPage'
