@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const BillSchema = new mongoose.Schema({
-  // 'đang xử lý', 'đã xác nhận', 'đã hủy', 'đã thanh toán'
+  // 'đang xử lý', 'đã xác nhận', 'đã hủy', 'đã thanh toán', 'đã hoàn tất'
   status: {
     type: String,
     default: 'đang xử lý',

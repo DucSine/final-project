@@ -2,7 +2,7 @@ const express = require('express')
 
 const router = express.Router()
 const { check } = require('express-validator')
-const { protect } = require('../../middlewares/admin/auth')
+const { a_protect } = require('../../middlewares/admin/auth')
 const {
   login, 
   forgotPassword, 
@@ -66,7 +66,7 @@ router.post(
     check('newPassword', 'Password tối thiểu 8 ký tự, tối đa 30 ký tự')
     .isLength({ min: 8, max: 30 })
   ],
-  protect,
+  a_protect,
   changePassword,
 )
 
