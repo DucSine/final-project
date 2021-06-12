@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const Response = require('../../helpers/response.helper');
 
 
-exports.protect = async (req, res, next) => {
+exports.a_protect = async (req, res, next) => {
   const token = req.body.token 
   || req.query.token 
   || req.headers.authorization 

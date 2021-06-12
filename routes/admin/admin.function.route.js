@@ -11,6 +11,6 @@ const { adminHostPage } = require('../../controllers/admin/admin.function.comtro
 // @route   GET api/admin/func/hostPage
 // @desc    Lấy toàn bộ tên món ăn, param: p= 1,2,...
 // @access  Public
-router.get('/hostPage', protect, adminHostPage)
+
 
 module.exports = router;

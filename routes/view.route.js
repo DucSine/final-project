@@ -14,7 +14,8 @@ const{
     resetPass, 
     resAuthToken
 } = require('../controllers/general.controller')
-const { adminLogin } = require('../controllers/admin/admin.function.comtroller')
+const { adminLogin, adminHostPage } = require('../controllers/admin/admin.function.comtroller')
+const { a_protect } = require('../middlewares/admin/auth')
 
 // @route   GET /
 // @desc    restaurant introduce page
@@ -34,6 +35,11 @@ router.get('/res_hostpage', protect, resHostpage)
 // @desc    admin login
 // @access  Public
 router.get('/admin/login', adminLogin)
+
+// @route   GET /admin/login
+// @desc    admin login
+// @access  Private
+router.get('/admin_hostpage', a_protect ,adminHostPage)
 
 // @route   GET /reset
 // @desc    Reset password page
