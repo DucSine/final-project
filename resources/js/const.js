@@ -51,4 +51,4 @@ const GET_RES_GET_LOYAL_USER_HIS_TRANSACSIONS = '/api/res/func/getLoyalUserHisTr
 
 const POST_ADMIN_LOGIN = '/api/admin/auth/login'
 const POST_ADMIN_FORGOT_PASSWORD = '/api/admin/auth/fogotPassword'
-const GET_ADMIN_HOST_PAGE = '/api/admin/func/hostPage'
+const GET_ADMIN_HOST_PAGE = '/admin_hostPage'

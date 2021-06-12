@@ -17,21 +17,17 @@ block header
     a#a_usInfo.text-primary Thông tin tài khoản
     a#a_usChangePass.text-primary Đổi mật khẩu
     button#btn_logout.btn.btn-danger Đăng xuất
-
-
-  
-  
-  
+    
 block sidebar
   ul.nav.nav-pills.flex-column(style='padding-top:30px;font-size: x-large;')
     li.nav-item
       a.nav-link.active(href='?load=hostpage') Trang chủ
     li.nav-item
-      a.nav-link(href='?load=product') Sản Phẩm
+      a.nav-link(href='?load=res_management') Quản lý nhà hàng 
     li.nav-item
-      a.nav-link(href='?load=bill') Quản lý đơn hàng
+      a.nav-link(href='?load=user_management') Quản lý khách hàng
     li.nav-item
-      a.nav-link(href='?load=discount') Mã giảm giá
+      a.nav-link(href='?load=discount_management') Quản lý mã giảm giá
 
 block content
   script(src='../../js/controller/admin.hostpage.js')
