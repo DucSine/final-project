@@ -144,6 +144,8 @@ exports.showBillDetail = async (req, res, next) => {
       throw new Error('Đơn hàng không tồn tại.')
 
     const bill_detail = await BillDetail.find({ bill: bill_id })
+    .populate('food')
+    .populate('bill')
     if (!bill_detail)
       throw new Error('Không có sản phẩm.')
 

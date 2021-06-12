@@ -21,6 +21,11 @@ const { adminLogin } = require('../controllers/admin/admin.function.comtroller')
 // @access  Public
 router.get('/', resIntroduce)
 
+// @route   GET /res_hostpage
+// @desc    restaurant introduce page
+// @access  Private
+router.get('/res_hostpage', protect, resHostpage)
+
 // @route   GET /changeMail
 // @desc    restaurant change after register
 // @access  Public
