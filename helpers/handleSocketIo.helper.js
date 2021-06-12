@@ -61,6 +61,7 @@ io.on('connection', (socket) => {
   );
 
   socket.on('adminJoin', ({ adminName }) => {
+    console.log('admin login')
     socket.join(adminName);
   });
 
