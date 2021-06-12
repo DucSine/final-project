@@ -339,7 +339,12 @@ exports.confirmBill = async (req, res, next) => {
         if (!bill)
             throw new Error('Có lỗi xảy ra.')
 
-        var rs = await Bill.findByIdAndUpdate(bill_ID, { $set: { status: 'đã xác nhận' } })
+        let rs
+        if (bill.payment)
+            rs = await Bill.findByIdAndUpdate(bill_ID, { $set: { status: 'đã thanh toán' } })
+        else
+            rs = await Bill.findByIdAndUpdate(bill_ID, { $set: { status: 'đã xác nhận' } })
+        
         if (!rs)
             throw new Error('Có lỗi xảy ra.')
 
