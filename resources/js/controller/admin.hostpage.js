@@ -1,1 +1,1 @@
-const socket = io(`http://kltn-foodoffer.herokuapp.com`)
+socket.emit('adminJoin', {adminName: admin})
