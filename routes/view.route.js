@@ -31,10 +31,10 @@ router.get('/res_hostpage', protect, resHostpage)
 // @desc    restaurant change after register
 // @access  Public
 
-// @route   GET /admin/login
+// @route   GET /admin/admin_login
 // @desc    admin login
 // @access  Public
-router.get('/admin/login', adminLogin)
+router.get('/admin_login', adminLogin)
 
 // @route   GET /admin/login
 // @desc    admin login
