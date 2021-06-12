@@ -11,7 +11,7 @@ function adLogin(){
     }
 
     axios.post(
-        POST_ADMIN_LOGIN,
+        http + '/api/admin/auth/login',
         {
             username:_list_inputLogin[0].value,
             password: _list_inputLogin[1].value
