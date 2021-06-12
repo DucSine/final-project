@@ -1,4 +1,5 @@
 function adLogin(){
+    console.log('loh')
     if(_list_inputLogin[2].checked){
         localStorage.setItem(AD_CB_SAVE, true)
         localStorage.setItem(AD_USERNAME, _list_inputLogin[0].value)
