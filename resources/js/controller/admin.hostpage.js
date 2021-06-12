@@ -1,1 +1,1 @@
-socket.emit('adminJoin', {adminName: admin})
+socket.emit('adminJoin', {adminName: 'admin'})
