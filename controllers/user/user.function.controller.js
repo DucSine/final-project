@@ -422,8 +422,8 @@ exports.order = async (req, res, next) => {
     io.to(restaurant.toString()).emit('billMessage', message_io)
 
     const get_bill = await Bill.findById(create_bill._id)
-    const get_bill_detail = await BillDetail.find({bill: create_bill._id})
-    return Response.success(res, { message :'Đặt hàng thành công.', get_bill, get_bill_detail})
+    const get_bill_detail = await BillDetail.find({ bill: create_bill._id })
+    return Response.success(res, { get_bill, get_bill_detail })
 
   } catch (error) {
     console.log(error)
