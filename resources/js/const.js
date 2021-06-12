@@ -1,3 +1,5 @@
+//io
+const socket = io(`http://kltn-foodoffer.herokuapp.com`)
 // init key style
 const NONE = 'none'
 const INLINE = 'inline'
