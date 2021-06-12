@@ -321,7 +321,7 @@ exports.order = async (req, res, next) => {
     food,
     amount
   } = req.body
-
+console.log(req.body)
   try {
     //tạo bill
     let resExist = await Restaurant.findById(restaurant)

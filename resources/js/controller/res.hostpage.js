@@ -49,6 +49,9 @@ const _div_direct = document.querySelector('#divDirect')
 const _btn_next = document.querySelector('#btn_next.btn.btn-primary')
 const _btn_pre = document.querySelector('#btn_pre.btn.btn-primary')
 
+//
+const _div_hostPage = document.getElementById('divHostPage')
+const _list_i_rp = _div_hostPage.querySelectorAll('i')
 
 //bill detail
 const _div_billDetail = document.getElementById('billDetail')
@@ -75,6 +78,7 @@ var _bill_id = ''
 const _div_createDiscount = document.querySelector('#createDiscount.modal.createDiscount-modal')
 const _list_input_createDiscount = _div_createDiscount.querySelectorAll('input')
 const _lb_createDiscount_amount =  _div_createDiscount.querySelector('#cr_lb_discount_amount')
+const _list_btn_createDiscount = _div_createDiscount.querySelectorAll('button')
 var flag_product = 1
 var _food_id = ''
 

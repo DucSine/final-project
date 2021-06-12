@@ -18,9 +18,16 @@ const {
     getLoyalUserHisTrans,
     getDataReport,
     createPublicDiscount,
-    createPrivateDiscount
+    createPrivateDiscount,
+    resHostpage
 } = require('../../controllers/restaurant/res.function.controller')
 const { protect } = require('../../middlewares/restaurant/auth')
+
+
+// @route   GET /res_hostpage/
+// @desc    restaurant hostpage
+// @access  Private
+router.get('/res_hostpage', protect, resHostpage)
 
 // @route   GET api/res/func/getFood
 // @desc    Xem chi tiết món ăn

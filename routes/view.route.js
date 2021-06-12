@@ -25,23 +25,12 @@ router.get('/', resIntroduce)
 // @desc    restaurant change after register
 // @access  Public
 
-
-// @route   GET /res_hostpage/
-// @desc    restaurant hostpage
-// @access  Private
-router.get('/res_hostpage', protect, resHostpage)
-
-// @route   GET /admin_signin
+// @route   GET /admin/login
 // @desc    admin login
 // @access  Public
 router.get('/admin/login', adminLogin)
 
-// @route   GET /admin_login
-// @desc    admin login
-// @access  Public
-
-
-// @route   GET /resetpass
+// @route   GET /reset
 // @desc    Reset password page
 // @access  Public
 router.get('/reset', resetPage)

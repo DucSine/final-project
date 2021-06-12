@@ -130,34 +130,37 @@ block content
     h4.text-primary Doanh thu
     p
       b.text-primary Tổng đơn hàng: 
-      i 500
+      i#rp_totalBill
     p
       b.text-primary Tổng doanh thu: 
-      i 500
+      i#rp_revenue
+    p
+      b.text-primary Thực nhận: 
+      i#rp_revenue
     p
       b.text-primary Giá trị trung bình mỗi đơn hàng: 
-      i 500
+      i#rp_avg_revenue
 
     hr
     h4.text-primary Khách hàng
     p
       b.text-primary Tổng khách hàng: 
-      i 500
+      i#rp_totalUser
     p
       b.text-primary Khách hàng mới: 
-      i 500
+      i#rp_newUser
 
     hr
     h4.text-primary Tỷ lệ đánh giá sản phẩm
     p
       b.text-primary Sản phẩm được đánh giá trên [4-5] sao: 
-      i 500
+      i#rp_hight_rate
     p
       b.text-primary Sản phẩm được đánh giá [3-4] sao: 
-      i 500
+      i#rp_medium_rate
     p
       b.text-primary Sản phẩm được đánh giá [0-3] sao: 
-      i 500
+      i#rp_low_rate
 
   #divProduct.div-content(style='display:none;padding-top:30px')
     .search-container(style="float:right; padding-right:30px;")
@@ -377,8 +380,8 @@ block content
         div(style)
           ul(style='list-style:none; padding:30px')
             each row in code 
-              li(style="border-style: ridge;" onclick='show_loyal_cus_detail(this.querySelector("p.usId").textContent)')
-                p.usId(style='display:none') #{row._id}
+              li(style="border-style: ridge;" onclick='show_div_createDiscount_discountDetail(this.querySelector("p.codeId").textContent)')
+                p.codeId(style='display:none') #{row._id}
                 p.discount 
                   b Mã giảm: 
                   | #{row.code}
@@ -390,8 +393,8 @@ block content
         div(style)
           ul(style='list-style:none; padding:30px')
             each row in expired_code 
-              li(style="border-style: ridge;" onclick='show_loyal_cus_detail(this.querySelector("p.usId").textContent)')
-                p.usId(style='display:none') #{row._id}
+              li(style="border-style: ridge;" onclick='show_div_createDiscount_discountDetail(this.querySelector("p.codeId").textContent)')
+                p.codeId(style='display:none') #{row._id}
                 p.discount 
                   b Mã giảm: 
                   | #{row.code}
@@ -486,11 +489,11 @@ block content
           input#li_code.form-control(type='text' name='code' placeholder='Nhập mã code' required='')
         .form-group
           label(for='li_discount')
-            b Sale
+            b Sale (%)
           input#li_discount.form-control(type='number' name='discount' min='1' max='100' placeholder='Nhập phần trăm giảm' required='')
         .form-group
-          label#cr_lb_discount_amount(for='li_amount')
-            b Số lượng mã
+          label(for='li_amount')
+            b#cr_lb_discount_amount Số lượng mã
           input#li_amount.form-control(type='number' name='amount' min='1' placeholder='Nhập số lượng mã' required='')
         .form-group
           label(for='li_dateExprite')

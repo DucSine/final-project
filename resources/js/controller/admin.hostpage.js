@@ -1,0 +1,1 @@
+const socket = io(`http://kltn-foodoffer.herokuapp.com`)

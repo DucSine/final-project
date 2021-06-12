@@ -18,6 +18,10 @@ const Response = require('../../helpers/response.helper')
 const limit = 10
 
 
-exports.adminLogin = async (req, res, next) =>{
-    res.render( './admin/login')
+exports.adminLogin = async (req, res, next) => {
+    res.render('./admin/login')
+}
+
+exports.adminHostPage = async (req, res, next) => {
+    res.render('./admin/hostpage')
 }

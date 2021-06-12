@@ -479,6 +479,37 @@ function sendDiscount() {
   _lb_createDiscount_amount.style.display = NONE
 }
 
+function show_div_createDiscount_discountDetail(value) {
+  _div_createDiscount.classList.add(CLASS_SHOW)
+  _list_btn_createDiscount[0].innerText = 'Cập nhật'
+  _list_btn_createDiscount[1].innerText = 'Thoát'
+
+  axios.get(GET_RES_GET_DISCOUNT_CODE_BY_ID + value)
+    .then(res => {
+      if (res.data.status == 'success') {
+        let discount = res.data.data.discount 
+        _list_input_createDiscount[0].value = discount.code
+        _list_input_createDiscount[1].value = discount.discount
+        _list_input_createDiscount[3].value = discount.dateExprite.split('.')[0]
+
+        if(discount.user == null){
+          _lb_createDiscount_amount.innerText = 'Số lượng'
+          _list_input_createDiscount[2].type = 'number'
+          _list_input_createDiscount[2].value = discount.amount
+        }
+        else{
+          _lb_createDiscount_amount.innerText = 'User'
+          _list_input_createDiscount[2].type = 'text'
+          _list_input_createDiscount[2].value = discount.user.username
+        }
+        //
+        console.log(res.data.data.discount)
+      }
+      else alert(res.data.error.message)
+    })
+    .catch(error => alert(console.error()))
+}
+
 function show_div_createDiscount() {
   _div_createDiscount.classList.add(CLASS_SHOW)
 }
@@ -504,7 +535,7 @@ function fCreateDiscount() {
       })
       .catch(error => alert(console.error()))
   }
-  else{
+  else {
     axios.post(
       POST_RES_CREATE_PRIVATE_DISCOUNT_CODE,
       {
@@ -531,12 +562,19 @@ function fCreateDiscount() {
 function cancelCreateDiscount() {
   _list_input_createDiscount[0].value = ''
   _list_input_createDiscount[1].value = ''
+  _list_input_createDiscount[2].type = 'number'
   _list_input_createDiscount[2].value = ''
   _list_input_createDiscount[3].value = ''
   _div_createDiscount.classList.remove(CLASS_SHOW)
   _list_input_createDiscount[2].style.display = INLINE
   _list_input_createDiscount[2].disabled = false
+  
+  _lb_createDiscount_amount.innerText = 'Số lượng'
   _lb_createDiscount_amount.style.display = INLINE
+
+
+  _list_btn_createDiscount[0].innerText = 'Tạo'
+  _list_btn_createDiscount[1].innerText = 'Hủy bỏ'
 }
 
 function hideFormLoyalUser() {
@@ -576,6 +614,7 @@ function set_btn_direct_food() {
 
 async function getDataReport() {
   let res = await axios.get('/api/res/func/getDataReport')
+  let data_rp = res.data.data
   //
   let massPopChart = new Chart(myChart, {
     type: 'bar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
@@ -583,7 +622,7 @@ async function getDataReport() {
       labels: ['Đã hoàn tất', 'Đã xác nhận', 'Đã thanh toán', 'Chưa xác nhận', 'Đã hủy'],
       datasets: [{
         label: 'Đơn hàng',
-        data: res.data.data.bill || [],
+        data: data_rp.bill || [],
         //backgroundColor:'green',
         backgroundColor: [
           'rgba(54, 162, 235, 0.6)',
@@ -625,6 +664,17 @@ async function getDataReport() {
       }
     }
   });
+  // rp
+  _list_i_rp[0].innerText = data_rp.bills_amount
+  _list_i_rp[1].innerText = data_rp.revenue
+  _list_i_rp[2].innerText = data_rp.revenue - (data_rp.revenue * 10 / 100)
+  _list_i_rp[3].innerText = data_rp.revenue / data_rp.bills_amount
+  _list_i_rp[4].innerText = data_rp.customer_total
+  _list_i_rp[5].innerText = 'new user'
+  _list_i_rp[6].innerText = data_rp.rate_hight
+  _list_i_rp[7].innerText = data_rp.rate_medium
+  _list_i_rp[8].innerText = data_rp.rate_low
+
   //
   console.log(res.data.data)
 }

@@ -463,7 +463,6 @@ exports.createPublicDiscount = async (req, res, next) => {
     }
 }
 
-
 exports.createPrivateDiscount = async (req, res, next) => {
     const errors = validationResult(req)
     if (!errors.isEmpty())
@@ -522,6 +521,7 @@ exports.getDiscountById = async (req, res, next) => {
     const discount_id = req.query.discount_id
     try {
         let discount = await Discount_code.findById(discount_id)
+            .populate('user')
         if (!discount)
             throw new Error('Có lỗi xảy ra.')
         return Response.success(res, { discount })
@@ -547,31 +547,44 @@ exports.getLoyalUserHisTrans = async (req, res, next) => {
 }
 
 exports.getDataReport = async (req, res, next) => {
+    const restaurant = req.restaurant.id
     try {
         //chart
-        let report_bill_wait = await Bill.find({ restaurant: req.restaurant.id, status: 'đang xử lý' }).count()
-        let report_bill_confirm = await Bill.find({ restaurant: req.restaurant.id, status: 'đã xác nhận' }).count()
-        let report_bill_cancel = await Bill.find({ restaurant: req.restaurant.id, status: 'đã hủy' }).count()
-        let report_bill_pay = await Bill.find({ restaurant: req.restaurant.id, status: 'đã thanh toán' }).count()
-        let report_bill_done = await Bill.find({ restaurant: req.restaurant.id, status: 'đã hoàn tất' }).count()
-        let bill = [report_bill_done, report_bill_confirm, report_bill_pay,report_bill_wait, report_bill_cancel]
+        let report_bill_wait = await Bill.find({ restaurant, status: 'đang xử lý' }).count()
+        let report_bill_confirm = await Bill.find({ restaurant, status: 'đã xác nhận' }).count()
+        let report_bill_cancel = await Bill.find({ restaurant, status: 'đã hủy' }).count()
+        let report_bill_pay = await Bill.find({ restaurant, status: 'đã thanh toán' }).count()
+        let report_bill_done = await Bill.find({ restaurant, status: 'đã hoàn tất' }).count()
+        let bill = [report_bill_done, report_bill_confirm, report_bill_pay, report_bill_wait, report_bill_cancel]
 
         // revenue total
         let revenue = 0
-        let bills_amount = await Bill.find({restaurant: req.restaurant.id}).count()
+        let bills_amount = await Bill.find({ restaurant }).count()
 
-        let bills = await Bill.find({restaurant: req.restaurant.id})
-        for(let item of bills)
+        let bills = await Bill.find({ restaurant, status: 'đã hoàn tất' })
+        for (let item of bills)
             revenue += item.total
-        
+
         // customer
-        let customer_total = await Loyal_user.find({restaurant: req.restaurant.id}).count()
-        let new_customer_total = await Loyal_user.find({restaurant: req.restaurant.id}).count()
+        let customer_total = await Loyal_user.find({ restaurant }).count()
+        let new_customer_total = await Loyal_user.find({ restaurant }).count()
 
         //rate: product
-        let foods = await Food.find()
+        let foods = await Food.find({ restaurant })
+        let rate_hight = 0
+        let rate_medium = 0
+        let rate_low = 0
 
-        return Response.success(res, { bill, bills_amount, revenue, customer_total})
+        for (let food of foods) {
+            if (food.rate > 4)
+                rate_hight++
+            else if (food.rate > 3)
+                rate_medium++
+            else
+                rate_low++
+        }
+
+        return Response.success(res, { bill, bills_amount, revenue, customer_total, rate_hight, rate_medium, rate_low })
     } catch (error) {
         console.log(error)
         return next(error)

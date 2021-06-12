@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 
 const Response = require('../../helpers/response.helper');
 
+
 exports.protect = async (req, res, next) => {
   const token = req.body.token 
   || req.query.token 
@@ -11,9 +12,8 @@ exports.protect = async (req, res, next) => {
 
   try {
     if (!token) throw new Error('Token not found!');
-    const decode = jwt.verify(token.split(' ')[1], process.env.JWT_SECRET);
-
-    if (decode.admin.name !== process.env.ADMIN_NAME)
+    const decode = jwt.verify(token, process.env.JWT_SECRET);
+    if (decode.admin.username !== process.env.ADMIN_NAME)
       throw new Error('Token không hợp lệ');
 
     const result = await bcrypt.compare(

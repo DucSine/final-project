@@ -1,0 +1,38 @@
+extends ../layouts/rescommon.pug
+block header
+  link(rel='stylesheet' href='../../css/hostpage.css')
+  nav.navbar.navbar-light.bg-primary
+    a.navbar-brand(href='/res/hostpage')
+      img(src='https://res.cloudinary.com/ducsine/image/upload/v1621242491/logo.png' width='200px' height='100px')
+    .div-inline(style='width: 280px')
+      a.notification
+        i.fa.fa-bell(style='font-size:30px;')
+        span.badge 0
+      img.avatar(src='https://res.cloudinary.com/ducsine/image/upload/v1623418396/avatar_admin_ltj5zp.jpg')
+      b  admin
+  .notifications_class
+    ul.text-primary
+     
+  .user-container
+    a#a_usInfo.text-primary Thông tin tài khoản
+    a#a_usChangePass.text-primary Đổi mật khẩu
+    button#btn_logout.btn.btn-danger Đăng xuất
+
+
+  
+  
+  
+block sidebar
+  ul.nav.nav-pills.flex-column(style='padding-top:30px;font-size: x-large;')
+    li.nav-item
+      a.nav-link.active(href='?load=hostpage') Trang chủ
+    li.nav-item
+      a.nav-link(href='?load=product') Sản Phẩm
+    li.nav-item
+      a.nav-link(href='?load=bill') Quản lý đơn hàng
+    li.nav-item
+      a.nav-link(href='?load=discount') Mã giảm giá
+
+block content
+  script(src='../../js/controller/admin.hostpage.js')
+  script(src='../../js/functions/admin.hostpage.js')
