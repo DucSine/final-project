@@ -6,6 +6,10 @@ const BillSchema = new mongoose.Schema({
     type: String,
     default: 'đang xử lý',
   },
+  payment:{
+    type: Boolean,
+    default: false  // true: MOMO, false : Tiem mat
+  },
   restaurant: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Restaurant',

@@ -317,6 +317,7 @@ exports.comment = async (req, res, next) => {
 exports.order = async (req, res, next) => {
   const {
     restaurant,
+    payment,
     code,
     food,
     amount
@@ -349,13 +350,15 @@ exports.order = async (req, res, next) => {
       create_bill = await Bill.create({
         restaurant,
         user: req.user._id,
-        discount_code: discountCode[0]._id
+        discount_code: discountCode[0]._id,
+        payment,
       })
     }
     else {
       create_bill = await Bill.create({
         restaurant,
-        user: req.user._id
+        user: req.user._id,
+        payment,
       })
     }
     if (!create_bill)
