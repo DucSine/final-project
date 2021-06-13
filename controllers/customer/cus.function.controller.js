@@ -12,18 +12,20 @@ exports.getAllFood = async (req, res, next) => {
     const foods_amount = await Food.find().count()
     const pageTotal = Math.ceil(foods_amount / limit)
     let foods
-    if (!p){
+    if (!p) {
       foods = await Food.find()
         .sort({ rate: -1 })
         .populate('restaurant')
-        return Response.success(res, { foods, foods_amount})
-    }else{
+      console.log(foods.length)
+      return Response.success(res, { foods, foods_amount })
+    } else {
       foods = await Food.find()
         .sort({ rate: -1 })
         .populate('restaurant')
         .skip((page - 1) * limit)
         .limit(limit)
-        return Response.success(res, { foods, foods_amount, pageTotal })
+        console.log(foods.length)
+      return Response.success(res, { foods, foods_amount, pageTotal })
     }
   } catch (error) {
     console.log(error)
