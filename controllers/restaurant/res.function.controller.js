@@ -168,10 +168,6 @@ exports.addFood = async (req, res, next) => {
     } = req
 
     try {
-        let food = await Food.findOne({ foodName })
-        if (food)
-            throw new Error('Món đã tồn tại.')
-
         if (file) {   // nếu upload ảnh đại diện 
             let orgName = file.originalname || '';
             orgName = orgName.trim().replace(/ /g, '-');

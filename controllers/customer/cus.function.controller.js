@@ -110,23 +110,16 @@ exports.findProducts = async (req, res, next) => {
   }
 }
 
-// Lấy thông tin nhà hàng
-exports.getRestaurantInfo = async (req, res, next) => {
-  const { resID } = req.query
-
-  try {
-    let restaurant = await Restaurant.findById(resID)
-      .populate('type')
-
-    if (!restaurant)
-      throw new Error('Nhà hàng không tồn tại!')
-
-    return Response.success(res, { restaurant })
-  } catch (error) {
-    console.log(error)
-    return next(error)
-  }
+exports.getAllRestaurant = async (req, res, next) => { 
+  function Res (_id,isVerified,isLock,
+    dateGeneral,banner,restaurantName,
+    email,
+    password,
+    phone,
+    type,
+    address,x, y,__v){}
 }
+
 
 //Xem đánh giá
 // foodID  :query
