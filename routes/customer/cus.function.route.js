@@ -9,7 +9,14 @@ const {
     findProducts,
     showRate,
     showComment,
+    getAllRestaurant,
+    getMenuByResID,
 } = require('../../controllers/customer/cus.function.controller')
+
+// @route   GET api/cus/getAllRestaurant
+// @desc    Lấy toàn bộ tên món ăn, param: p= 1,2,...
+// @access  Public
+router.get('/getAllRestaurant', getAllRestaurant)
 
 // @route   GET api/cus/getAllProduct
 // @desc    Lấy toàn bộ tên món ăn, param: p= 1,2,...
@@ -40,5 +47,11 @@ router.get('/showRate', showRate)
 // @desc    Xem danh sách bình luận
 // @access  Public
 router.get('/showComment', showComment)
+
+// @route   GET api/cus/getResMenu
+// @desc    Xem danh sách bình luận
+// @access  Public
+router.get('/getResMenu', getMenuByResID)
+
 
 module.exports = router

@@ -26,7 +26,7 @@ exports.getAllFood = async (req, res, next) => {
         .populate('restaurant')
         .skip((page - 1) * limit)
         .limit(limit)
-        console.log(foods.length)
+      console.log(foods.length)
       return Response.success(res, { foods, foods_amount, pageTotal })
     }
   } catch (error) {
@@ -92,7 +92,7 @@ exports.findProducts = async (req, res, next) => {
     if (productsTotal <= 0)
       return Response.error(res, { message: 'Không tìm thấy!' })
 
-    const  food = await Food.find({ foodName: new RegExp(key, 'i') })
+    const food = await Food.find({ foodName: new RegExp(key, 'i') })
       .sort({ rate: -1, price: 1, dateCreate: -1 })
       .populate('restaurant')
       .skip((page - 1) * limit)
@@ -110,14 +110,50 @@ exports.findProducts = async (req, res, next) => {
   }
 }
 
-exports.getAllRestaurant = async (req, res, next) => { 
-  function Res (_id,isVerified,isLock,
-    dateGeneral,banner,restaurantName,
-    email,
-    password,
-    phone,
-    type,
-    address,x, y,__v){}
+exports.getMenuByResID = async (req, res, next) => {
+  const res_id = req.query.res_id
+
+  try {
+    let food = await Food.find({restaurant: res_id})
+    if(!food)
+      throw new Error('Không có menu.')
+      return Response(res, {food})
+  } catch (error) {
+    console.log(error)
+    return next(error)
+  }
+}
+
+exports.getAllRestaurant = async (req, res, next) => {
+  // function Res(_id, isVerified, isLock,
+  //   dateGeneral, banner, restaurantName,
+  //   email, password, phone, type, address, x, y, __v) {
+  //     this._id = _id
+  //     this.isVerified = isVerified
+  //     this.isLock = isLock
+  //     this.dateGeneral = this.dateGeneral
+  //     this.banner = banner
+  //     this.restaurantName = restaurantName
+  //     this.email = email
+  //     this.password = password
+  //     this.phone = phone
+  //     this.type = type
+  //     this.address=address
+  //     this.x = x 
+  //     this.y = y
+  //     this.__v = __v
+  //    }
+  let restaurants = []
+  let foods = []
+  let restaurant = await Restaurant.find()
+  for (let item of restaurant) {
+    //let rest = Res(...item)
+    //foods = await Food.find({ restaurant: item.restaurant })
+    //rest.prototype.foods = foods
+    ///console.log(...item)
+    restaurants.push(item)
+  }
+  return Response.success(res, { restaurants })
 }
 
 
