@@ -4,6 +4,8 @@ const Star = require('../../models/Star')
 const Comment = require('../../models/Comment')
 const Restaurant = require('../../models/Restaurant')
 const limit = 15
+const limitNew = 10
+const limitRate = 10
 
 exports.getAllFood = async (req, res, next) => {
   const p = req.query.p
@@ -33,14 +35,14 @@ exports.getAllFood = async (req, res, next) => {
   }
 }
 
-//trang chủ -5 món mới nhất
+//trang chủ -10 món mới nhất
 exports.getNewFood = async (req, res, next) => {
   try {
     const foods = await Food.find()
       .sort({ dateCreate: -1 })
       .populate('restaurant')
       .skip(0)
-      .limit(5)
+      .limit(limitNew)
 
     if (!foods)
       throw new Error('Có lỗi xảy ra')
@@ -59,7 +61,7 @@ exports.topRate = async (req, res, next) => {
       .sort({ rate: -1, price: 1 })
       .populate('restaurant')
       .skip(0)
-      .limit(10)
+      .limit(limitRate)
 
     if (!food)
       throw new Error('Có lỗi xảy ra')
