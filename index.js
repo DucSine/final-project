@@ -57,6 +57,7 @@ app.post('/dev/addRes', async (req,res, next) => {
     phone,
   } = req.body
 
+  console.log(req.body)
   const password = 'duc231097'
   console.log(req.body)
   try{
