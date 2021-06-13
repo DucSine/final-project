@@ -154,7 +154,7 @@ exports.getAllRestaurant = async (req, res, next) => {
 // đếm rate 5,4,3,2,1
 // rate trung bình
 exports.showRate = async (req, res, next) => {
-  const { foodID } = req.query
+  const { foodID, p } = req.query
   try {
     let food = await Food.findById(foodID)
     if (!food)
@@ -175,8 +175,15 @@ exports.showRate = async (req, res, next) => {
       percent_vote_4: Number((vote_4 / total).toFixed(1)),
       percent_vote_5: Number((vote_5 / total).toFixed(1))
     }
+    const page = parseInt(p, 10)
+    const pageTotal = Math.ceil(total / limit)
+    const list_rate = await Star.find({ food: food._id })
+      .sort({ dateCreate: -1 })
+      .populate('user')
+      .skip((page - 1) * limit)
+      .limit(limit);
 
-    return Response.success(res, { rate })
+    return Response.success(res, { rate, list_rate, total, pageTotal })
   } catch (error) {
     console.log(error)
     return next(error)
