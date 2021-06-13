@@ -52,6 +52,8 @@ app.post('/dev/addRes', async (req,res, next) => {
     type,
     email,
     address,
+    x,
+    y,
     phone,
   } = req.body
 
@@ -75,6 +77,8 @@ app.post('/dev/addRes', async (req,res, next) => {
         phone: phone,
         type: restaurantType._id,
         address,
+        x,
+        y,
         isVerified:true,
         
       })

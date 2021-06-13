@@ -41,9 +41,11 @@ const RestaurantSchema = new mongoose.Schema({
     ref: 'RestaurantType',
     required: true,
   },
-  location: {
-    x: Number,
-    y: Number,
+  x:{
+    type: Number
+  },
+  y:{
+    type: Number
   },
   banner: {
     type: String,
