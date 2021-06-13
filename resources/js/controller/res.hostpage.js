@@ -1,5 +1,3 @@
-//const socket = io(`http://localhost:3000`)
-const socket = io(`http://kltn-foodoffer.herokuapp.com`)
 //form iconlogin
 const _img_Avatar = document.querySelector('img.avatar')
 const _div_userContainer = document.querySelector('div.user-container')

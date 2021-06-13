@@ -89,7 +89,7 @@ exports.findProducts = async (req, res, next) => {
     if (productsTotal <= 0)
       return Response.error(res, { message: 'Không tìm thấy!' })
 
-    const food = await Food.find({ foodName: new RegExp(key, 'i') })
+    const  food = await Food.find({ foodName: new RegExp(key, 'i') })
       .sort({ rate: -1, price: 1, dateCreate: -1 })
       .populate('restaurant')
       .skip((page - 1) * limit)
