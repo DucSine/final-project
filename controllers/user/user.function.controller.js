@@ -16,7 +16,7 @@ const Bill = require('../../models/Bill')
 const BillDetail = require('../../models/Bill_Detail')
 const Discount_code = require('../../models/Discount_code')
 const Messages = require('../../models/Messages')
-const limit = 20
+const limit = 10
 
 //Danh sách mã giảm giá 
 exports.publicDiscountCode = async (req, res, next) => {
@@ -130,8 +130,8 @@ exports.showBillDetail = async (req, res, next) => {
       throw new Error('Đơn hàng không tồn tại.')
 
     const bill_detail = await BillDetail.find({ bill: bill_id })
-    .populate('food')
-    .populate('bill')
+      .populate('food')
+      .populate('bill')
     if (!bill_detail)
       throw new Error('Không có sản phẩm.')
 
@@ -413,9 +413,9 @@ exports.order = async (req, res, next) => {
     io.to(restaurant.toString()).emit('billMessage', message_io)
 
     const get_bill_detail = await BillDetail.find({ bill: create_bill._id })
-    .populate('food')
-    .populate('bill')
-    return Response.success(res, {get_bill_detail })
+      .populate('food')
+      .populate('bill')
+    return Response.success(res, { get_bill_detail })
 
   } catch (error) {
     console.log(error)
@@ -508,3 +508,4 @@ exports.setWatchedNotifications = async (req, res, next) => {
     return next(error)
   }
 }
+

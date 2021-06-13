@@ -18,7 +18,6 @@ exports.getAllFood = async (req, res, next) => {
       foods = await Food.find()
         .sort({ rate: -1 })
         .populate('restaurant')
-      console.log(foods.length)
       return Response.success(res, { foods, foods_amount })
     } else {
       foods = await Food.find()
@@ -26,7 +25,6 @@ exports.getAllFood = async (req, res, next) => {
         .populate('restaurant')
         .skip((page - 1) * limit)
         .limit(limit)
-      console.log(foods.length)
       return Response.success(res, { foods, foods_amount, pageTotal })
     }
   } catch (error) {

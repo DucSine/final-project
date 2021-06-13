@@ -48,7 +48,7 @@ router.get('/showRate', showRate)
 // @access  Public
 router.get('/showComment', showComment)
 
-// @route   GET api/cus/getResMenu
+// @route   GET api/cus/getResMenu?res_id=?
 // @desc    Xem danh sách bình luận
 // @access  Public
 router.get('/getResMenu', getMenuByResID)
