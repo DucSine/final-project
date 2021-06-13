@@ -78,8 +78,8 @@ app.post('/dev/addRes', async (req,res, next) => {
         phone: phone,
         type: restaurantType._id,
         address,
-        x,
-        y,
+        x:Number(x),
+        y: Number(y),
         isVerified:true,
         
       })
