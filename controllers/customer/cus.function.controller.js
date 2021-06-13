@@ -114,10 +114,13 @@ exports.getMenuByResID = async (req, res, next) => {
   const res_id = req.query.res_id
 
   try {
-    let food = await Food.find({restaurant: res_id})
-    if(!food)
+    let food = await Food.find({ restaurant: res_id })
+    let amount = await Food.find({ restaurant: res_id }).count()
+    if (!food)
       throw new Error('Không có menu.')
-      return Response(res, {food})
+    console.log('log food')
+    console.log(food)
+    return Response(res, { food, amount })
   } catch (error) {
     console.log(error)
     return next(error)
@@ -125,35 +128,20 @@ exports.getMenuByResID = async (req, res, next) => {
 }
 
 exports.getAllRestaurant = async (req, res, next) => {
-  // function Res(_id, isVerified, isLock,
-  //   dateGeneral, banner, restaurantName,
-  //   email, password, phone, type, address, x, y, __v) {
-  //     this._id = _id
-  //     this.isVerified = isVerified
-  //     this.isLock = isLock
-  //     this.dateGeneral = this.dateGeneral
-  //     this.banner = banner
-  //     this.restaurantName = restaurantName
-  //     this.email = email
-  //     this.password = password
-  //     this.phone = phone
-  //     this.type = type
-  //     this.address=address
-  //     this.x = x 
-  //     this.y = y
-  //     this.__v = __v
-  //    }
-  let restaurants = []
-  let foods = []
-  let restaurant = await Restaurant.find()
-  for (let item of restaurant) {
-    //let rest = Res(...item)
-    //foods = await Food.find({ restaurant: item.restaurant })
-    //rest.prototype.foods = foods
-    ///console.log(...item)
-    restaurants.push(item)
+  const p = req.query.p
+  try {
+    const page = parseInt(p, 10)
+    const foods_amount = await Food.find().count()
+    const pageTotal = Math.ceil(foods_amount / limit)
+
+    let amount = await Restaurant.find().count()
+    let restaurant = await Restaurant.find()
+
+    return Response(res, { restaurant, amount })
+  } catch (error) {
+    console.log(error)
+    return next(error)
   }
-  return Response.success(res, { restaurants })
 }
 
 
