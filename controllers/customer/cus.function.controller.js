@@ -61,7 +61,7 @@ exports.topRate = async (req, res, next) => {
       .sort({ rate: -1, price: 1 })
       .populate('restaurant')
       .skip(0)
-      .limit(limitRate)
+      .limit(limit)
 
     if (!food)
       throw new Error('Có lỗi xảy ra')
@@ -72,6 +72,7 @@ exports.topRate = async (req, res, next) => {
     return next(error)
   }
 }
+
 
 //Tìm kiếm món ăn
 exports.findProducts = async (req, res, next) => {
@@ -108,27 +109,6 @@ exports.findProducts = async (req, res, next) => {
     return next(error)
   }
 }
-
-//tìm kiếm -lấy tên món
-exports.getNameProducts = async (req, res, next) => {
-  try {
-    const foods = await Food.find()
-    const am = await Food.find().count()
-    if (!foods)
-      throw new Error('Có lỗi xảy ra.')
-
-    var foodName = []
-    for (var food of foods)
-      foodName.push(food.foodName)
-
-    var foodNameList = [...new Set(foodName)]
-    return Response.success(res, { foodNameList })
-  } catch (error) {
-    console.log(error)
-    return next(error)
-  }
-}
-
 
 // Lấy thông tin nhà hàng
 exports.getRestaurantInfo = async (req, res, next) => {

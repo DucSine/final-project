@@ -5,22 +5,16 @@ const router = express.Router()
 const {
     getNewFood, 
     topRate, 
+    getAllFood,
     findProducts,
     showRate,
     showComment,
-    getRestaurantInfo,
-    getNameProducts,
-    getAllFood,
 } = require('../../controllers/customer/cus.function.controller')
 
 // @route   GET api/cus/getAllProduct
 // @desc    Lấy toàn bộ tên món ăn, param: p= 1,2,...
 // @access  Public
 router.get('/getAllProduct', getAllFood)
-// @route   GET api/cus/getNameProducts
-// @desc    Lấy toàn bộ tên món ăn
-// @access  Public
-router.get('/getNameProducts', getNameProducts)
 
 // @route   GET api/cus/getNewFood
 // @desc    Lấy 5 món mới
@@ -36,12 +30,6 @@ router.get('/topRate', topRate)
 // @desc    Tìm kiếm 
 // @access  Public
 router.get('/findProducts', findProducts)
-
-// @route   GET api/cus/getRestaurantInfo
-// @desc    Lấy thông tin nhà hàng
-// @access  Public
-router.get('/getRestaurantInfo', getRestaurantInfo)
-
 
 // @route   GET api/cus/showRate
 // @desc    Xem đánh giá

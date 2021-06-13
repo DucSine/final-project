@@ -46,22 +46,10 @@ router.get('/cart', protect, showCart)
 // @access  Private
 router.post('/removeFoodsInCart', protect, removeFoodsInCart)
 
-// @route   GET api/user/func/getRestaurantById
-// @desc    Xem giỏ hàng
-// @access  Private
-router.get('/getRestaurantById', protect, getRestaurantById)
-
 // @route   POST api/user/func/order
 // @desc    Đặt hàng
 // @access  Private
-
 router.post('/order', protect, order)
-
-// @route   POST api/user/func/delBillById
-// @desc    Xóa đơn hàng
-// @access  Private
-router.post('/delBillById', protect, delBillById)
-
 
 // @route   GET api/user/func/billDetail?bill_id='????'
 // @desc    Xem chi tiết đơn hàng
