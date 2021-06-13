@@ -3,7 +3,7 @@ const Response = require('../../helpers/response.helper')
 const Star = require('../../models/Star')
 const Comment = require('../../models/Comment')
 const Restaurant = require('../../models/Restaurant')
-const limit = 20
+const limit = 15
 
 exports.getAllFood = async (req, res, next) => {
   const p = req.query.p
@@ -11,16 +11,20 @@ exports.getAllFood = async (req, res, next) => {
     const page = parseInt(p, 10)
     const foods_amount = await Food.find().count()
     const pageTotal = Math.ceil(foods_amount / limit)
-    const foods = await Food.find()
-      .sort({ rate: -1 })
-      .populate('restaurant')
-      .skip((page - 1) * limit)
-      .limit(limit);
-
-    if (!foods)
-      throw new Error('Có lỗi xảy ra.')
-
-    return Response.success(res, { foods, foods_amount, pageTotal })
+    let foods
+    if (!p){
+      foods = await Food.find()
+        .sort({ rate: -1 })
+        .populate('restaurant')
+        return Response.success(res, { foods, foods_amount})
+    }else{
+      foods = await Food.find()
+        .sort({ rate: -1 })
+        .populate('restaurant')
+        .skip((page - 1) * limit)
+        .limit(limit)
+        return Response.success(res, { foods, foods_amount, pageTotal })
+    }
   } catch (error) {
     console.log(error)
     return next(error)
