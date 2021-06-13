@@ -118,9 +118,8 @@ exports.getMenuByResID = async (req, res, next) => {
     let amount = await Food.find({ restaurant: res_id }).count()
     if (!food)
       throw new Error('Không có menu.')
-    console.log('log food')
-    console.log(food)
-    return Response(res, { food, amount })
+      
+    return Response.success(res, { food, amount })
   } catch (error) {
     console.log(error)
     return next(error)
