@@ -118,7 +118,7 @@ exports.getMenuByResID = async (req, res, next) => {
     let amount = await Food.find({ restaurant: res_id }).count()
     if (!food)
       throw new Error('Không có menu.')
-      
+
     return Response.success(res, { food, amount })
   } catch (error) {
     console.log(error)
@@ -130,13 +130,19 @@ exports.getAllRestaurant = async (req, res, next) => {
   const p = req.query.p
   try {
     const page = parseInt(p, 10)
-    const foods_amount = await Food.find().count()
-    const pageTotal = Math.ceil(foods_amount / limit)
-
     let amount = await Restaurant.find().count()
-    let restaurant = await Restaurant.find()
-
-    return Response(res, { restaurant, amount })
+    const pageTotal = Math.ceil(amount / limit)
+    let restaurant
+    if (!p) {
+      restaurant = await Restaurant.find()
+      return Response.success(res, { restaurant, amount })
+    }
+    else {
+      restaurant = await Restaurant.find()
+        .skip((page - 1) * limit)
+        .limit(limit)
+      return Response.success(res, { restaurant, amount, pageTotal })
+    }
   } catch (error) {
     console.log(error)
     return next(error)
