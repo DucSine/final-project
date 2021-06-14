@@ -37,11 +37,13 @@ const Restaurant = require('./models/Restaurant')
 const RestaurantType = require('./models/RestaurantType')
 const Food = require('./models/Food')
 const User = require('./models/User')
+const Star = require('./models/Star')
 const jwt = require('jsonwebtoken')
 const { emailIsExists, decodeAuthToken } = require('./config/general')
 const upload = multer({ dest: './resources/uploads' })
 
 const Response = require('./helpers/response.helper')
+const { getMaxListeners } = require('./models/Restaurant')
 app.get('/dev/addRes', (req, res) => res.render('addRes'))
 
 app.post('/dev/addRes', async (req, res, next) => {
@@ -143,5 +145,56 @@ app.post('/dev/addFood', upload.single('image'), async (req, res, next) => {
 }, (req, res) => res.send(`<script>alert('Thành công')</script>`))
 ///
 
+
+
+function getRndInteger(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+async function generateRate() {
+
+  let foods = await Food.find()
+  let userList = await User.find()
+
+  for (let food of foods) {
+    const rateTimeGoods = getRndInteger(500, 1000)
+    const rateTimeBad = getRndInteger(0, 200)
+    for (let i = 0; i <= rateTimeGoods; i++) {
+      let user = userList[getRndInteger(0, 2199)]._id
+
+      let check = await Star.findOne({ food: food._id, user })
+      if (!check) {
+        console.log('rate: ' + i)
+        let rs = await Star.create({
+          rate: getRndInteger(4, 5),
+          food: food._id,
+          user
+        })
+        if (!rs)
+          throw new Error('Có lỗi xảy ra')
+        console.log('rate Goods' + i + ' done')
+      }
+    }
+
+    for (let i = 0; i <= rateTimeBad; i++) {
+      let user = userList[getRndInteger(0, 2199)]._id
+
+      let check = await Star.findOne({ food: food._id, user })
+      if (!check) {
+        console.log('rate: ' + i)
+        let rs = await Star.create({
+          rate: getRndInteger(1, 3),
+          food: food._id,
+          user
+        })
+        if (!rs)
+          throw new Error('Có lỗi xảy ra')
+        console.log('rate Bad' + i + ' done')
+      }
+    }
+  }
+
+}
+generateRate()
 
 server.listen(port, () => console.log(`run with http://localhost:${port}`))
