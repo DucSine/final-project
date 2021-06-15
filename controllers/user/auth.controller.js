@@ -36,7 +36,7 @@ exports.register = async (req, res, next) => {
     if (checkMail)
       throw new Error('Email đã được sử dụng!')
 
-    if (username.trim().indexOf(' ') != -1)
+    if (username.indexOf(' ') != -1)
       throw new Error('username không được chứa Khoảng trắng và các ký tự đặc biệt.')
     
     let patten = '[a-z0-9]{6,12}'
@@ -195,12 +195,12 @@ exports.login = async (req, res, next) => {
   const { username, password } = req.body
 
   try {
-    if (username.trim().indexOf(' ') != -1)
+    if (username.indexOf(' ') != -1)
       throw new Error('username không được chứa Khoảng trắng và các ký tự đặc biệt.')
     
     let patten = '[a-z0-9]{6,12}'
-    if (Boolean(username.match(patten)))
-      throw new Error('username không được chứa Khoảng trắng và các ký thự đặc biệt.')
+    if (Boolean(username.match(patten))== false)
+      throw new Error('username không được chứa Khoảng trắng và các ký thự đặc biệt..')
 
     const user = await User.findOne({ username })
 
@@ -402,6 +402,8 @@ exports.editAccount = async (req, res, next) => {
   } = req
   console.log(req.body)
   try {
+    if(Number(Dat))
+
     if (file) {   // nếu đổi ảnh đại diện 
       let orgName = file.originalname || '';
       orgName = orgName.trim().replace(/ /g, '-');
