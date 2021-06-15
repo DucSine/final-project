@@ -209,8 +209,11 @@ block content
         a.nav-link(data-toggle='tab' href='#billConfirm')
           h4 Đã xác nhận
       li.nav-item
-        a.nav-link(data-toggle='tab' href='#billDone')
+        a.nav-link(data-toggle='tab' href='#billPay')
           h4 Đã thanh toán
+      li.nav-item
+        a.nav-link(data-toggle='tab' href='#billDone')
+          h4 Đã hoàn tất
       li.nav-item
         a.nav-link(data-toggle='tab' href='#billCancle')
           h4 Đã Hủy
@@ -238,6 +241,13 @@ block content
                     p
                       b Tổng cộng: 
                       | #{bill.total} 
+          #divDirect(style='padding:30px;')
+            span(style='padding-right:5px')
+                button.btn.btn-primary(type='button') 
+                  i.fas.fa-angle-double-left
+            span(style='padding-left:5px')
+                button.btn.btn-primary(type='button') 
+                  i.fas.fa-angle-double-right
                        
       #billConfirm.container.tab-pane.fade
         br
@@ -261,6 +271,45 @@ block content
                     p
                       b Tổng cộng: 
                       | #{bill.total} 
+          
+          #divDirect(style='padding:30px;')
+            span(style='padding-right:5px')
+                button.btn.btn-primary(type='button') 
+                  i.fas.fa-angle-double-left
+            span(style='padding-left:5px')
+                button.btn.btn-primary(type='button') 
+                  i.fas.fa-angle-double-right
+
+      #billPay.container.tab-pane.fade
+        br
+        div(style)
+          ul#listProduct(style='list-style:none;')
+            each bill in confrimTransasion
+              li(onclick='getWaitBillDetail(this.querySelector("#cfbillId").textContent)')
+                .media.border.p-1
+                  .media-body(style='padding-left: 30px; padding-right: 30px')
+                    label#cfbillId(style='font-size: x-large;')
+                      b Bill ID: 
+                      | #{bill._id}
+                    i.fas.fa-calendar-check.text-primary(style='float: right;')
+                      b(style='color: black')  Đã xác nhận
+                    p
+                      b Ngày tạo đơn hàng: 
+                      | #{bill.dateCreate} 
+                    p
+                      b Khách hàng: 
+                      |  #{bill.user.username}
+                    p
+                      b Tổng cộng: 
+                      | #{bill.total} 
+
+          #divDirect(style='padding:30px;')
+            span(style='padding-right:5px')
+                button.btn.btn-primary(type='button') 
+                  i.fas.fa-angle-double-left
+            span(style='padding-left:5px')
+                button.btn.btn-primary(type='button') 
+                  i.fas.fa-angle-double-right
 
       #billDone.container.tab-pane.fade
         br
@@ -297,6 +346,13 @@ block content
                     p
                       b Tổng cộng: 
                       | #{bill.total} 
+          #divDirect(style='padding:30px;')
+            span(style='padding-right:5px')
+                button.btn.btn-primary(type='button') 
+                  i.fas.fa-angle-double-left
+            span(style='padding-left:5px')
+                button.btn.btn-primary(type='button') 
+                  i.fas.fa-angle-double-right
       
       #billCancle.container.tab-pane.fade
         br
@@ -336,6 +392,14 @@ block content
                     p 
                       b Lý do hủy 
                       | #{bill.message}
+
+          #divDirect(style='padding:30px;')
+            span(style='padding-right:5px')
+                button.btn.btn-primary(type='button') 
+                  i.fas.fa-angle-double-left
+            span(style='padding-left:5px')
+                button.btn.btn-primary(type='button') 
+                  i.fas.fa-angle-double-right
   
   #divDiscountCode.div-content(style='display:none;padding-top:30px')
     div(style='float:right; padding-right:30px')
@@ -375,6 +439,14 @@ block content
                       label
                         b Điểm tích lũy: 
                         b #{row.point}  
+                      
+          #divDirect(style='padding:30px;')
+            span(style='padding-right:5px')
+                button.btn.btn-primary(type='button') 
+                  i.fas.fa-angle-double-left
+            span(style='padding-left:5px')
+                button.btn.btn-primary(type='button') 
+                  i.fas.fa-angle-double-right
         
       #discount.container.tab-pane.fade
         div(style)
@@ -389,6 +461,14 @@ block content
                   b Thời hạn: 
                   | #{row.dateExprite}
 
+          #divDirect(style='padding:30px;')
+            span(style='padding-right:5px')
+                button.btn.btn-primary(type='button') 
+                  i.fas.fa-angle-double-left
+            span(style='padding-left:5px')
+                button.btn.btn-primary(type='button') 
+                  i.fas.fa-angle-double-right
+
       #hisDiscount.container.tab-pane.fade
         div(style)
           ul(style='list-style:none; padding:30px')
@@ -401,6 +481,14 @@ block content
                 p.discount 
                   b Thời hạn: 
                   | #{row.dateExprite}
+
+          #divDirect(style='padding:30px;')
+            span(style='padding-right:5px')
+                button.btn.btn-primary(type='button') 
+                  i.fas.fa-angle-double-left
+            span(style='padding-left:5px')
+                button.btn.btn-primary(type='button') 
+                  i.fas.fa-angle-double-right
 
   #addProduct.modal.addProduct-modal
     form.modal-content.addProduct-modal-content.animate( method='post' enctype='multipart/form-data' onsubmit='return editProduct()' )
