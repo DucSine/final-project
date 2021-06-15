@@ -54,5 +54,39 @@ block sidebar
       a.nav-link(href='?load=discount_management') Quản lý mã giảm giá
 
 block content
+  .div-content(style='padding-top:30px')
+    | safmsaf
+    .search-container(style="float:right; padding-right:30px;")
+      .form(onsubmit='return false' method='get')
+        input#inputSearch(type="text" placeholder="Search.." name="keySearch")
+        button(type="button" onclick='search()')
+          i.fa.fa-search
+
+    p#totalPage(style='display:none')
+      #divDirect(style='padding:30px;')
+        span(style='padding-right:5px')
+          button#btn_pre.btn.btn-primary(type='button' onclick='previousPage()') 
+            i.fas.fa-angle-double-left
+        span(style='padding-left:5px')
+          button#btn_next.btn.btn-primary(type='button' onclick='nextPage()') 
+            i.fas.fa-angle-double-right
+
+  .div-content(style='display:none;padding-top:30px')
+    | sa;d'a
+    .search-container(style="float:right; padding-right:30px;")
+      .form(onsubmit='return false' method='get')
+        input#inputSearch(type="text" placeholder="Search.." name="keySearch")
+        button(type="button" onclick='search()')
+          i.fa.fa-search
+
+    p#totalPage(style='display:none')
+      #divDirect(style='padding:30px;')
+        span(style='padding-right:5px')
+          button#btn_pre.btn.btn-primary(type='button' onclick='previousPage()') 
+            i.fas.fa-angle-double-left
+        span(style='padding-left:5px')
+          button#btn_next.btn.btn-primary(type='button' onclick='nextPage()') 
+            i.fas.fa-angle-double-right
+
   script(src='../../js/controller/admin.hostpage.js')
   script(src='../../js/functions/admin.hostpage.js')

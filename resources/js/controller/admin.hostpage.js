@@ -47,10 +47,10 @@ switch (_load) {
         initPageFunctions(_a_sidebars[1], _div_contents[1], BLOCK)
         break
     case 'user_management':
-        initPageFunctions(_a_sidebars[2], _div_contents[2], BLOCK)
+        initPageFunctions(_a_sidebars[2], _div_contents[1], BLOCK)
         break
     case 'discount_management':
-        initPageFunctions(_a_sidebars[3], _div_contents[3], BLOCK)
+        initPageFunctions(_a_sidebars[3], _div_contents[1], BLOCK)
         break
     default:
         initPageFunctions(_a_sidebars[0], _div_contents[0], NONE)
@@ -76,7 +76,7 @@ window.onclick = function (e) {
         case _btn_logout:
             document.cookie = "token="
             _div_userContainer.classList.toggle(CLASS_SHOW_FLEX)
-            window.location = "/admin_login";
+            window.location = "/admin_login"
             break
         default:
             _div_userContainer.classList.remove(CLASS_SHOW_FLEX)
@@ -87,19 +87,19 @@ window.onclick = function (e) {
 
 
 
-function initPageFunctions(tagA, ) {
+function initPageFunctions(tagA, tagDiv, status) {
     for (var aItem of _a_sidebars)
         (aItem == tagA) ?
             aItem.classList.add(CLASS_ACTIVE) :
             aItem.classList.remove(CLASS_ACTIVE)
-    // for (var divItem of _div_contents)
-    //     (divItem == tagDiv) ?
-    //         divItem.style.display = BLOCK :
-    //         divItem.style.display = NONE
+    for (var divItem of _div_contents)
+        (divItem == tagDiv) ?
+            divItem.style.display = BLOCK :
+            divItem.style.display = NONE
 
 
-    // _div_searchForm.style.display = status
-    // _div_direct.style.display = status
+    _div_searchForm.style.display = status
+    _div_direct.style.display = status
 }
 
 socket.emit('adminJoin', { adminName: 'admin' })

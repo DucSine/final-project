@@ -145,5 +145,14 @@ app.post('/dev/addFood', upload.single('image'), async (req, res, next) => {
 
 }, (req, res) => res.send(`<script>alert('Thành công')</script>`))
 ///
+function testStr(){
+  let strr = 'fuc sjddfd4'
+  if(strr.trim().indexOf(' ') != -1)
+    console.log('Có klhaorng trắng')
 
+    let patten = '[a-z0-9]{6,12}'
+    console.log(Boolean(strr.match(patten)))
+}
+
+testStr()
 server.listen(port, () => console.log(`run with http://localhost:${port}`))

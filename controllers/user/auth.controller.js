@@ -31,9 +31,17 @@ exports.register = async (req, res, next) => {
   } = req.body
   console.log(req.body)
   try {
+    
     const checkMail = await emailIsExists(email)
     if (checkMail)
       throw new Error('Email đã được sử dụng!')
+
+    if (username.trim().indexOf(' ') != -1)
+      throw new Error('username không được chứa Khoảng trắng và các ký tự đặc biệt.')
+    
+    let patten = '[a-z0-9]{6,12}'
+    if (Boolean(username.match(patten)))
+      throw new Error('username không được chứa Khoảng trắng và các ký thự đặc biệt.')
 
     let user = await User.findOne({ username })
 
@@ -56,9 +64,9 @@ exports.register = async (req, res, next) => {
 
 
     //
-    const otpExpire = Date.now() + 24 * 60 * 60 * 1000 
+    const otpExpire = Date.now() + 24 * 60 * 60 * 1000
     var authCode = 'FO-'
-    for(var i = 0; i <= 5; i++)
+    for (var i = 0; i <= 5; i++)
       authCode += Math.floor(Math.random() * 10)
     //var dateParts = bDate.split('/')
 
@@ -83,7 +91,7 @@ exports.register = async (req, res, next) => {
       //)
     })
     //TẠO OTP
-    
+
     //SEND MAIL
     var eMessage = `Xin chào ${username}!`
       + `\nMã OTP của bạn là ${authCode} `
@@ -164,12 +172,12 @@ exports.verificationAccount = async (req, res, next) => {
     let user = await User.findOne({ email })
     if (!user)
       throw new Error('Có lỗi xảy ra')
-    
-    if (OTP != user.OTP || Date.now()> new Date(user.otpExpire)*1)
-    return Response.error(res, { message: 'OTP không hợp lệ!' })
-   
-    await User.findByIdAndUpdate(user._id, { $set: { isVerified: true , OTP: null, otpExpire: null} })
-    
+
+    if (OTP != user.OTP || Date.now() > new Date(user.otpExpire) * 1)
+      return Response.error(res, { message: 'OTP không hợp lệ!' })
+
+    await User.findByIdAndUpdate(user._id, { $set: { isVerified: true, OTP: null, otpExpire: null } })
+
     return Response.success(res, { message: 'Kích hoạt tài khoản thành công.' })
   } catch (err) {
     console.log(error.message)
@@ -187,16 +195,23 @@ exports.login = async (req, res, next) => {
   const { username, password } = req.body
 
   try {
+    if (username.trim().indexOf(' ') != -1)
+      throw new Error('username không được chứa Khoảng trắng và các ký tự đặc biệt.')
+    
+    let patten = '[a-z0-9]{6,12}'
+    if (Boolean(username.match(patten)))
+      throw new Error('username không được chứa Khoảng trắng và các ký thự đặc biệt.')
+
     const user = await User.findOne({ username })
 
-    if (!user) 
+    if (!user)
       throw new Error('username không đúng')
 
-    if (!user.isVerified) 
+    if (!user.isVerified)
       throw new Error('Tài khoản chưa được kích hoạt!')
 
     // Result: boolean
-    const result = await bcrypt.compare( password , user.password )
+    const result = await bcrypt.compare(password, user.password)
 
     if (!result) {
       throw new Error('Password sai!')
@@ -396,7 +411,7 @@ exports.editAccount = async (req, res, next) => {
 
       const result = await cloudinary.uploader.upload(newFullPath);
       fs.unlinkSync(newFullPath);
-      
+
       await User.findByIdAndUpdate(req.user._id, {
         $set: {
           ...req.body,
@@ -404,7 +419,7 @@ exports.editAccount = async (req, res, next) => {
           avatar: result.url
         },
       })
-    }else{
+    } else {
       await User.findByIdAndUpdate(req.user._id, {
         $set: {
           ...req.body,
@@ -412,7 +427,7 @@ exports.editAccount = async (req, res, next) => {
         },
       })
     }
-    
+
     return Response.success(res, { message: 'Cập nhật thành công' })
   } catch (error) {
     console.log(error)
