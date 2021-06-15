@@ -145,13 +145,18 @@ app.post('/dev/addFood', upload.single('image'), async (req, res, next) => {
 
 }, (req, res) => res.send(`<script>alert('Thành công')</script>`))
 ///
-function testStr(){
-  let strr = 'fuc sjddfd4'
-  if(strr.trim().indexOf(' ') != -1)
-    console.log('Có klhaorng trắng')
-
-    let patten = '[a-z0-9]{6,12}'
-    console.log(Boolean(strr.match(patten)))
+async function testStr() {
+  let restaurant = await Restaurant.find().populate('type')
+  //console.log(restaurant)
+  console.log(restaurant.length)
+  let key = ''
+  let page = 0
+  let restaurants = await Restaurant.find({ restaurantName: new RegExp(key, 'i') })
+    // .populate('type')
+    // .skip((page - 1) * limit)
+    // .limit(limit)
+  //console.log(restaurants)
+  console.log(restaurants.length)
 }
 
 testStr()

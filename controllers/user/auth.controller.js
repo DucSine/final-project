@@ -17,6 +17,8 @@ const {
 } = require('../../config/general')
 const { use } = require('../../routes/user/auth.route')
 
+const us_patten = '[a-z0-9]{6,12}'
+const pass_patten = '[a-z0-9]'
 //Đăng ký
 exports.register = async (req, res, next) => {
   // Validate
@@ -31,17 +33,19 @@ exports.register = async (req, res, next) => {
   } = req.body
   console.log(req.body)
   try {
-    
+
     const checkMail = await emailIsExists(email)
     if (checkMail)
       throw new Error('Email đã được sử dụng!')
 
     if (username.indexOf(' ') != -1)
       throw new Error('username không được chứa Khoảng trắng và các ký tự đặc biệt.')
-    
-    let patten = '[a-z0-9]{6,12}'
-    if (Boolean(username.match(patten)))
+
+    if (Boolean(username.match(us_patten)) == false)
       throw new Error('username không được chứa Khoảng trắng và các ký thự đặc biệt.')
+
+    if (Boolean(password.match(pass_patten)) == false)
+      throw new Error('password không được chứa Khoảng trắng và các ký thự đặc biệt.')
 
     let user = await User.findOne({ username })
 
@@ -197,11 +201,12 @@ exports.login = async (req, res, next) => {
   try {
     if (username.indexOf(' ') != -1)
       throw new Error('username không được chứa Khoảng trắng và các ký tự đặc biệt.')
-    
-    let patten = '[a-z0-9]{6,12}'
-    if (Boolean(username.match(patten))== false)
-      throw new Error('username không được chứa Khoảng trắng và các ký thự đặc biệt..')
 
+    if (Boolean(username.match(us_patten)) == false)
+      throw new Error('username không được chứa Khoảng trắng và các ký thự đặc biệt.')
+
+    if (Boolean(password.match(pass_patten)) == false)
+      throw new Error('password không được chứa Khoảng trắng và các ký thự đặc biệt.')
     const user = await User.findOne({ username })
 
     if (!user)
@@ -210,6 +215,8 @@ exports.login = async (req, res, next) => {
     if (!user.isVerified)
       throw new Error('Tài khoản chưa được kích hoạt!')
 
+    if (user.isLock)
+      throw new Error('Tài khoản đã bị khóa!')
     // Result: boolean
     const result = await bcrypt.compare(password, user.password)
 
@@ -323,6 +330,9 @@ exports.resetPassword = async (req, res, next) => {
     if (!user.isVerified)
       throw new Error('Tài khoản chưa được kích hoạt!')
 
+    if (Boolean(password.match(pass_patten)) == false)
+      throw new Error('password không được chứa Khoảng trắng và các ký thự đặc biệt.')
+
     const salt = await bcrypt.genSalt(10);
     const password = await bcrypt.hash(newPassword, salt)
     await User.findByIdAndUpdate(user._id, { $set: { password } })
@@ -364,6 +374,12 @@ exports.changePassword = async (req, res, next) => {
   } = req.body
 
   try {
+    if (Boolean(password.match(pass_patten)) == false)
+      throw new Error('password không được chứa Khoảng trắng và các ký thự đặc biệt.')
+
+    if (Boolean(newPassword.match(pass_patten)) == false)
+      throw new Error('password không được chứa Khoảng trắng và các ký thự đặc biệt.')
+
     if (password == newPassword)
       throw new Error('Mật khẩu mới phải khác mật khẩu cũ!')
 
@@ -402,17 +418,18 @@ exports.editAccount = async (req, res, next) => {
   } = req
   console.log(req.body)
   try {
-    if(Number(Dat))
+    if (Number(new Date(bDate)) >= Date.now())
+      throw new Error('Ngày sinh không hợp lệ.')
 
     if (file) {   // nếu đổi ảnh đại diện 
-      let orgName = file.originalname || '';
-      orgName = orgName.trim().replace(/ /g, '-');
+      let orgName = file.originalname || ''
+      orgName = orgName.trim().replace(/ /g, '-')
       const fullPathInServ = file.path;
-      const newFullPath = `${fullPathInServ}-${orgName}`;
-      fs.rename(fullPathInServ, newFullPath);
+      const newFullPath = `${fullPathInServ}-${orgName}`
+      fs.rename(fullPathInServ, newFullPath)
 
-      const result = await cloudinary.uploader.upload(newFullPath);
-      fs.unlinkSync(newFullPath);
+      const result = await cloudinary.uploader.upload(newFullPath)
+      fs.unlinkSync(newFullPath)
 
       await User.findByIdAndUpdate(req.user._id, {
         $set: {
