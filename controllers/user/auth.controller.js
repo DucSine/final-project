@@ -196,7 +196,7 @@ exports.login = async (req, res, next) => {
       throw new Error('Tài khoản chưa được kích hoạt!')
 
     // Result: boolean
-    const result = await bcrypt.compare(password, user.password)
+    const result = await bcrypt.compare( password , user.password )
 
     if (!result) {
       throw new Error('Password sai!')
