@@ -79,17 +79,17 @@ exports.flagLockRestaurant = async (req, res, next) => {
         resId,
         isLock
     } = req.body
-    console.log(req.body)
+
     try {
         let restaurant = await Restaurant.findById(resId)
         if (!restaurant)
-            throw new Error('Có lỗi xảy ra. TÊN')
+            throw new Error('Có lỗi xảy ra.')
 
-        let rs = await Restaurant.findByIdAndUpdate(resId, { $set: { isLock } })
+        let rs = await Restaurant.findByIdAndUpdate(restaurant._id, { $set: { isLock } })
         if (!rs)
-            throw new Error('Có lỗi xảy ra. kHOA')
+            throw new Error('Có lỗi xảy ra.')
 
-        return Response.success(req, { message: 'Cập nhật thành công.' })
+        return Response.success(res, { message: 'Cập nhật thành công.' })
     } catch (error) {
         console.log(error)
         return next(new Error('Có lỗi xảy ra!'))

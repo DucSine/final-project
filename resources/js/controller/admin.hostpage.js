@@ -16,6 +16,9 @@ const _div_contents = document.querySelectorAll('.div-content')
 const _div_searchForm = document.querySelector('.search-container')
 const _ip_search = _div_searchForm.querySelector('input.inputSearch')
 
+const _selectType = document.querySelector('select.text-primary')
+const _list_options = _selectType.querySelectorAll('option') 
+
 //table - tbbody
 const _tbody_Res = document.querySelector('.tbRes')
 const _tbody_User = document.querySelector('.tbUser')
@@ -127,8 +130,7 @@ axios.get(GET_ADMIN_GET_ALL_RESTAURANT)
                 `<tr>
                     <td>${item.restaurantName}</td> 
                     <td>${item.email}</td>
-                    
-                    <td><button class='btn btn-warning' onclick="resLock('${item._id},${item.isLock}'); ">${item.isLock ? this.innerText= 'Mở Khóa':this.innerText='Khóa'}</button></td>
+                    <td><button class='btn btn-warning' onclick="resLock('${item._id},${item.isLock}'); ">${item.isLock ? this.innerText = 'Mở Khóa' : this.innerText = 'Khóa'}</button></td>
                     <td><button class='btn btn-primary'>Chi tiết</button></td>
                 </tr>`
             )
@@ -158,5 +160,36 @@ axios.get(GET_ADMIN_GET_ALL_USERS)
     })
     .catch(error => console.log(error))
 
+window.onload = function () {
+    if (localStorage.getItem('_typeId') != 1) {   
+        for(let item of _list_options){
+            if(localStorage.getItem('_typeId') == item.value){
+                item.selected="selected"
+                _typeId = item.value
+            }
+                
+        }
+        axios.get(`${GET_ADMIN_GET_ALL_RESTAURANT}?type=${localStorage.getItem('_typeId')}`)
+            .then(res => {
+                if (res.data.status == 'success') {
+                    let restaurant = res.data.data.restaurant
+
+                    let tbRes = restaurant.map((item) =>
+                        `<tr>
+                    <td>${item.restaurantName}</td> 
+                    <td>${item.email}</td>
+                    <td><button class='btn btn-warning' onclick="resLock('${item._id},${item.isLock}'); ">${item.isLock ? this.innerText = 'Mở Khóa' : this.innerText = 'Khóa'}</button></td>
+                    <td><button class='btn btn-primary'>Chi tiết</button></td>
+                </tr>`
+                    )
+
+                    _tbody_Res.innerHTML = tbRes.join(' ')
+                }
+                else alert(res.data.error.message)
+            })
+            .catch(error => console.log(error))
+        localStorage.setItem('_typeId','1')
+    }
+}
 socket.emit('adminJoin', { adminName: 'admin' })
 
