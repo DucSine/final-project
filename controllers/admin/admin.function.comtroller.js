@@ -61,6 +61,20 @@ exports.getRestaurant = async (req, res, next) => {
     }
 }
 
+exports.getRestaurantById = async (req, res, next) => {
+    const resId = req.query.resId
+    try {
+        let restaurant = await Restaurant.findById(resId).populate('type')
+        if (!restaurant)
+            throw new Error('Có lỗi xảy ra.')
+
+        return Response.success(res, { restaurant })
+    } catch (error) {
+        console.log(error)
+        return next(new Error('Có lỗi xảy ra!'))
+    }
+}
+
 exports.getRestaurantType = async (req, res, next) => {
     try {
         let tpye = await RestaurantType.find()
@@ -130,6 +144,20 @@ exports.getUser = async (req, res, next) => {
     }
 
 
+}
+
+exports.getUserById = async (req, res, next) => {
+    const userId = req.query.userId
+    try {
+        let user = await User.findById(userId)
+        if (!user)
+            throw new Error('Có lỗi xảy ra.')
+
+        return Response.success(res, { user })
+    } catch (error) {
+        console.log(error)
+        return next(new Error('Có lỗi xảy ra!'))
+    }
 }
 
 exports.flagLockUser = async (req, res, next) => {

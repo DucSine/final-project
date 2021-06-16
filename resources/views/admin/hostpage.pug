@@ -176,7 +176,7 @@ block content
           button.btn.btn-primary(type='button' onclick='nextPage()') 
             i.fas.fa-angle-double-right
 
-  .modal.resInfo-modal(style='display:block')
+  .modal.resInfo-modal
     .modal-content.accountInfo-modal-content.animate
       div(style='background-color:#f1f1f1; text-align: center;')
         label.text-primary
@@ -217,13 +217,26 @@ block content
                       b Email:
                   td
                     b#detail_resEmail
+                tr
+                  td  
+                    label.text-primary(for='')
+                      b Xác thực:
+                  td
+                    b#detail_resVerified
+                tr
+                  td  
+                    label.text-primary(for='')
+                      b Khóa tài khoản:
+                  td
+                    b#detail_resLock
+
   
           .col-sm-3
             img.img.img-thumbnail.img-circle(width='300' height='300' )
 
         .form-group(style='padding-top: 24px; padding-left: 48px; padding-right: 48px;')
           span(style='float: right')
-            button.btn.btn-danger(type='button' onclick='this.style.display = NONE') Thoát
+            button.btn.btn-danger(type='button' onclick='_div_resDetail.style.display = NONE') Thoát
       .container(style='background-color:#f1f1f1')
 
   script(src='../../js/controller/admin.hostpage.js')

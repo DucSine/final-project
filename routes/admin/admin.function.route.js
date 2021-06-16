@@ -14,12 +14,20 @@ const {
     createDiscount,
     editDiscount,
     getRestaurantType,
+    getRestaurantById,
+    getUserById,
 } = require('../../controllers/admin/admin.function.comtroller')
 
 // @route   GET /api/admin/func/getRestaurant
 // @desc    Lấy danh sách nhà hàng
 // @access  Private
 router.get('/getRestaurant', getRestaurant)
+
+// @route   GET /api/admin/func/getRestaurantById
+// @desc    Lấy danh sách nhà hàng
+// @access  Private
+router.get('/getRestaurantById', getRestaurantById)
+
 
 // @route   GET /api/admin/func/getRestaurantType
 // @desc    Lấy danh sách nhà hàng
@@ -35,6 +43,11 @@ router.post('/flagLockRestaurant', flagLockRestaurant)
 // @desc    Lấy danh sách khách hàng
 // @access  Private
 router.get('/getUser', getUser)
+
+// @route   GET /api/admin/func/getUserById
+// @desc    Lấy danh sách khách hàng
+// @access  Private
+router.get('/getUserById', getUserById)
 
 // @route   POST /api/admin/func/flagLockUser
 // @desc    Khóa, mở khóa tài khoản khách hàng

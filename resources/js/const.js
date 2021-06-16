@@ -56,10 +56,12 @@ const POST_ADMIN_FORGOT_PASSWORD ='/api/admin/auth/fogotPassword'
 const GET_ADMIN_HOST_PAGE = '/admin_hostPage'
 
 const GET_ADMIN_GET_ALL_RESTAURANT = '/api/admin/func/getRestaurant'
+const GET_ADMIN_GET_RESTAURANT_BY_ID = '/api/admin/func/getRestaurantById?resId='
 const GET_ADMIN_GET_ALL_RESTAURANT_TYPE ='/api/admin/func/getRestaurantType'
 const POST_ADMIN_EDIT_LOCK_RESTAURANT =  '/api/admin/func/flagLockRestaurant'
 
 const GET_ADMIN_GET_ALL_USERS = '/api/admin/func/getUser'
+const GET_ADMIN_GET_USERS_BY_ID = '/api/admin/func/getUserById?userId='
 const POST_ADMIN_EDIT_LOCK_USER = '/api/admin/func/flagLockUser'
 
 const GET_ADMIN_GET_DISCOUNT = '/api/admin/func/getDiscount'

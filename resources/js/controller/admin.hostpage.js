@@ -24,7 +24,16 @@ const _tbody_Res = document.querySelector('.tbRes')
 const _tbody_User = document.querySelector('.tbUser')
 const _tbody_Discount = document.querySelector('.tbDiscount')
 
-
+//resDetail
+const _div_resDetail = document.querySelector('.modal.resInfo-modal')
+const _b_detail_resName = _div_resDetail.querySelector('#detail_resName')
+const _b_detail_resType = _div_resDetail.querySelector('#detail_resType')
+const _b_detail_resPhone = _div_resDetail.querySelector('#detail_resPhone')
+const _b_detail_resAddress = _div_resDetail.querySelector('#detail_resAddress')
+const _b_detail_resEmail = _div_resDetail.querySelector('#detail_resEmail')
+const _b_detail_resVerified = _div_resDetail.querySelector('#detail_resVerified')
+const _b_detail_resLock = _div_resDetail.querySelector('#detail_resLock')
+const _img_detail_res_banner = _div_resDetail.querySelector('img.img.img-thumbnail.img-circle')
 //
 var query = location.search
 var _page = '1'
