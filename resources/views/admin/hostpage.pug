@@ -137,7 +137,7 @@ block content
           i.fa.fa-search
 
     div(style='padding-top:50px')
-    
+
     table.table.table-striped
       thead.text-primary(style='font-size: x-large;')
         tr
@@ -175,6 +175,56 @@ block content
         span(style='padding-left:5px')
           button.btn.btn-primary(type='button' onclick='nextPage()') 
             i.fas.fa-angle-double-right
+
+  .modal.resInfo-modal(style='display:block')
+    .modal-content.accountInfo-modal-content.animate
+      div(style='background-color:#f1f1f1; text-align: center;')
+        label.text-primary
+          b(style='font-size: xx-large;') Thông tin cửa hàng
+
+      .container
+        .row(style='padding:16px')
+          .col-sm-9
+            table.table.table-striped
+              tbody
+                tr
+                  td  
+                    label.text-primary(for='')
+                      b Tên nhà hàng:
+                  td
+                    b#detail_resName
+                tr
+                  td  
+                    label.text-primary(for='')
+                      b Loại hình kinh doanh:
+                  td
+                    b#detail_resType
+                tr
+                  td  
+                    label.text-primary(for='')
+                      b Số điện thoại:
+                  td
+                    b#detail_resPhone
+                tr
+                  td  
+                    label.text-primary(for='')
+                      b Địa chỉ:
+                  td
+                    b#detail_resAddress
+                tr
+                  td  
+                    label.text-primary(for='')
+                      b Email:
+                  td
+                    b#detail_resEmail
+  
+          .col-sm-3
+            img.img.img-thumbnail.img-circle(width='300' height='300' )
+
+        .form-group(style='padding-top: 24px; padding-left: 48px; padding-right: 48px;')
+          span(style='float: right')
+            button.btn.btn-danger(type='button' onclick='this.style.display = NONE') Thoát
+      .container(style='background-color:#f1f1f1')
 
   script(src='../../js/controller/admin.hostpage.js')
   script(src='../../js/functions/admin.hostpage.js')

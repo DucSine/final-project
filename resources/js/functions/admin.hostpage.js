@@ -19,7 +19,7 @@ function resTypeChanged(object) {
                     <td>${item.restaurantName}</td> 
                     <td>${item.email}</td>
                     <td><button class='btn btn-warning' onclick="resLock('${item._id},${item.isLock}'); ">${item.isLock ? this.innerText= 'Mở Khóa':this.innerText='Khóa'}</button></td>
-                    <td><button class='btn btn-primary'>Chi tiết</button></td>
+                    <td><button class='btn btn-primary' onclick="resDetail('${item._id}')">Chi tiết</button></td>
                 </tr>`
                 )
 
@@ -48,4 +48,9 @@ function resLock(value) {
         else alert(res.data.error.message)
     })
     .catch(error => console.log(error))
+}
+
+function resDetail(resId){
+
+
 }

@@ -146,6 +146,7 @@ exports.showBillDetail = async (req, res, next) => {
 exports.getHistoryTransaction = async (req, res, next) => {
   try {
     let hisTran = await Bill.find({ user: req.user._id })
+      .populate('restaurant')
     if (!hisTran)
       throw new Error('Không có giao dịch nào.')
 

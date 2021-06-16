@@ -8,7 +8,6 @@ const {
     addCart,
     updateCart,
     showCart,
-    getRestaurantById,
     comment,
     showBillDetail,
     cancelOrder,
@@ -16,13 +15,9 @@ const {
     publicDiscountCode,
     getHistoryTransaction,
     order,
-    createBill,
-    updateBill,
-    delBillById,
     removeFoodsInCart,
     notifications,
     setWatchedNotifications,
-    addDisCountCodeToBill,
 } = require('../../controllers/user/user.function.controller')
 const { protect } = require('../../middlewares/user/auth')
 

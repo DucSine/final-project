@@ -131,7 +131,7 @@ axios.get(GET_ADMIN_GET_ALL_RESTAURANT)
                     <td>${item.restaurantName}</td> 
                     <td>${item.email}</td>
                     <td><button class='btn btn-warning' onclick="resLock('${item._id},${item.isLock}'); ">${item.isLock ? this.innerText = 'Mở Khóa' : this.innerText = 'Khóa'}</button></td>
-                    <td><button class='btn btn-primary'>Chi tiết</button></td>
+                    <td><button class='btn btn-primary' onclick="resDetail('${item._id}')">Chi tiết</button></td>
                 </tr>`
             )
             _tbody_Res.innerHTML = tbRes.join(' ')
