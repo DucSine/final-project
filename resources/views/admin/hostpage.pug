@@ -156,7 +156,9 @@ block content
           button.btn.btn-primary(type='button' onclick='nextPage()') 
             i.fas.fa-angle-double-right
 
-  .div-content(style='display:none;padding-top:30px')
+  .div-content(style='display:none;padding-top:20px')
+    div(style='float:right; padding-right:30px; padding-bottom: 20px')
+      button#btn_createDiscount.btn.btn-primary(type='button' onclick='show_div_createDiscount()') Tạo mã giảm giá
     table.table.table-striped
       thead.text-primary(style='font-size: x-large;')
         tr
@@ -239,5 +241,96 @@ block content
             button.btn.btn-danger(type='button' onclick='_div_resDetail.style.display = NONE') Thoát
       .container(style='background-color:#f1f1f1')
 
+  .modal.userInfo-modal
+    .modal-content.accountInfo-modal-content.animate
+      div(style='background-color:#f1f1f1; text-align: center;')
+        label.text-primary
+          b(style='font-size: xx-large;') Thông tin khách hàng
+
+      .container
+        .row(style='padding:16px')
+          .col-sm-9
+            table.table.table-striped
+              tbody
+                tr
+                  td  
+                    label.text-primary(for='')
+                      b Tên khách hàng:
+                  td
+                    b#detail_user_fullName
+                tr
+                  td  
+                    label.text-primary(for='')
+                      b username:
+                  td
+                    b#detail_user_username
+                tr
+                  td  
+                    label.text-primary(for='')
+                      b Số điện thoại:
+                  td
+                    b#detail_user_Phone
+                tr
+                  td  
+                    label.text-primary(for='')
+                      b Địa chỉ:
+                  td
+                    b#detail_user_Address
+                tr
+                  td  
+                    label.text-primary(for='')
+                      b Email:
+                  td
+                    b#detail_user_Email
+                tr
+                  td  
+                    label.text-primary(for='')
+                      b Xác thực:
+                  td
+                    b#detail_user_Verified
+                tr
+                  td  
+                    label.text-primary(for='')
+                      b Khóa tài khoản:
+                  td
+                    b#detail_user_Lock
+
+  
+          .col-sm-3
+            img.img.img-thumbnail.img-circle(width='300' height='300' )
+
+        .form-group(style='padding-top: 24px; padding-left: 48px; padding-right: 48px;')
+          span(style='float: right')
+            button.btn.btn-danger(type='button' onclick='_div_userDetail.style.display = NONE') Thoát
+      .container(style='background-color:#f1f1f1')
+  
+  .modal.createDiscount-modal 
+    form.modal-content.createDiscount-modal-content.animate( method='post' onsubmit='return fCreateDiscount()')
+      div(style='background-color:#f1f1f1; text-align: center;')
+        label.text-primary
+          b#headerFormAddProduct(style='font-size: xx-large;') Tạo mã giảm giá
+      .container
+        .form-group
+          label(for='li_code')
+            b Code
+          input#li_code.form-control(type='text' name='code' placeholder='Nhập mã code' required='')
+        .form-group
+          label(for='li_discount')
+            b Sale (%)
+          input#li_discount.form-control(type='number' name='discount' min='1' max='100' placeholder='Nhập phần trăm giảm' required='')
+        .form-group
+          label(for='li_amount')
+            b#cr_lb_discount_amount Số lượng mã
+          input#li_amount.form-control(type='number' name='amount' min='1' placeholder='Nhập số lượng mã' required='')
+        .form-group
+          label(for='li_dateExprite')
+            b Ngày hết hạn
+          input#li_dateExprite.form-control(type='datetime-local' name='email' placeholder='Hạn sử dụng' required='')
+        .form-group(style='padding-left: 48px; padding-right: 48px;')
+          span
+            button#btn_add.btn.btn-primary(type='submit') Tạo
+          span(style='float: right')
+            button.btn.btn-danger(type='button' onclick='cancelCreateDiscount()') Hủy bỏ
+      .container(style='background-color:#f1f1f1')
   script(src='../../js/controller/admin.hostpage.js')
   script(src='../../js/functions/admin.hostpage.js')

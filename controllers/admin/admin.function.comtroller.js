@@ -192,16 +192,17 @@ exports.getDiscount = async (req, res, next) => {
         let pageTotal = 0
         let discount
 
-        if (!type) {
+        if (!code) {
             total = await Discount_code.find({ restaurant: null }).count()
             discount = await Discount_code.find({ restaurant: null })
-                .populate('type')
+                .sort({ dateExprite: -1 })
                 .skip((page - 1) * limit)
                 .limit(limit)
         }
         else {
             total = await Discount_code.find({ code, restaurant: null }).count()
             discount = await Discount_code.find({ code, restaurant: null })
+                .sort({ dateExprite: -1 })
                 .skip((page - 1) * limit)
                 .limit(limit)
         }
@@ -219,14 +220,48 @@ exports.getDiscount = async (req, res, next) => {
 
 }
 
-exports.createDiscount = (req, res, next) => {
+exports.createDiscount = async (req, res, next) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty())
+        return res.status(400).json({ errors: errors.array() })
     const {
-        amount,
-        code,
         discount,
-        dateExprite // numbers
+        code,
+        amount,
+        dateExprite, //number
     } = req.body
 
+    try {
+        const currentDiscount = await Discount_code.findOne({ code })
+        if (currentDiscount)
+            if (Number(currentDiscount.dateExprite) >= Date.now())
+                throw new Error('Mã đã tồn tại hoặc đang còn hiệu lực.')
+
+        if (amount.indexOf('.') != -1 || amount.indexOf(',') != -1 || amount.indexOf('e') != -1)
+            throw new Error('Số lượng mã không hợp lệ')
+
+        if (Number(amount) <= 0)
+            throw new Error('Số lượng mã không hợp lệ')
+
+        if (Number(dateExprite) <= Date.now())
+            throw new Error('Thời gian hết hạn không hợp lệ.')
+
+        let rs = await Discount_code.create({
+            discount,
+            code,
+            amount,
+            dateExprite: new Date(Number(dateExprite)),
+        })
+
+        if (!rs)
+            throw new Error('Có lỗi xảy ra.')
+
+        return Response.success(res, { message: 'Tạo mã thành công' })
+
+    } catch (error) {
+        console.log(error)
+        return next(error)
+    }
 }
 
-exports.editDiscount = (req, res, next) => { }
+exports.editDiscount = async (req, res, next) => { }

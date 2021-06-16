@@ -515,6 +515,12 @@ function show_div_createDiscount() {
 }
 
 function fCreateDiscount() {
+  let dateExp = Number(new Date(_list_input_createDiscount[3].value)) 
+  if(dateExp <= Date.now()){
+    alert('Thời hạn không họp lệ')
+    return false
+  }
+
   if (flag_sendDiscount == 0) {
     _list_input_createDiscount[2].style.display = INLINE
     axios.post(

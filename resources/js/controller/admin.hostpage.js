@@ -17,7 +17,7 @@ const _div_searchForm = document.querySelector('.search-container')
 const _ip_search = _div_searchForm.querySelector('input.inputSearch')
 
 const _selectType = document.querySelector('select.text-primary')
-const _list_options = _selectType.querySelectorAll('option') 
+const _list_options = _selectType.querySelectorAll('option')
 
 //table - tbbody
 const _tbody_Res = document.querySelector('.tbRes')
@@ -34,6 +34,26 @@ const _b_detail_resEmail = _div_resDetail.querySelector('#detail_resEmail')
 const _b_detail_resVerified = _div_resDetail.querySelector('#detail_resVerified')
 const _b_detail_resLock = _div_resDetail.querySelector('#detail_resLock')
 const _img_detail_res_banner = _div_resDetail.querySelector('img.img.img-thumbnail.img-circle')
+
+//userDetail
+const _div_userDetail = document.querySelector('.modal.userInfo-modal')
+const _b_detail_user_fullName = _div_userDetail.querySelector('#detail_user_fullName')
+const _b_detail_user_username = _div_userDetail.querySelector('#detail_user_username')
+const _b_detail_user_Phone = _div_userDetail.querySelector('#detail_user_Phone')
+const _b_detail_user_Address = _div_userDetail.querySelector('#detail_user_Address')
+const _b_detail_user_Email = _div_userDetail.querySelector('#detail_user_Email')
+const _b_detail_user_Verified = _div_userDetail.querySelector('#detail_user_Verified')
+const _b_detail_user_Lock = _div_userDetail.querySelector('#detail_user_Lock')
+const _img_detail_user_avatar = _div_userDetail.querySelector('img.img.img-thumbnail.img-circle')
+
+// discount
+const _btn_createDiscount = document.querySelector('#btn_createDiscount.btn.btn-primary')
+//create discount form
+const _div_discountCode = document.querySelector('.modal.createDiscount-modal')
+const _list_ip_discount = _div_discountCode.querySelectorAll('input')
+const _btn_add_discount = _div_discountCode.querySelector('#btn_add.btn.btn-primary')
+
+let flag_Discount = 0
 //
 var query = location.search
 var _page = '1'
@@ -103,6 +123,9 @@ window.onclick = function (e) {
             _div_userContainer.classList.toggle(CLASS_SHOW_FLEX)
             window.location = "/admin_login"
             break
+        case _btn_createDiscount:
+            _div_discountCode.style.display = BLOCK
+            break
         default:
             _div_userContainer.classList.remove(CLASS_SHOW_FLEX)
             break
@@ -139,8 +162,16 @@ axios.get(GET_ADMIN_GET_ALL_RESTAURANT)
                 `<tr>
                     <td>${item.restaurantName}</td> 
                     <td>${item.email}</td>
-                    <td><button class='btn btn-warning' onclick="resLock('${item._id},${item.isLock}')">${item.isLock ? this.innerText = 'Mở Khóa' : this.innerText = 'Khóa'}</button></td>
-                    <td><button class='btn btn-primary' onclick="resDetail('${item._id}')">Chi tiết</button></td>
+                    <td>
+                        <button class='btn btn-warning' onclick="resLock('${item._id},${item.isLock}')">
+                            ${item.isLock ? this.innerText = 'Mở Khóa' : this.innerText = 'Khóa'}
+                        </button>
+                    </td>
+                    <td>
+                        <button class='btn btn-primary' onclick="resDetail('${item._id}')">
+                            Chi tiết
+                        </button>
+                    </td>
                 </tr>`
             )
             _tbody_Res.innerHTML = tbRes.join(' ')
@@ -159,8 +190,16 @@ axios.get(GET_ADMIN_GET_ALL_USERS)
                 `<tr>
                     <td>${item.fullName}</td> 
                     <td>${item.username}</td>
-                    <td><button class='btn btn-warning' onclick="userLock('${item._id},${item.isLock}')">${item.isLock ? this.innerText = 'Mở Khóa' : this.innerText = 'Khóa'}</button></td>
-                    <td><button class='btn btn-primary'>Chi tiết</button></td>
+                    <td>
+                        <button class='btn btn-warning' onclick="userLock('${item._id},${item.isLock}')">
+                            ${item.isLock ? this.innerText = 'Mở Khóa' : this.innerText = 'Khóa'}
+                        </button>
+                    </td>
+                    <td>
+                        <button class='btn btn-primary' onclick="userDetail('${item._id}')">
+                            Chi tiết
+                        </button>
+                    </td>
                 </tr>`)
             _tbody_User.innerHTML = tbUser.join(' ')
 
@@ -169,14 +208,42 @@ axios.get(GET_ADMIN_GET_ALL_USERS)
     })
     .catch(error => console.log(error))
 
+axios.get(GET_ADMIN_GET_DISCOUNT)
+    .then(res => {
+        if (res.data.status == 'success') {
+
+            let discount = res.data.data.discount
+
+            let tbDiscount = discount.map((item) =>
+                `<tr>
+                    <td>${item.code}</td> 
+                    <td>${item.discount}</td>
+                    <td>${item.amount}</td>
+                    <td>
+                        ${Number(new Date(item.dateExprite)) < Date.now() ? this.innerText = 'Đã hết hạn' : this.innerText = 'Đang hoạt động'}
+                    </td>
+                    <td>
+                        <button class='btn btn-primary'>
+                            Chi tiết
+                        </button>
+                    </td>
+                </tr>`)
+            _tbody_Discount.innerHTML = tbDiscount.join(' ')
+
+        }
+        else alert(res.data.error.message)
+    })
+    .catch(error => console.log(error))
+
+
 window.onload = function () {
-    if (localStorage.getItem('_typeId') != 1) {   
-        for(let item of _list_options){
-            if(localStorage.getItem('_typeId') == item.value){
-                item.selected="selected"
+    if (localStorage.getItem('_typeId') != 1) {
+        for (let item of _list_options) {
+            if (localStorage.getItem('_typeId') == item.value) {
+                item.selected = "selected"
                 _typeId = item.value
             }
-                
+
         }
         axios.get(`${GET_ADMIN_GET_ALL_RESTAURANT}?type=${localStorage.getItem('_typeId')}`)
             .then(res => {
@@ -187,8 +254,16 @@ window.onload = function () {
                         `<tr>
                     <td>${item.restaurantName}</td> 
                     <td>${item.email}</td>
-                    <td><button class='btn btn-warning' onclick="resLock('${item._id},${item.isLock}'); ">${item.isLock ? this.innerText = 'Mở Khóa' : this.innerText = 'Khóa'}</button></td>
-                    <td><button class='btn btn-primary'>Chi tiết</button></td>
+                    <td>
+                        <button class='btn btn-warning' onclick="resLock('${item._id},${item.isLock}'); ">
+                            ${item.isLock ? this.innerText = 'Mở Khóa' : this.innerText = 'Khóa'}
+                        </button>
+                    </td>
+                    <td>
+                        <button class='btn btn-primary' onclick="resDetail('${item._id}')">
+                            Chi tiết
+                        </button>
+                    </td>
                 </tr>`
                     )
 
@@ -197,7 +272,7 @@ window.onload = function () {
                 else alert(res.data.error.message)
             })
             .catch(error => console.log(error))
-        localStorage.setItem('_typeId','1')
+        localStorage.setItem('_typeId', '1')
     }
 }
 socket.emit('adminJoin', { adminName: 'admin' })
