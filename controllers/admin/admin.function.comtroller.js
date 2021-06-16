@@ -162,20 +162,20 @@ exports.getUserById = async (req, res, next) => {
 
 exports.flagLockUser = async (req, res, next) => {
     const {
-        user_id,
+        userId,
         isLock
     } = req.body
 
     try {
-        let users = await User.findById(user_id)
+        let users = await User.findById(userId)
         if (!users)
             throw new Error('Có lỗi xảy ra.')
 
-        let rs = await User.findByIdAndUpdate(user_id, { $set: { isLock } })
+        let rs = await User.findByIdAndUpdate(userId, { $set: { isLock } })
         if (!rs)
             throw new Error('Có lỗi xảy ra.')
 
-        return Response.success(req, { message: 'Cập nhật thành công.' })
+        return Response.success(res, { message: 'Cập nhật thành công.' })
     } catch (error) {
         console.log(error)
         return next(new Error('Có lỗi xảy ra!'))

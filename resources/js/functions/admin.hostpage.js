@@ -1,5 +1,4 @@
-
-//resType
+//restaurant
 function resTypeChanged(object) {
     console.log(object.value)
     _typeId = object.value
@@ -31,7 +30,6 @@ function resTypeChanged(object) {
 }
 
 function resLock(value) {
-
     let resId = value.split(',')[0]
     let status_lock = value.split(',')[1]
     let isLock = false
@@ -73,6 +71,25 @@ function resDetail(resId) {
                 _b_detail_resLock.innerText ='Tài khoản đang mở'
 
                 _img_detail_res_banner.src = restaurant.banner
+
+            }
+            else alert(res.data.error.message)
+        })
+        .catch(error => console.log(error))
+}
+
+//user
+function userLock(value) {
+    let userId = value.split(',')[0]
+    let status_lock = value.split(',')[1]
+    let isLock = false
+    status_lock == 'false' ? isLock = true : isLock = false
+    
+    axios.post(POST_ADMIN_EDIT_LOCK_USER, { userId, isLock })
+        .then(res => {
+            if (res.data.status == 'success') {
+                alert('Cập nhật thành công.')
+                location.reload()
 
             }
             else alert(res.data.error.message)
