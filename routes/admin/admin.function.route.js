@@ -5,7 +5,6 @@ const router = express.Router()
 const upload = multer({ dest: './resources/uploads' })
 const { check } = require('express-validator')
 
-const { protect } = require('../../middlewares/admin/auth')
 const {
     getRestaurant, 
     flagLockRestaurant, 
@@ -14,12 +13,18 @@ const {
     getDiscount,
     createDiscount,
     editDiscount,
+    getRestaurantType,
 } = require('../../controllers/admin/admin.function.comtroller')
 
 // @route   GET /api/admin/func/getRestaurant
 // @desc    Lấy danh sách nhà hàng
 // @access  Private
 router.get('/getRestaurant', getRestaurant)
+
+// @route   GET /api/admin/func/getRestaurantType
+// @desc    Lấy danh sách nhà hàng
+// @access  Private
+router.get('/getRestaurantType', getRestaurantType)
 
 // @route   POST /api/admin/func/flagLockRestaurant
 // @desc    Khóa, mở khóa tài khoản nhà hàng

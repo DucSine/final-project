@@ -16,7 +16,7 @@ const Bill = require('../../models/Bill')
 const Discount_code = require('../../models/Discount_code')
 
 const Response = require('../../helpers/response.helper')
-const limit = 20
+const limit = 15
 
 
 exports.adminLogin = async (req, res, next) => {
@@ -55,6 +55,19 @@ exports.getRestaurant = async (req, res, next) => {
         pageTotal = Math.ceil(total / limit)
 
         return Response.success(res, { restaurant, total, pageTotal })
+    } catch (error) {
+        console.log(error)
+        return next(new Error('Có lỗi xảy ra!'))
+    }
+}
+
+exports.getRestaurantType = async (req, res, next) => {
+    try {
+        let tpye = await RestaurantType.find()
+        if (!tpye)
+            throw new Error('Có lỗi xảy ra.')
+
+        return Response.success(res, { type })
     } catch (error) {
         console.log(error)
         return next(new Error('Có lỗi xảy ra!'))

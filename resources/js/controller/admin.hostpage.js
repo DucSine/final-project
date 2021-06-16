@@ -16,6 +16,13 @@ const _div_contents = document.querySelectorAll('.div-content')
 const _div_searchForm = document.querySelector('.search-container')
 const _ip_search = _div_searchForm.querySelector('input.inputSearch')
 
+//table - tbbody
+const _tbody_Res = document.querySelector('.tbRes')
+const _tbody_User = document.querySelector('.tbUser')
+const _tbody_Discount = document.querySelector('.tbDiscount')
+
+
+//
 var query = location.search
 var _page = '1'
 var _load = 'hostpage'
@@ -51,10 +58,10 @@ switch (_load) {
         initPageFunctions(_a_sidebars[1], _div_contents[1], BLOCK)
         break
     case 'user_management':
-        initPageFunctions(_a_sidebars[2], _div_contents[1], BLOCK)
+        initPageFunctions(_a_sidebars[2], _div_contents[2], BLOCK)
         break
     case 'discount_management':
-        initPageFunctions(_a_sidebars[3], _div_contents[1], BLOCK)
+        initPageFunctions(_a_sidebars[3], _div_contents[3], BLOCK)
         break
     default:
         initPageFunctions(_a_sidebars[0], _div_contents[0], NONE)
@@ -102,7 +109,7 @@ function initPageFunctions(tagA, tagDiv, status) {
             divItem.style.display = NONE
 
 
-    //_div_searchForm.style.display = status
+    _div_searchForm.style.display = status
     //_div_direct.style.display = status
 }
 
@@ -113,6 +120,18 @@ axios.get(
 )
 .then(res => {
     if(res.data.status == 'success'){
+        let restaurant = res.data.data.restaurant
+
+        let tbRes = restaurant.map((item)=>
+        `<tr>
+            <td>${item.restaurantName}</td> 
+            <td>${item.email}</td>
+            <td><button class='btn btn-warning' onclick="alert('${item._id}'); ">Khóa</button></td>
+            <td><button class='btn btn-primary'>Chi tiết</button></td>
+        </tr>`)
+        _tbody_Res.innerHTML = tbRes
+        console.log(typeof restaurant)
+
         console.log(res.data)
     }
     else alert(res.data.error.message)
