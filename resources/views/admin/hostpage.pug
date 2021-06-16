@@ -98,14 +98,17 @@ block content
         button(type="button" onclick='search()')
           i.fa.fa-search
 
-    .filt    
+    .filt(style='font-size: x-large;') 
       label(for="")
         b.text-primary Lọc theo: &nbsp; &nbsp;   
-      select.text-primary
-        option(value="1") Hôm nay 
-        option(value="2") Tuần này
-        option(value="3") Tháng này
-        option(value="4") Năm nay
+      select.text-primary(onchange='resTypeChanged(this)')
+        option(value="1") Tất cả 
+        option(value="606c29b97141a71498bd32d8") Quán bún, phở, hủ tiếu,...
+        option(value="606c29c27141a71498bd32d9") Quán cơm
+        option(value="606c29df7141a71498bd32da") Quán coffee, trà sữa,...
+        option(value="606c29fb7141a71498bd32db") Đồ ăn nhanh (bánh mỳ, fast foods,...)
+        option(value="606c2a067141a71498bd32dc") Đồ ăn vặt
+        option(value="60829a97c0f329750c092ee0") Khác
 
     div(style='padding-top:50px')
     table.table.table-striped
@@ -127,15 +130,16 @@ block content
             i.fas.fa-angle-double-right
 
   .div-content(style='display:none;padding-top:30px')
-    | Khách hàng
     .search-container(style="float:right; padding-right:30px;")
       .form(onsubmit='return false' method='get')
         input.inputSearch(type="text" placeholder="Search.." name="keySearch")
         button(type="button" onclick='search()')
           i.fa.fa-search
 
+    div(style='padding-top:50px')
+    
     table.table.table-striped
-      thead.text-primary
+      thead.text-primary(style='font-size: x-large;')
         tr
           th Tên khách hàng
           th username
@@ -153,15 +157,8 @@ block content
             i.fas.fa-angle-double-right
 
   .div-content(style='display:none;padding-top:30px')
-    | Mã
-    .search-container(style="float:right; padding-right:30px;")
-      .form(onsubmit='return false' method='get')
-        input.inputSearch(type="text" placeholder="Search.." name="keySearch")
-        button(type="button" onclick='search()')
-          i.fa.fa-search
-
     table.table.table-striped
-      thead.text-primary
+      thead.text-primary(style='font-size: x-large;')
         tr
           th Code
           th Phần trăm giảm

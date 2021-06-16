@@ -76,18 +76,18 @@ exports.getRestaurantType = async (req, res, next) => {
 
 exports.flagLockRestaurant = async (req, res, next) => {
     const {
-        res_id,
+        resId,
         isLock
     } = req.body
-
+    console.log(req.body)
     try {
-        let restaurant = await Restaurant.findById(res_id)
+        let restaurant = await Restaurant.findById(resId)
         if (!restaurant)
-            throw new Error('Có lỗi xảy ra.')
+            throw new Error('Có lỗi xảy ra. TÊN')
 
-        let rs = await Restaurant.findByIdAndUpdate(res_id, { $set: { isLock } })
+        let rs = await Restaurant.findByIdAndUpdate(resId, { $set: { isLock } })
         if (!rs)
-            throw new Error('Có lỗi xảy ra.')
+            throw new Error('Có lỗi xảy ra. kHOA')
 
         return Response.success(req, { message: 'Cập nhật thành công.' })
     } catch (error) {
@@ -105,10 +105,9 @@ exports.getUser = async (req, res, next) => {
         let pageTotal = 0
         let users
 
-        if (!type) {
+        if (!fullName) {
             total = await User.find().count()
             users = await User.find()
-                .populate('type')
                 .skip((page - 1) * limit)
                 .limit(limit)
         }

@@ -54,3 +54,15 @@ const GET_RES_GET_LOYAL_USER_HIS_TRANSACSIONS = '/api/res/func/getLoyalUserHisTr
 const POST_ADMIN_LOGIN = '/api/admin/auth/login'
 const POST_ADMIN_FORGOT_PASSWORD ='/api/admin/auth/fogotPassword'
 const GET_ADMIN_HOST_PAGE = '/admin_hostPage'
+
+const GET_ADMIN_GET_ALL_RESTAURANT = '/api/admin/func/getRestaurant'
+const GET_ADMIN_GET_ALL_RESTAURANT_TYPE ='/api/admin/func/getRestaurantType'
+const POST_ADMIN_EDIT_LOCK_RESTAURANT =  '/api/admin/func/flagLockRestaurant'
+
+const GET_ADMIN_GET_ALL_USERS = '/api/admin/func/getUser'
+const POST_ADMIN_EDIT_LOCK_USER = '/api/admin/func/flagLockUser'
+
+const GET_ADMIN_GET_DISCOUNT = '/api/admin/func/getDiscount'
+const POST_ADMIN_CREATE_DISCOUNT = '/api/admin/func/createDiscount'
+const POST_ADMIN_EDIT_DISCOUNT = '/api/admin/func/editDiscount'
+

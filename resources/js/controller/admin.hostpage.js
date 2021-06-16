@@ -28,6 +28,8 @@ var _page = '1'
 var _load = 'hostpage'
 var _keySearch = ''
 
+var _typeId = 1 // restaurant type
+
 if (query != '') {
     for (var key of query.split('&')) {
         switch (key.split('=')[0]) {
@@ -97,6 +99,7 @@ window.onclick = function (e) {
 }
 
 
+// init page + data
 
 function initPageFunctions(tagA, tagDiv, status) {
     for (var aItem of _a_sidebars)
@@ -113,27 +116,47 @@ function initPageFunctions(tagA, tagDiv, status) {
     //_div_direct.style.display = status
 }
 
+// 
+
+axios.get(GET_ADMIN_GET_ALL_RESTAURANT)
+    .then(res => {
+        if (res.data.status == 'success') {
+            let restaurant = res.data.data.restaurant
+
+            let tbRes = restaurant.map((item) =>
+                `<tr>
+                    <td>${item.restaurantName}</td> 
+                    <td>${item.email}</td>
+                    
+                    <td><button class='btn btn-warning' onclick="resLock('${item._id},${item.isLock}'); ">${item.isLock ? this.innerText= 'Mở Khóa':this.innerText='Khóa'}</button></td>
+                    <td><button class='btn btn-primary'>Chi tiết</button></td>
+                </tr>`
+            )
+            _tbody_Res.innerHTML = tbRes.join(' ')
+        }
+        else alert(res.data.error.message)
+    })
+    .catch(error => console.log(error))
+
+axios.get(GET_ADMIN_GET_ALL_USERS)
+    .then(res => {
+        if (res.data.status == 'success') {
+
+            let users = res.data.data.users
+
+            let tbUser = users.map((item) =>
+                `<tr>
+                    <td>${item.fullName}</td> 
+                    <td>${item.username}</td>
+                    <td><button class='btn btn-warning' onclick="alert('${item._id}'); ">Khóa</button></td>
+                    <td><button class='btn btn-primary'>Chi tiết</button></td>
+                </tr>`)
+            _tbody_User.innerHTML = tbUser.join(' ')
+
+        }
+        else alert(res.data.error.message)
+    })
+    .catch(error => console.log(error))
+
 socket.emit('adminJoin', { adminName: 'admin' })
 
-axios.get(
-    '/api/admin/func/getRestaurant'
-)
-.then(res => {
-    if(res.data.status == 'success'){
-        let restaurant = res.data.data.restaurant
-
-        let tbRes = restaurant.map((item)=>
-        `<tr>
-            <td>${item.restaurantName}</td> 
-            <td>${item.email}</td>
-            <td><button class='btn btn-warning' onclick="alert('${item._id}'); ">Khóa</button></td>
-            <td><button class='btn btn-primary'>Chi tiết</button></td>
-        </tr>`)
-        _tbody_Res.innerHTML = tbRes
-        console.log(typeof restaurant)
-
-        console.log(res.data)
-    }
-    else alert(res.data.error.message)
-})
-.catch(error => alert(console.error()))
