@@ -12,6 +12,10 @@ const _div_notification = document.querySelector('.notifications_class')
 const _a_sidebars = document.querySelectorAll('a.nav-link')
 const _div_contents = document.querySelectorAll('.div-content')
 
+//search form
+const _div_searchForm = document.querySelector('.search-container')
+const _ip_search = _div_searchForm.querySelector('input.inputSearch')
+
 var query = location.search
 var _page = '1'
 var _load = 'hostpage'
@@ -98,8 +102,19 @@ function initPageFunctions(tagA, tagDiv, status) {
             divItem.style.display = NONE
 
 
-    _div_searchForm.style.display = status
-    _div_direct.style.display = status
+    //_div_searchForm.style.display = status
+    //_div_direct.style.display = status
 }
 
 socket.emit('adminJoin', { adminName: 'admin' })
+
+axios.get(
+    '/api/admin/func/getRestaurant'
+)
+.then(res => {
+    if(res.data.status == 'success'){
+        console.log(res.data)
+    }
+    else alert(res.data.error.message)
+})
+.catch(error => alert(console.error()))

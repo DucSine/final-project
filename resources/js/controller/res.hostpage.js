@@ -35,7 +35,7 @@ const _btn_addProduct = document.getElementById('btn_addProduct')
 
 const _list_btn_next = document.getElementById('listButtonPage')
 const _div_searchForm = document.querySelector('.search-container')
-const _ip_search = _div_searchForm.querySelector('input#inputSearch')
+const _ip_search = _div_searchForm.querySelector('input.inputSearch')
 
 const _div_productDetailModal = document.getElementById('addProduct')
 const _b_labelFormAddProduct = document.getElementById('headerFormAddProduct')
