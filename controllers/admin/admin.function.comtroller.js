@@ -61,6 +61,28 @@ exports.getRestaurant = async (req, res, next) => {
     }
 }
 
+exports.getRestaurantByName = async (req, res, next) => {
+    const { restaurantName, p } = req.query
+
+    try {
+        const page = parseInt(p, 10)
+        let total = await Restaurant.find({restaurantName: new RegExp(restaurantName, 'i')}).count()
+        let pageTotal = Math.ceil(total / limit)
+        let restaurant = await Restaurant.find({restaurantName: new RegExp(restaurantName, 'i')})
+            .skip((page - 1) * limit)
+            .limit(limit)
+
+        if (!restaurant)
+            throw new Error('Có lỗi xảy ra.')
+        
+
+        return Response.success(res, { restaurant, total, pageTotal })
+    } catch (error) {
+        console.log(error)
+        return next(new Error('Có lỗi xảy ra!'))
+    }
+}
+
 exports.getRestaurantById = async (req, res, next) => {
     const resId = req.query.resId
     try {
@@ -146,6 +168,28 @@ exports.getUser = async (req, res, next) => {
 
 }
 
+exports.getUserByUsername = async (req, res, next) => {
+    const { username, p } = req.query
+
+    try {
+        const page = parseInt(p, 10)
+        let total = await User.find({username: new RegExp(username, 'i')}).count()
+        let pageTotal = Math.ceil(total / limit)
+        let users = await User.find({username: new RegExp(username, 'i')})
+            .skip((page - 1) * limit)
+            .limit(limit)
+
+        if (!users)
+            throw new Error('Có lỗi xảy ra.')
+        
+
+        return Response.success(res, { users, total, pageTotal })
+    } catch (error) {
+        console.log(error)
+        return next(new Error('Có lỗi xảy ra!'))
+    }
+}
+
 exports.getUserById = async (req, res, next) => {
     const userId = req.query.userId
     try {
@@ -220,6 +264,21 @@ exports.getDiscount = async (req, res, next) => {
 
 }
 
+exports.getDiscountById = async (req, res, next) => {
+    const discountId = req.query.discountId
+
+    try {
+        let discount = await Discount_code.findById(discountId)
+        if (!discount)
+            throw new Error('Có lỗi xảy ra.')
+
+        return Response.success(res, { discount })
+    } catch (error) {
+        console.log(error)
+        return next(new Error('Có lỗi xảy ra!'))
+    }
+}
+
 exports.createDiscount = async (req, res, next) => {
     const errors = validationResult(req)
     if (!errors.isEmpty())
@@ -264,4 +323,14 @@ exports.createDiscount = async (req, res, next) => {
     }
 }
 
-exports.editDiscount = async (req, res, next) => { }
+exports.editDiscount = async (req, res, next) => { 
+    const discountCode_id = res.query.discountCode_id
+    try {
+        
+    } catch (error) {
+        console.log(error)
+        return next(error)
+    } 
+}
+
+exports.getDataReport = async (req, res, next) => { }

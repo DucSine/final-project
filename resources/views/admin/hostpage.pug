@@ -54,33 +54,24 @@ block sidebar
       a.nav-link(href='?load=discount_management') Quản lý mã giảm giá
 
 block content
-  .div-content(style='padding-top:30px')
-    | Trang chủ
-    .search-container(style="float:right; padding-right:30px;")
+  .search-container(style="float:right; padding-right:30px; padding-top:20px")
       .form(onsubmit='return false' method='get')
         input.inputSearch(type="text" placeholder="Search.." name="keySearch")
-        button(type="button" onclick='search()')
+        button.btn-primary(type="button" onclick='search()')
           i.fa.fa-search
+  .div-content(style='padding-top:30px')
+    | Trang chủ
+    .chart
+      canvas#userchart
 
-    table.table.table-striped
-      thead
-        tr
-          th Firstname
-          th Lastname
-          th Email
-      tbody
-        tr
-          td John
-          td Doe
-          td john@example.com
-        tr
-          td Mary
-          td Moe
-          td mary@example.com
-        tr
-          td July
-          td Dooley
-          td july@example.com
+    .chart
+      canvas#restaurantchart
+
+    .chart
+      canvas#transactionchart
+
+
+    
 
     p#totalPage(style='display:none')
       #divDirect(style='padding:30px;')
@@ -92,12 +83,6 @@ block content
             i.fas.fa-angle-double-right
 
   .div-content(style='display:none;padding-top:30px')
-    .search-container(style="float:right; padding-right:30px;")
-      .form(onsubmit='return false' method='get')
-        input.inputSearch(type="text" placeholder="Search.." name="keySearch")
-        button(type="button" onclick='search()')
-          i.fa.fa-search
-
     .filt(style='font-size: x-large;') 
       label(for="")
         b.text-primary Lọc theo: &nbsp; &nbsp;   
@@ -130,12 +115,6 @@ block content
             i.fas.fa-angle-double-right
 
   .div-content(style='display:none;padding-top:30px')
-    .search-container(style="float:right; padding-right:30px;")
-      .form(onsubmit='return false' method='get')
-        input.inputSearch(type="text" placeholder="Search.." name="keySearch")
-        button(type="button" onclick='search()')
-          i.fa.fa-search
-
     div(style='padding-top:50px')
 
     table.table.table-striped
@@ -150,15 +129,15 @@ block content
     p#totalPage(style='display:none')
       #divDirect(style='padding:30px;')
         span(style='padding-right:5px')
-          button.btn.btn-primary(type='button' onclick='previousPage()') 
+          button#btnPre.btn.btn-primary(type='button') 
             i.fas.fa-angle-double-left
         span(style='padding-left:5px')
-          button.btn.btn-primary(type='button' onclick='nextPage()') 
+          button#btnNext.btn.btn-primary(type='button') 
             i.fas.fa-angle-double-right
 
   .div-content(style='display:none;padding-top:20px')
     div(style='float:right; padding-right:30px; padding-bottom: 20px')
-      button#btn_createDiscount.btn.btn-primary(type='button' onclick='show_div_createDiscount()') Tạo mã giảm giá
+      button#btn_createDiscount.btn.btn-primary(type='button') Tạo mã giảm giá
     table.table.table-striped
       thead.text-primary(style='font-size: x-large;')
         tr

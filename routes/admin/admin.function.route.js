@@ -16,6 +16,9 @@ const {
     getRestaurantType,
     getRestaurantById,
     getUserById,
+    getDiscountById,
+    getRestaurantByName,
+    getUserByUsername,
 } = require('../../controllers/admin/admin.function.comtroller')
 
 // @route   GET /api/admin/func/getRestaurant
@@ -28,6 +31,10 @@ router.get('/getRestaurant', getRestaurant)
 // @access  Private
 router.get('/getRestaurantById', getRestaurantById)
 
+// @route   GET /api/admin/func/getRestaurantByName
+// @desc    Lấy danh sách nhà hàng
+// @access  Private
+router.get('/getRestaurantByName', getRestaurantByName)
 
 // @route   GET /api/admin/func/getRestaurantType
 // @desc    Lấy danh sách nhà hàng
@@ -44,6 +51,11 @@ router.post('/flagLockRestaurant', flagLockRestaurant)
 // @access  Private
 router.get('/getUser', getUser)
 
+// @route   GET /api/admin/func/getUserByUsername
+// @desc    Lấy danh sách khách hàng
+// @access  Private
+router.get('/getUserByUsername', getUserByUsername)
+
 // @route   GET /api/admin/func/getUserById
 // @desc    Lấy danh sách khách hàng
 // @access  Private
@@ -58,6 +70,11 @@ router.post('/flagLockUser', flagLockUser)
 // @desc    Lấy danh sách mã giảm giá của admin
 // @access  Private
 router.get('/getDiscount', getDiscount)
+
+// @route   GET /api/admin/func/getDiscountById
+// @desc    Lấy danh sách mã giảm giá của admin
+// @access  Private
+router.get('/getDiscountById', getDiscountById)
 
 // @route   POST /api/admin/func/createDiscount
 // @desc    Tạo mã giảm giá

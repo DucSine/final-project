@@ -10,13 +10,13 @@ const CLASS_ACTIVE = 'active'
 const CLASS_SHOW = 'show'
 const CLASS_SHOW_FLEX = 'show-flex'
 // key localStorage
-  //login
+//login
 const CB_SAVE = 'cb_save'
 const EMAIL_SIGN = '_emailSign'
 const PASSWORD_SIGN = '_passwordSign'
 
-const AD_CB_SAVE ='ad_cb'
-const AD_USERNAME ='ad_username'
+const AD_CB_SAVE = 'ad_cb'
+const AD_USERNAME = 'ad_username'
 const AD_PASSWORD = 'ad_password'
 
 // patterm
@@ -52,19 +52,23 @@ const GET_RES_GET_LOYAL_USER_DETAIL = '/api/res/func/getLoyalUser?user_id='
 const GET_RES_GET_LOYAL_USER_HIS_TRANSACSIONS = '/api/res/func/getLoyalUserHisTrans?user_id='
 
 const POST_ADMIN_LOGIN = '/api/admin/auth/login'
-const POST_ADMIN_FORGOT_PASSWORD ='/api/admin/auth/fogotPassword'
+const POST_ADMIN_FORGOT_PASSWORD = '/api/admin/auth/fogotPassword'
 const GET_ADMIN_HOST_PAGE = '/admin_hostPage'
 
 const GET_ADMIN_GET_ALL_RESTAURANT = '/api/admin/func/getRestaurant'
 const GET_ADMIN_GET_RESTAURANT_BY_ID = '/api/admin/func/getRestaurantById?resId='
-const GET_ADMIN_GET_ALL_RESTAURANT_TYPE ='/api/admin/func/getRestaurantType'
-const POST_ADMIN_EDIT_LOCK_RESTAURANT =  '/api/admin/func/flagLockRestaurant'
+const GET_ADMIN_GET_RESTAURANT_BY_NAME = '/api/admin/func/getRestaurantByName?restaurantName='
+const GET_ADMIN_GET_ALL_RESTAURANT_TYPE = '/api/admin/func/getRestaurantType'
+const POST_ADMIN_EDIT_LOCK_RESTAURANT = '/api/admin/func/flagLockRestaurant'
 
 const GET_ADMIN_GET_ALL_USERS = '/api/admin/func/getUser'
 const GET_ADMIN_GET_USERS_BY_ID = '/api/admin/func/getUserById?userId='
+const GET_ADMIN_GET_USERS_BY_USERNAME = '/api/admin/func/getUserByUsername?username='
 const POST_ADMIN_EDIT_LOCK_USER = '/api/admin/func/flagLockUser'
 
 const GET_ADMIN_GET_DISCOUNT = '/api/admin/func/getDiscount'
+const GET_ADMIN_GET_DISCOUNT_BY_ID = '/api/admin/func/getDiscountById?discountId='
 const POST_ADMIN_CREATE_DISCOUNT = '/api/admin/func/createDiscount'
-const POST_ADMIN_EDIT_DISCOUNT = '/api/admin/func/editDiscount'
+const POST_ADMIN_EDIT_DISCOUNT = '/api/admin/func/editDiscount?discountId='
+
 

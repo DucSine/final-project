@@ -1,3 +1,65 @@
+//search
+function search() {
+    let ip_search = document.querySelector('input.inputSearch')
+
+    axios.get(GET_ADMIN_GET_RESTAURANT_BY_NAME + ip_search.value)
+        .then(res => {
+            if (res.data.status == 'success') {
+                let restaurant = res.data.data.restaurant
+
+                let tbRes = restaurant.map((item) =>
+                    `<tr>
+                    <td>${item.restaurantName}</td> 
+                    <td>${item.email}</td>
+                    <td>
+                        <button class='btn btn-warning' onclick="resLock('${item._id},${item.isLock}')">
+                            ${item.isLock ? this.innerText = 'Mở Khóa' : this.innerText = 'Khóa'}
+                        </button>
+                    </td>
+                    <td>
+                        <button class='btn btn-primary' onclick="resDetail('${item._id}')">
+                            Chi tiết
+                        </button>
+                    </td>
+                </tr>`
+                )
+                _tbody_Res.innerHTML = tbRes.join(' ')
+            }
+            else console.log(res.data.error.message)
+        })
+        .catch(error => console.log(error))
+    //
+    axios.get(GET_ADMIN_GET_USERS_BY_USERNAME + ip_search.value)
+        .then(res => {
+            if (res.data.status == 'success') {
+                let users = res.data.data.users
+                let tbUser = users.map((item) =>
+                    `<tr>
+                    <td>${item.fullName}</td> 
+                    <td>${item.username}</td>
+                    <td>
+                        <button class='btn btn-warning' onclick="userLock('${item._id},${item.isLock}')">
+                            ${item.isLock ? this.innerText = 'Mở Khóa' : this.innerText = 'Khóa'}
+                        </button>
+                    </td>
+                    <td>
+                        <button class='btn btn-primary' onclick="userDetail('${item._id}')">
+                            Chi tiết
+                        </button>
+                    </td>
+                </tr>`)
+                _tbody_User.innerHTML = tbUser.join(' ')
+            }
+            else console.log(res.data.error.message)
+        })
+        .catch(error => console.log(error))
+}
+
+async function report() {
+
+}
+
+
 //restaurant
 function resTypeChanged(object) {
     console.log(object.value)
@@ -125,6 +187,25 @@ function userDetail(userId) {
 }
 
 //discount
+function discountCodeDetail(discountId) {
+
+    axios.get(GET_ADMIN_GET_DISCOUNT_BY_ID + discountId)
+        .then(res => {
+            if (res.data.status == 'success') {
+                discountCode_id = discountId
+                console.log(discount)
+                _list_ip_discount[0].value = discount.code
+                _list_ip_discount[1].value = discount.discount
+                _list_ip_discount[2].value = discount.amount
+                _list_ip_discount[3].value = discount.dateExprite.split('.')[0]
+                _div_discountCode.style.display = BLOCK
+                _btn_add_discount.innerText = 'Cập nhật'
+                flag_Discount = 1
+            }
+            else alert(res.data.error.message)
+        })
+        .catch(error => console.log(error))
+}
 
 function fCreateDiscount() {
     let dateExp = Number(new Date(_list_ip_discount[3].value))
@@ -132,23 +213,42 @@ function fCreateDiscount() {
         alert('Thời hạn không hợp lệ')
         return false
     }
-    axios.post(
-        POST_ADMIN_CREATE_DISCOUNT,
-        {
-            code: _list_ip_discount[0].value,
-            discount: _list_ip_discount[1].value,
-            amount: _list_ip_discount[2].value,
-            dateExprite: dateExp, //number
-        }
-    )
-        .then(res => {
-            if (res.data.status == 'success') {
-                alert(res.data.data.message)
-                location.reload()
+    if (flag_Discount == 0)
+        axios.post(
+            POST_ADMIN_CREATE_DISCOUNT,
+            {
+                code: _list_ip_discount[0].value,
+                discount: _list_ip_discount[1].value,
+                amount: _list_ip_discount[2].value,
+                dateExprite: dateExp, //number
             }
-            else alert(res.data.error.message)
-        })
-        .catch(error => console.log(error))
+        )
+            .then(res => {
+                if (res.data.status == 'success') {
+                    alert(res.data.data.message)
+                    location.reload()
+                }
+                else alert(res.data.error.message)
+            })
+            .catch(error => console.log(error))
+    else
+        axios.post(
+            POST_ADMIN_EDIT_DISCOUNT + discountCode_id,
+            {
+                code: _list_ip_discount[0].value,
+                discount: _list_ip_discount[1].value,
+                amount: _list_ip_discount[2].value,
+                dateExprite: dateExp, //number
+            }
+        )
+            .then(res => {
+                if (res.data.status == 'success') {
+                    alert(res.data.data.message)
+                    location.reload()
+                }
+                else alert(res.data.error.message)
+            })
+            .catch(error => console.log(error))
     return false
 }
 
@@ -161,5 +261,5 @@ function cancelCreateDiscount() {
     _list_ip_discount[3].value = ''
 
     _btn_add_discount.innerText = 'Tạo'
-
+    flag_Discount = 0
 }

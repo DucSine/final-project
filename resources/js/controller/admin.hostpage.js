@@ -16,6 +16,16 @@ const _div_contents = document.querySelectorAll('.div-content')
 const _div_searchForm = document.querySelector('.search-container')
 const _ip_search = _div_searchForm.querySelector('input.inputSearch')
 
+// chart
+let userChart = document.getElementById('userchart').getContext('2d');
+let resChart = document.getElementById('restaurantchart').getContext('2d');
+let transactionchart = document.getElementById('transactionchart').getContext('2d');
+// Global Options
+Chart.defaults.global.defaultFontFamily = 'Lato';
+Chart.defaults.global.defaultFontSize = 18;
+Chart.defaults.global.defaultFontColor = '#777';
+
+// resType
 const _selectType = document.querySelector('select.text-primary')
 const _list_options = _selectType.querySelectorAll('option')
 
@@ -54,6 +64,7 @@ const _list_ip_discount = _div_discountCode.querySelectorAll('input')
 const _btn_add_discount = _div_discountCode.querySelector('#btn_add.btn.btn-primary')
 
 let flag_Discount = 0
+let discountCode_id = ''
 //
 var query = location.search
 var _page = '1'
@@ -95,7 +106,7 @@ switch (_load) {
         initPageFunctions(_a_sidebars[2], _div_contents[2], BLOCK)
         break
     case 'discount_management':
-        initPageFunctions(_a_sidebars[3], _div_contents[3], BLOCK)
+        initPageFunctions(_a_sidebars[3], _div_contents[3], NONE)
         break
     default:
         initPageFunctions(_a_sidebars[0], _div_contents[0], NONE)
@@ -217,13 +228,15 @@ axios.get(GET_ADMIN_GET_DISCOUNT)
             let tbDiscount = discount.map((item) =>
                 `<tr>
                     <td>${item.code}</td> 
-                    <td>${item.discount}</td>
+                    <td>${item.discount}</ td>
                     <td>${item.amount}</td>
                     <td>
-                        ${Number(new Date(item.dateExprite)) < Date.now() ? this.innerText = 'Đã hết hạn' : this.innerText = 'Đang hoạt động'}
+                        ${Number(new Date(item.dateExprite)) < Date.now() ?
+                    this.innerText = 'Đã hết hạn' :
+                    this.innerText = 'Đang hoạt động'}
                     </td>
                     <td>
-                        <button class='btn btn-primary'>
+                        <button class='btn btn-primary' onclick="discountCodeDetail('${item._id}')" >
                             Chi tiết
                         </button>
                     </td>
@@ -275,5 +288,58 @@ window.onload = function () {
         localStorage.setItem('_typeId', '1')
     }
 }
+
+
+//
+new Chart(userChart, {
+    type: 'bar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+    data: {
+        labels: ['Đang hoạt động', 'Chưa xác thực', 'Đã khóa'],
+        datasets: [{
+            label: 'user',
+            data: [
+                90,
+                56,
+                95,
+            ],
+            //backgroundColor:'green',
+            backgroundColor: [
+                'rgba(54, 162, 235, 0.6)',
+                'rgba(54, 162, 235, 0.6)',
+                'rgba(54, 162, 235, 0.6)',
+            ],
+            borderWidth: 1,
+            borderColor: '#777',
+            hoverBorderWidth: 3,
+            hoverBorderColor: '#000'
+        }]
+    },
+    options: {
+        title: {
+            display: true,
+            text: 'User Account',
+            fontSize: 25
+        },
+        legend: {
+            display: true,
+            position: 'right',
+            labels: {
+                fontColor: '#000'
+            }
+        },
+        layout: {
+            padding: {
+                left: 50,
+                right: 0,
+                bottom: 0,
+                top: 0
+            }
+        },
+        tooltips: {
+            enabled: true
+        }
+    }
+});
+
 socket.emit('adminJoin', { adminName: 'admin' })
 
