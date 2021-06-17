@@ -66,15 +66,15 @@ exports.getRestaurantByName = async (req, res, next) => {
 
     try {
         const page = parseInt(p, 10)
-        let total = await Restaurant.find({restaurantName: new RegExp(restaurantName, 'i')}).count()
+        let total = await Restaurant.find({ restaurantName: new RegExp(restaurantName, 'i') }).count()
         let pageTotal = Math.ceil(total / limit)
-        let restaurant = await Restaurant.find({restaurantName: new RegExp(restaurantName, 'i')})
+        let restaurant = await Restaurant.find({ restaurantName: new RegExp(restaurantName, 'i') })
             .skip((page - 1) * limit)
             .limit(limit)
 
         if (!restaurant)
             throw new Error('Có lỗi xảy ra.')
-        
+
 
         return Response.success(res, { restaurant, total, pageTotal })
     } catch (error) {
@@ -173,15 +173,15 @@ exports.getUserByUsername = async (req, res, next) => {
 
     try {
         const page = parseInt(p, 10)
-        let total = await User.find({username: new RegExp(username, 'i')}).count()
+        let total = await User.find({ username: new RegExp(username, 'i') }).count()
         let pageTotal = Math.ceil(total / limit)
-        let users = await User.find({username: new RegExp(username, 'i')})
+        let users = await User.find({ username: new RegExp(username, 'i') })
             .skip((page - 1) * limit)
             .limit(limit)
 
         if (!users)
             throw new Error('Có lỗi xảy ra.')
-        
+
 
         return Response.success(res, { users, total, pageTotal })
     } catch (error) {
@@ -323,14 +323,49 @@ exports.createDiscount = async (req, res, next) => {
     }
 }
 
-exports.editDiscount = async (req, res, next) => { 
-    const discountCode_id = res.query.discountCode_id
+exports.editDiscount = async (req, res, next) => {
+    const discountCode_id = req.query.discountCode_id
     try {
-        
+        let discount = await Discount_code.findById(discountCode_id)
+        if (!discount)
+            throw new Error('Có lỗi xảy ra.')
+
+        let rs = await Discount_code.findByIdAndUpdate(discount._id, { $set: { ...req.body } })
+        if (!rs)
+            throw new Error('Có lỗi xảy ra.')
+
+        return Response.success(res, { rs })
     } catch (error) {
         console.log(error)
         return next(error)
-    } 
+    }
 }
 
-exports.getDataReport = async (req, res, next) => { }
+exports.getDataReport = async (req, res, next) => {
+    try {
+        //user
+        let user_Doing = await User.find({ isVerified: true, isLock: false }).count()
+        let user_Verified = await User.find({ isVerified: false }).count()
+        let user_Lock = await User.find({ isLock: true }).count()
+        //res
+        let res_Doing = await Restaurant.find({ isVerified: true, isLock: false }).count()
+        let res_Verified = await Restaurant.find({ isVerified: false }).count()
+        let res_Lock = await Restaurant.find({ isLock: true }).count()
+        //transaction
+
+        return Response.success(
+            res,
+            {
+                user_Doing,
+                user_Verified,
+                user_Lock,
+                res_Doing,
+                res_Verified,
+                res_Lock
+            }
+        )
+    } catch (error) {
+        console.log(error)
+        return next(error)
+    }
+}

@@ -193,6 +193,7 @@ function discountCodeDetail(discountId) {
         .then(res => {
             if (res.data.status == 'success') {
                 discountCode_id = discountId
+                let discount = res.data.data.discount 
                 console.log(discount)
                 _list_ip_discount[0].value = discount.code
                 _list_ip_discount[1].value = discount.discount
@@ -243,7 +244,8 @@ function fCreateDiscount() {
         )
             .then(res => {
                 if (res.data.status == 'success') {
-                    alert(res.data.data.message)
+                    alert('Cập nhật thành công.')
+                    _div_discountCode.style.display = NONE
                     location.reload()
                 }
                 else alert(res.data.error.message)

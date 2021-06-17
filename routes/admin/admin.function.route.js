@@ -19,6 +19,7 @@ const {
     getDiscountById,
     getRestaurantByName,
     getUserByUsername,
+    getDataReport,
 } = require('../../controllers/admin/admin.function.comtroller')
 
 // @route   GET /api/admin/func/getRestaurant
@@ -85,6 +86,12 @@ router.post('/createDiscount', createDiscount)
 // @desc    Tạo mã giảm giá
 // @access  Private
 router.post('/editDiscount', editDiscount)
+
+// @route   POST /api/admin/func/getDataReport
+// @desc    Tạo mã giảm giá
+// @access  Private
+router.get('/getDataReport', getDataReport)
+
 
 
 module.exports = router;
