@@ -289,57 +289,5 @@ window.onload = function () {
     }
 }
 
-
-//
-new Chart(userChart, {
-    type: 'bar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
-    data: {
-        labels: ['Đang hoạt động', 'Chưa xác thực', 'Đã khóa'],
-        datasets: [{
-            label: 'user',
-            data: [
-                90,
-                56,
-                95,
-            ],
-            //backgroundColor:'green',
-            backgroundColor: [
-                'rgba(54, 162, 235, 0.6)',
-                'rgba(54, 162, 235, 0.6)',
-                'rgba(54, 162, 235, 0.6)',
-            ],
-            borderWidth: 1,
-            borderColor: '#777',
-            hoverBorderWidth: 3,
-            hoverBorderColor: '#000'
-        }]
-    },
-    options: {
-        title: {
-            display: true,
-            text: 'User Account',
-            fontSize: 25
-        },
-        legend: {
-            display: true,
-            position: 'right',
-            labels: {
-                fontColor: '#000'
-            }
-        },
-        layout: {
-            padding: {
-                left: 50,
-                right: 0,
-                bottom: 0,
-                top: 0
-            }
-        },
-        tooltips: {
-            enabled: true
-        }
-    }
-});
-
 socket.emit('adminJoin', { adminName: 'admin' })
 

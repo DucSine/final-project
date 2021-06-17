@@ -56,9 +56,114 @@ function search() {
 }
 
 async function report() {
+    let res = await axios.get('/api/admin/func/getDataReport')
+    let data_rp = res.data.data
+
+    let user_Doing = res.data.data.user_Doing
+    let user_Verified = res.data.data.user_Verified
+    let user_Lock = res.data.data.user_Lock
+
+    let res_Doing = res.data.data.res_Doing
+    let res_Verified = res.data.data.res_Verified
+    let res_Lock = res.data.data.res_Lock
+
+    new Chart(userChart, {
+        type: 'bar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+        data: {
+            labels: ['Đang hoạt động', 'Chưa xác thực', 'Đã khóa'],
+            datasets: [{
+                label: 'user',
+                data: [user_Doing, user_Verified, user_Lock],
+                //backgroundColor:'green',
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(54, 162, 235, 0.6)',
+                ],
+                borderWidth: 1,
+                borderColor: '#777',
+                hoverBorderWidth: 3,
+                hoverBorderColor: '#000'
+            }]
+        },
+        options: {
+            title: {
+                display: true,
+                text: 'User Account',
+                fontSize: 25
+            },
+            legend: {
+                display: true,
+                position: 'right',
+                labels: {
+                    fontColor: '#000'
+                }
+            },
+            layout: {
+                padding: {
+                    left: 50,
+                    right: 0,
+                    bottom: 0,
+                    top: 0
+                }
+            },
+            tooltips: {
+                enabled: true
+            }
+        }
+    });
+
+    //
+
+    new Chart(resChart, {
+        type: 'bar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+        data: {
+            labels: ['Đang hoạt động', 'Chưa xác thực', 'Đã khóa'],
+            datasets: [{
+                label: 'user',
+                data: [res_Doing, res_Verified, res_Lock],
+                //backgroundColor:'green',
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(54, 162, 235, 0.6)',
+                ],
+                borderWidth: 1,
+                borderColor: '#777',
+                hoverBorderWidth: 3,
+                hoverBorderColor: '#000'
+            }]
+        },
+        options: {
+            title: {
+                display: true,
+                text: 'Restaurant Account',
+                fontSize: 25
+            },
+            legend: {
+                display: true,
+                position: 'right',
+                labels: {
+                    fontColor: '#000'
+                }
+            },
+            layout: {
+                padding: {
+                    left: 50,
+                    right: 0,
+                    bottom: 0,
+                    top: 0
+                }
+            },
+            tooltips: {
+                enabled: true
+            }
+        }
+    });
+    //
 
 }
-
+report()
 
 //restaurant
 function resTypeChanged(object) {
@@ -193,7 +298,7 @@ function discountCodeDetail(discountId) {
         .then(res => {
             if (res.data.status == 'success') {
                 discountCode_id = discountId
-                let discount = res.data.data.discount 
+                let discount = res.data.data.discount
                 console.log(discount)
                 _list_ip_discount[0].value = discount.code
                 _list_ip_discount[1].value = discount.discount
