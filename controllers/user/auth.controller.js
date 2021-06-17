@@ -74,6 +74,7 @@ exports.register = async (req, res, next) => {
       authCode += Math.floor(Math.random() * 10)
     //var dateParts = bDate.split('/')
 
+    console.log({authCode})
     // Tạo ra salt mã hóa
     const salt = await bcrypt.genSalt(10);
     await User.create({
