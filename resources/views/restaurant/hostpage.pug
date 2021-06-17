@@ -231,7 +231,7 @@ block content
                       b Bill ID: 
                       | #{bill._id}
                     i.fas.fa-clock.text-warning(style='float: right;')
-                      b(style='color: black')  Chờ xác nhận
+                      b(style='color: black') #{bill.status}
                     p
                       b Ngày tạo đơn hàng: 
                       | #{bill.dateCreate} 
@@ -261,7 +261,7 @@ block content
                       b Bill ID: 
                       | #{bill._id}
                     i.fas.fa-calendar-check.text-primary(style='float: right;')
-                      b(style='color: black')  Đã xác nhận
+                      b(style='color: black') #{bill.status}
                     p
                       b Ngày tạo đơn hàng: 
                       | #{bill.dateCreate} 
@@ -284,7 +284,7 @@ block content
         br
         div(style)
           ul#listProduct(style='list-style:none;')
-            each bill in confrimTransasion
+            each bill in payTransasion
               li(onclick='getWaitBillDetail(this.querySelector("#cfbillId").textContent)')
                 .media.border.p-1
                   .media-body(style='padding-left: 30px; padding-right: 30px')
@@ -292,7 +292,7 @@ block content
                       b Bill ID: 
                       | #{bill._id}
                     i.fas.fa-calendar-check.text-primary(style='float: right;')
-                      b(style='color: black')  Đã xác nhận
+                      b(style='color: black') #{bill.status}
                     p
                       b Ngày tạo đơn hàng: 
                       | #{bill.dateCreate} 

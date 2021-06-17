@@ -622,7 +622,7 @@ async function getDataReport() {
   let res = await axios.get('/api/res/func/getDataReport')
   let data_rp = res.data.data
   //
-  let massPopChart = new Chart(userChart, {
+  let massPopChart = new Chart(myChart, {
     type: 'bar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
     data: {
       labels: ['Đã hoàn tất', 'Đã xác nhận', 'Đã thanh toán', 'Chưa xác nhận', 'Đã hủy'],

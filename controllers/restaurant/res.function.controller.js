@@ -55,9 +55,17 @@ exports.resHostpage = async (req, res, next) => {
         .skip((page - 1) * b_limit)
         .limit(b_limit)
 
-    var doneTransasionTotal = await Bill.find({ restaurant: restaurant._id, status: 'đã thanh toán' }).count()
+    let payTransasionTotal  = await Bill.find({ restaurant: restaurant._id, status: 'đã thanh toán' }).count()
+    let payTransasionPage = Math.ceil(confrimTransasionTotal / b_limit)
+    var payTransasion = await Bill.find({ restaurant: restaurant._id, status: 'đã thanh toán' })
+        .sort({ _id: 1 })
+        .populate('user')
+        .skip((page - 1) * b_limit)
+        .limit(b_limit)
+
+    var doneTransasionTotal = await Bill.find({ restaurant: restaurant._id, status: 'đã hoàn tất' }).count()
     var doneTransasionPage = Math.ceil(doneTransasionTotal / b_limit)
-    var doneTransasion = await Bill.find({ restaurant: restaurant._id, status: 'đã thanh toán' })
+    var doneTransasion = await Bill.find({ restaurant: restaurant._id, status: 'đã hoàn tất' })
         .sort({ _id: 1 })
         .populate('user')
         .skip((page - 1) * b_limit)
@@ -142,6 +150,8 @@ exports.resHostpage = async (req, res, next) => {
             doneTransasionTotal,
             doneTransasionPage,
             doneTransasion,
+            payTransasion,
+
             cancelTransasionTotal,
             cancelTransasionPage,
             cancelTransasion,

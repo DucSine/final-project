@@ -435,7 +435,7 @@ exports.cancelOrder = async (req, res, next) => {
     if (bill.status != 'đang xử lý')
       throw new Error('Đơn hàng không thể hủy vì đang được giao hoặc đã hoàn tất.')
 
-    await Bill.findByIdAndUpdate(bill_id, { $set: { status: 'Đã hủy' } })
+    await Bill.findByIdAndUpdate(bill_id, { $set: { status: 'đã hủy' } })
 
     Response.success(res, { message: 'Đã hoàn tất.' })
   } catch (error) {
